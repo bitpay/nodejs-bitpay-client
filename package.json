@@ -1,0 +1,52 @@
+{
+  "name": "BitPay",
+  "version": "1.0.0",
+  "description": "Complete version of the PHP library for the new cryptographically secure BitPay API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc -p ./tsconfig.json",
+    "coverage": "npm run unit -- --coverage",
+    "format": "npm run prettier -- --write",
+    "format:ci": "npm run prettier -- --check",
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "prepare": "npm run build",
+    "prettier": "prettier 'src/**/*.ts' 'tests/**/*.spec.ts' --single-quote --trailing-comma all",
+    "test": "npm run format:ci && npm run lint && npm run coverage",
+    "unit": "jest --config=jest.json --runInBand"
+  },
+  "author": "Antonio Buedo <integrations@bitpay.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitpay/nodejs-bitpay-client.git"
+  },
+  "dependencies": {
+    "bs58": "^4.0.1",
+    "elliptic": "^6.5.3",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.4",
+    "tiny-secp256k1": "^1.1.1",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "@types/bs58": "^4.0.0",
+    "@types/elliptic": "^6.4.6",
+    "@types/jest": "^24.0.13",
+    "@types/node": "^11.13.5",
+    "@types/puppeteer": "^1.20.6",
+    "@types/request": "^2.48.1",
+    "@types/request-promise": "^4.1.42",
+    "@types/underscore": "^1.10.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.17.1",
+    "puppeteer": "^1.16.0",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^25.5.1",
+    "tslint": "^5.16.0",
+    "typescript": "^3.9.2"
+  }
+}

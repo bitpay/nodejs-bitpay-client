@@ -1,0 +1,311 @@
+const fs = require('fs');
+const request = require('request');
+const BitPaySDK = require('../src/index');
+import * as readline from 'readline';
+
+let privateKeyPath = __dirname+'/../examples/private_key_setup';
+let ConfFilePath = __dirname+'/../examples/BitPay.config.json';
+let keyUtils = new BitPaySDK.KeyUtils();
+let keyPair;
+let ecKey;
+let environment;
+let storeFile = true;
+let apiUrl;
+let merchantToken;
+let merchantPairCode;
+let payrollToken;
+let payrollPairCode;
+let keyPath = '';
+let keyPlain = '';
+
+let rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+let main = function () {
+    selectEnv();
+};
+let selectEnv = async () => {
+    try{
+        console.log("Select target environment:");
+        rl.question('Press T for testing or P for production: \n', async (answer) => {
+            switch(answer.toLowerCase()) {
+                case 't':
+                    environment = 'Test';
+                    await setEnv(environment);
+                    selectCreateKey();
+                    break;
+                case 'p':
+                    environment = 'Prod';
+                    await setEnv(environment);
+                    selectCreateKey();
+                    break;
+                default:
+                    selectEnv();
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+};
+let setEnv = async (env) => {
+    if (env == 'Test') {
+        apiUrl = 'https://test.bitpay.com';
+        return;
+    }
+    apiUrl = 'https://bitpay.com';
+};
+let selectCreateKey = async () => {
+    try{
+        console.log("Enter your private key or its location");
+        rl.question('Or press Enter to generate a brand new key: ', async (answer) => {
+            switch (answer.toLowerCase()) {
+                case '':
+                    await createNewKey();
+                    break;
+                default:
+                    await loadKey(answer);
+                    break;
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+};
+let createNewKey = async () => {
+    try {
+        console.log("Generating private key... \n");
+        keyPair = keyUtils.generate_keypair();
+        ecKey = keyUtils.load_keypair(keyPair);
+        await sleep(2000);
+        console.log('Generated Private Key: ' + ecKey.getPrivate("hex"));
+        console.log('With Public Key: ' + ecKey.getPublic("hex") + '\n');
+        await storeKey();
+    } catch (e) {
+        console.log(e);
+    }
+};
+let loadKey = async (privateKey) => {
+    try {
+        if(fs.existsSync(privateKey)) {
+            console.log("Loading private key... \n");
+            await sleep(2000);
+            ecKey = keyUtils.load_keypair(fs.readFileSync(privateKey).toString().trim());
+            console.log('Loaded Private Key: ' + ecKey.getPrivate("hex"));
+            console.log('With Public Key: ' + keyUtils.getPublicKeyFromPrivateKey(ecKey));
+            console.log('From: ' + privateKey);
+            console.log("\n\n");
+        }
+        else {
+            ecKey = keyUtils.load_keypair(privateKey);
+            console.log("Loading private key... \n");
+            await sleep(2000);
+            console.log('Loaded Private Key: ' + ecKey.getPrivate("hex"));
+            console.log('With Public Key: ' + keyUtils.getPublicKeyFromPrivateKey(ecKey));
+            console.log('From: ' + privateKey);
+            console.log("\n\n");
+        }
+    } catch (e) {
+        console.log(e);
+    }
+};
+let storeKey = async () => {
+    try {
+        console.log("Select the way you want to store your private key:");
+        rl.question('Press F for storing in a text file or T for plain text in your config file: ', async (answer) => {
+            switch (answer.toLowerCase()) {
+                case 'f':
+                    storeFile = true;
+                    keyPath = privateKeyPath + '_' + environment.toLowerCase() + '.key';
+
+                    console.log("Saving private key... \n");
+                    sleep(500);
+                    fs.writeFile(privateKeyPath + '_' + environment.toLowerCase() + '.key', ecKey.getPrivate("hex"), {mode: 0o755}, function (err) {
+                        if (err) throw err;
+                        console.log('Private key saved in file: ' + keyPath + '\n');
+                    });
+                    await sleep(1000);
+
+                    selectTokens();
+                    break;
+                case 't':
+                    storeFile = false;
+                    keyPlain = ecKey.getPrivate("hex");
+                    console.log("Saving private key... \n");
+                    await sleep(1000);
+
+                    selectTokens();
+                    break;
+                default:
+                    storeKey();
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+};
+let selectTokens = async () => {
+    try{
+        console.log("Select the tokens that you would like to request:");
+        rl.question('Press M for merchant, P for Payroll or B for both: \n', async (answer) => {
+            switch(answer.toLowerCase()) {
+                case 'm':
+                case 'p':
+                case 'b':
+                    console.log("Requesting tokens... \n");
+                    await sleep(500);
+                    await requestTokens(answer);
+                    break;
+                default:
+                    selectTokens();
+            }
+        });
+    } catch (e) {
+        console.log(e);
+
+    }
+};
+let requestTokens = async (option) => {
+    try{
+        let reqMerchant = false;
+        let reqPayroll = false;
+        switch (option) {
+            case 'm':
+                reqMerchant = true;
+                reqPayroll = false;
+                break;
+            case 'p':
+                reqMerchant = false;
+                reqPayroll = true;
+                break;
+            case 'b':
+                reqMerchant = true;
+                reqPayroll = true;
+                break;
+        }
+
+        let sin = keyUtils.get_sin_from_key(ecKey);
+        let headers = {
+            "x-accept-version": "2.0.0",
+            "Content-type": "application/json"
+        };
+
+        if (reqMerchant) {
+            console.log("Requesting Merchant token... \n");
+            let facade = 'merchant';
+            let postData = {id: sin,facade: facade};
+            let options = {
+                url: apiUrl + '/tokens',
+                method: 'POST',
+                body: postData,
+                headers: headers,
+                json: true
+            };
+
+            request(options, function (error, response, body) {
+                let jsonResponse = JSON.parse(JSON.stringify(body.data[0]));
+                merchantToken = jsonResponse['token'];
+                merchantPairCode = jsonResponse['pairingCode'];
+            });
+            await sleep(2000);
+        }
+        if (reqPayroll) {
+            console.log("Requesting Payroll token... \n");
+            let facade = 'payroll';
+            let postData = {id: sin,facade: facade};
+            let options = {
+                url: apiUrl + '/tokens',
+                method: 'POST',
+                body: postData,
+                headers: headers,
+                json: true
+            };
+
+            request(options, function (error, response, body) {
+                let jsonResponse = JSON.parse(JSON.stringify(body.data[0]));
+                payrollToken = jsonResponse['token'];
+                payrollPairCode = jsonResponse['pairingCode'];
+            });
+            await sleep(2000);
+        }
+
+        await updateConfigFile();
+    } catch (e) {
+        console.log(e);
+
+    }
+};
+let updateConfigFile = async () => {
+    // console.log(merchantToken);
+    // console.log(payrollToken);
+    let confObj;
+
+    if (environment == 'Test') {
+        confObj = {
+            'BitPayConfiguration': {
+                "Environment": "Test",
+                "EnvConfig": {
+                    "Test": {
+                        "PrivateKeyPath": keyPath,
+                        "PrivateKey": keyPlain,
+                        "ApiTokens": {
+                            "merchant": merchantToken,
+                            "payroll": payrollToken
+                        }
+                    }
+                }
+            }
+        };
+    } else {
+        confObj = {
+            'BitPayConfiguration': {
+                "Environment": "Prod",
+                "EnvConfig": {
+                    "Prod": {
+                        "PrivateKeyPath": keyPath,
+                        "PrivateKey": keyPlain,
+                        "ApiTokens": {
+                            "merchant": merchantToken,
+                            "payroll": payrollToken
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    confObj['BitPayConfiguration']['EnvConfig'][environment] = {
+        "PrivateKeyPath" : keyPath,
+        "PrivateKey" : keyPlain,
+        "ApiTokens" : {
+            "merchant" : merchantToken,
+            "payroll" : payrollToken
+        }
+    };
+
+    fs.writeFile(ConfFilePath, JSON.stringify(confObj, null, 4), function (err) {
+        if (err) throw err;
+        console.log('Generated configuration file');
+        console.log('And saved in file: ' + ConfFilePath + '\n');
+    });
+    await sleep(2000);
+
+    console.log('Configuration generated successfully! \n');
+    console.log("To complete your setup, Go to " + apiUrl + "/dashboard/merchant/api-tokens and pair this client with your merchant account using the pairing codes:");
+    if (merchantToken) {
+        console.log(merchantPairCode + " for the Merchant facade.");
+    }
+    if (payrollToken) {
+        console.log(payrollPairCode + " for the Payroll facade ONLY if you have requested access for this role.");
+    }
+
+    process.exit();
+};
+function sleep(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+
+main();

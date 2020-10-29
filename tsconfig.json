@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false
+  },
+  "lib": [
+    "es5",
+    "node"
+  ],
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "node_modules",
+    "test",
+    "examples"
+  ]
+}
