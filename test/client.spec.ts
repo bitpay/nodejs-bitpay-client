@@ -1,5 +1,5 @@
 import {Env} from "../src";
-import {Invoice} from "../src/models";
+import {Buyer} from "../src/Model/Invoice/Buyer";
 
 const BitPaySDK = require('../src/index');
 const Currencies = BitPaySDK.Currency;
@@ -11,12 +11,13 @@ describe('BitPaySDK.Client', () => {
     beforeAll(() => {
         jest.setTimeout(20000); // browser takes a while
         let tokens = BitPaySDK.Tokens;
-        tokens.merchant = '3AHzQTE8gSAsiic69TPZSoKSWkjg4euCLsivcbAdsBgK';
+        tokens.merchant = 'EZGKrE4ZifLPPf31jcHd153a5ad9ePnqMx1gAomAjr3W';
+        tokens.payroll = 'F5uY2NNspRyt6WHLkWsTV2eMzSYWzsADiAcznP3hPexL';
         let keyFilePath = __dirname+'/../examples/private_key_setup_test.key';
-        let keyPlainText = 'e78c0a2ed82ac9cdb442fdd606b8b1af9e082b0337e8ee0094342894be6ce203';
+        let keyPlainText = '7b9ef624577998af6f16e32a1fae18b301274ef3631294c490c582183f21290d';
         let configFilePath = '/Users/antonio.buedo/Bitpay/Repos/nodejs-bitpay-client/setup/../examples/BitPay.config.json';
 
-        client = new BitPaySDK.Client(null, Env.Test, keyFilePath, tokens);
+        client = new BitPaySDK.Client(null, Env.Test, keyPlainText, tokens);
         // client = new BitPaySDK.Client(configFilePath);
     });
 
@@ -38,7 +39,11 @@ describe('BitPaySDK.Client', () => {
     });
 
     describe('Invoices', () => {
+        let buyer = new Buyer();
+        buyer.email = "agallardo@bitpay.com";
+        buyer.name = "BuyerTest";
         let invoiceData = new BitPaySDK.Models.Invoice(50, Currencies.USD);
+        invoiceData.buyer = buyer;
         let invoice;
         let retrievedInvoice;
         let retrievedInvoices;
@@ -57,7 +62,7 @@ describe('BitPaySDK.Client', () => {
 
         it('should retrieve invoice list', async () => {
             let dateStart = "10-01-2020";
-            let dateEnd = "10-260-2020";
+            let dateEnd = "10-26-2020";
             let status = InvoiceStatus.New;
             let orderId = "0000";
             let limit = 30;
@@ -67,5 +72,43 @@ describe('BitPaySDK.Client', () => {
             console.log(retrievedInvoices);
             expect(retrievedInvoices).toBeDefined();
         });
+    });
+
+    describe('Refunds', () => {
+        let dateStart = "11-01-2020";
+        let dateEnd = "11-21-2020";
+        let createdRefund;
+        let refundEmail = "agallardo@bitpay.com";
+        let canceledRefund;
+        let firstPaidInvoice;
+        let retrievedRefund;
+        let firstRefund;
+
+        it('should get first paid invoice', async () => {
+            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
+            firstPaidInvoice = firstPaidInvoice.shift();
+        });
+
+        it('should create refund request', async () => {
+            createdRefund = await client.CreateRefund(firstPaidInvoice, refundEmail, firstPaidInvoice.price, firstPaidInvoice.currency);
+        });
+
+        it('should get refund request', async () => {
+            retrievedRefund = await client.GetRefunds(firstPaidInvoice);
+            firstRefund = retrievedRefund.shift();
+        });
+
+        it('should cancel refund request', async () => {
+            canceledRefund = await client.CancelRefund(firstPaidInvoice, firstRefund);
+        });
+
+        console.log(createdRefund);
+        expect(createdRefund).toBeDefined();
+
+        console.log(retrievedRefund);
+        expect(retrievedRefund).toBeDefined();
+
+        console.log(canceledRefund);
+        expect(canceledRefund).toBeDefined();
     });
 });

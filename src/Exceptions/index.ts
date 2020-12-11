@@ -19,11 +19,20 @@ import {InvoiceCreationException as InvoiceCreation} from './InvoiceCreationExce
 import {InvoiceQueryException as InvoiceQuery} from './InvoiceQueryException';
 import {RateException as RateGeneric} from './RateException';
 import {RateQueryException as RateQuery} from './RateQueryException';
+import {RefundException as RefundGeneric} from './RefundException';
+import {RefundCreationException as RefundCreation} from './RefundCreationException';
+import {RefundQueryException as RefundQuery} from './RefundQueryException';
+import {RefundCancellationException as RefundCancellation} from './RefundCancellationException';
+
 export {
     Generic,
     InvoiceGeneric,
     InvoiceCreation,
     InvoiceQuery,
     RateGeneric,
-    RateQuery
+    RateQuery,
+    RefundGeneric,
+    RefundCreation,
+    RefundQuery,
+    RefundCancellation
 };

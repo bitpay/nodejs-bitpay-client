@@ -1,9 +1,8 @@
-import {KeyUtils} from "../index";
+import {Env, KeyUtils} from "../index";
 import * as qs from "querystring";
 import * as rp from 'request-promise';
 import * as _ from 'underscore';
 import * as elliptic from "elliptic";
-import {Env} from "../index";
 import BitPayException from "../exceptions/BitPayException";
 
 export class RESTcli {
@@ -147,6 +146,10 @@ export class RESTcli {
                     message += "\n" + error.toString();
                 });
                 throw new BitPayException(null, "Errors: " + message);
+            }
+
+            if (responsObj.hasOwnProperty("success")) {
+                return JSON.stringify(responsObj["success"]);
             }
 
             return JSON.stringify(responsObj["data"]);

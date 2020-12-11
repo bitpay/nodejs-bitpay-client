@@ -16,14 +16,14 @@
 import { KeyUtils } from './util/KeyUtils';
 import { RESTcli } from './util/RESTcli';
 import * as BitPayExceptions from "./exceptions/index";
-import * as Models from "./models/index";
+import * as Models from "./Model/index";
 import { Client } from './Client';
 import { Config } from './Config';
 import { Currency } from './Currency';
 import { Facade } from './Facade';
 import * as Env from './Env'
-import * as InvoiceStatus from './models/Invoice/InvoiceStatus';
-import * as RefundStatus from './models/Invoice/RefundStatus';
+import * as InvoiceStatus from './Model/Invoice/InvoiceStatus';
+import * as RefundStatus from './Model/Invoice/RefundStatus';
 
 let Tokens = {} as Tokens;
 

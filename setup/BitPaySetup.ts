@@ -289,7 +289,7 @@ let updateConfigFile = async () => {
         console.log('Generated configuration file');
         console.log('And saved in file: ' + ConfFilePath + '\n');
     });
-    await sleep(2000);
+    await sleep(5000);
 
     console.log('Configuration generated successfully! \n');
     console.log("To complete your setup, Go to " + apiUrl + "/dashboard/merchant/api-tokens and pair this client with your merchant account using the pairing codes:");
