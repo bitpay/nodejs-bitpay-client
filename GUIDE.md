@@ -23,7 +23,7 @@ The private key should be stored in the client environment such that it cannot b
 
 **Here is how to generate the configuration file and private key required to load the SDK:**
 
-* Using the [BitPaySetup Script](https://github.com/bitpay/nodejs-bitpay-client/blob/master/src/setup/nodejs/BitPaySetup.ts) helps to generate the private key, as well as a environment file formatted in JSON which contains all configuration requirements, that should be stored in the client local file system. It is not recommended to transmit the private key over any public or unsecure networks.
+* Using the [BitPaySetup Script](https://github.com/bitpay/nodejs-bitpay-client/blob/master/setup/BitPaySetup.ts) helps to generate the private key, as well as a environment file formatted in JSON which contains all configuration requirements, that should be stored in the client local file system. It is not recommended to transmit the private key over any public or unsecure networks.
   
   Once the BitPaySetup Script has run and generated the Json correctly, read the console output and follow the instructions in order to pair your new tokens.
   This method would also allow you to generate the Private Key as plain text which you can securely store in case you are using cloud services.
