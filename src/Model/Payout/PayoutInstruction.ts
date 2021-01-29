@@ -44,10 +44,10 @@ export class PayoutInstruction implements PayoutInstructionInterface {
             case RecipientReferenceMethod.EMAIL:
                 this.email = methodValue;
                 break;
-            case RecipientReferenceMethod.RECIPIENTID:
+            case RecipientReferenceMethod.RECIPIENT_ID:
                 this.recipientId = methodValue;
                 break;
-            case RecipientReferenceMethod.SHOPPERID:
+            case RecipientReferenceMethod.SHOPPER_ID:
                 this.shopperId = methodValue;
                 break;
             default:
