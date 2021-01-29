@@ -79,10 +79,10 @@ let client = new BitPaySDK.Client(configFilePath);
 // Initialize with separate variables.
 
 let tokens = BitPaySDK.Tokens;
-tokens.merchant = '3AHzQTE8gSAsiic69TPZSoKSWkjg4euCLsivcbAdsBgK';
-let keyFilePath = __dirname+'/../examples/private_key_setup_test.key';
-let keyPlainText = 'e78c0a2ed82ac9cdb442fdd606b8b1af9e082b0337e8ee0094342894be6ce203';
-let configFilePath = '/Users/antonio.buedo/Bitpay/Repos/nodejs-bitpay-client/setup/../examples/BitPay.config.json';
+tokens.merchant = 'AdsBgKAHzQTE8geuC3jg4TPivcbLsiic69SAsZSoKSWk';
+let keyFilePath = __dirname+'/../examples/private_key_test.key';
+let keyPlainText = 'ce2030a2ed82ac2b0337e8ee00943428949e78cd606b8b1af9e08be6cdb442fd';
+let configFilePath = __dirname+'/../examples/BitPay.config.json';
 
 let client = new BitPaySDK.Client(
     null,
