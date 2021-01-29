@@ -73,3 +73,5 @@ export class Bill implements BillInterface {
         this.currency = _currency;
     }
 }
+
+export default Item;

@@ -1,9 +1,28 @@
 import * as elliptic from 'elliptic';
 import {BitPayExceptions as Exceptions, Config, Facade, KeyUtils, RESTcli, Tokens} from './index';
-import {Invoice, InvoiceInterface, RateInterface, Rates} from "./Model";
+import {
+    Bill,
+    BillInterface,
+    Invoice,
+    InvoiceInterface,
+    PayoutBatch,
+    PayoutBatchInterface,
+    PayoutRecipient,
+    PayoutRecipientInterface,
+    PayoutRecipients,
+    RateInterface,
+    Rates
+} from "./Model";
 import {Refund, RefundInterface} from "./Model/Invoice/Refund";
 
 const fs = require('fs');
+
+/**
+ * @author Antonio Buedo
+ * @version 1.0.2101
+ * See bitpay.com/api for more information.
+ * date 29.11.2021
+ */
 
 export class Client {
     private _configuration: Config;
@@ -11,7 +30,7 @@ export class Client {
     private _tokenCache: Tokens;
     private _ecKey: elliptic.ec.KeyPair;
     private _RESTcli: RESTcli;
-    private _currenciesInfo: {};
+    public _currenciesInfo: [];
     private _keyUtils = new KeyUtils();
 
     constructor(
@@ -20,18 +39,22 @@ export class Client {
         privateKey: string,
         tokens: Tokens,
     ) {
-        // constructor with config file
-        if(arguments.length > 1) {
-            this._env = environment;
-            this.BuildConfig(privateKey, tokens);
-            this.initKeys();
-            this.init();
-        }
-        // constructor with parameters
-        else {
-            this.BuildConfigFromFile(configFilePath);
-            this.initKeys();
-            this.init();
+        try {
+            // constructor with config file
+            if(arguments.length > 1) {
+                this._env = environment;
+                this.BuildConfig(privateKey, tokens);
+                this.initKeys();
+                this.init();
+            }
+            // constructor with parameters
+            else {
+                this.BuildConfigFromFile(configFilePath);
+                this.initKeys();
+                this.init();
+            }
+        } catch (e) {
+            throw new Exceptions.Generic(null, "failed to initiate client : " + e.message);
         }
     }
 
@@ -123,14 +146,26 @@ export class Client {
         }
     }
 
-    private init() {
-        try {
-            this._RESTcli = new RESTcli(this._env, this._ecKey);
-            this.LoadAccessTokens();
-            // this.LoadCurrencies();
-        } catch (e) {
-            throw new Exceptions.Generic(null, "failed to deserialize BitPay server response (Token array) : " + e.message);
-        }
+    /**
+     * Gets info for specific currency.
+     *
+     * @param currencyCode String Currency code for which the info will be retrieved.
+     * @return Map|null
+     */
+    public async GetCurrencyInfo(currencyCode: string) {
+        let currencyInfo = null;
+
+        let loop = await this.LoadCurrencies().then(ratesData => {
+            ratesData.some(element => {
+                currencyInfo = element;
+                if (element["code"] == currencyCode) {
+                    currencyInfo = element;
+                    return true;
+                }
+            });
+        });
+
+        return currencyInfo;
     }
 
     private getGuid(): string {
@@ -143,9 +178,7 @@ export class Client {
     private LoadAccessTokens() {
         try {
             this.ClearAccessTokenCache();
-
-            let tokens = this._configuration.envConfig[this._env]["ApiTokens"];
-            this._tokenCache = tokens;
+            this._tokenCache = this._configuration.envConfig[this._env]["ApiTokens"];
         } catch (e) {
             throw new Exceptions.Generic(null, "When trying to load the tokens : " + e.message);
         }
@@ -163,11 +196,45 @@ export class Client {
         }
     }
 
-    private LoadCurrencies() {
+    /**
+     * Create a BitPay Bill.
+     *
+     * @param bill        A Bill object with request parameters defined.
+     * @return A BitPay generated Bill object.
+     * @throws BitPayException       BitPayException class
+     * @throws BillCreationException BillCreationException class
+     */
+    public async CreateBill(bill: Bill): Promise<BillInterface> {
+        bill.token = this.GetAccessToken(Facade.Merchant);
+
         try {
-            this._currenciesInfo = this._RESTcli.get("currencies/", {}, false);
+            return await this._RESTcli.post("bills", bill).then(billData => {
+                return <BillInterface>JSON.parse(billData);
+            });
         } catch (e) {
-            // No action required
+            throw new Exceptions.BillCreation("failed to deserialize BitPay server response (Bill) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve a BitPay bill by bill id using the specified facade.
+     *
+     * @param billId      The id of the bill to retrieve.
+     * @return A BitPay Bill object.
+     * @throws BitPayException    BitPayException class
+     * @throws BillQueryException BillQueryException class
+     */
+    public async GetBill(billId: string): Promise<BillInterface> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Merchant)
+        };
+
+        try {
+            return await this._RESTcli.get("bills/" + billId, params).then(billData => {
+                return <BillInterface>JSON.parse(billData);
+            });
+        } catch (e) {
+            throw new Exceptions.BillQuery("failed to deserialize BitPay server response (Bill) : " + e.message);
         }
     }
 
@@ -243,7 +310,6 @@ export class Client {
         {
             throw new Exceptions.InvoiceQuery("failed to deserialize BitPay server response (Invoice) : " + e.message);
         }
-
     }
 
     /**
@@ -340,223 +406,333 @@ export class Client {
         }
     }
 
-    // /**
-    //  * Create a BitPay bill using the POS facade.
-    //  *
-    //  * @param bill An Bill object with request parameters defined.
-    //  * @return A BitPay generated Bill object.
-    //  * @throws BillCreationException BillCreationException class
-    //  */
-    // public Bill createBill(Bill bill) throws BillCreationException {
-    //     try {
-    //         return this.createBill(bill, Facade.Merchant, true);
-    //     } catch (Exception e) {
-    //         throw new BillCreationException(e.getMessage());
-    //     }
-    // }
-    //
-    // /**
-    //  * Create a BitPay Bill.
-    //  *
-    //  * @param bill        A Bill object with request parameters defined.
-    //  * @param facade      The facade used to create it.
-    //  * @param signRequest Signed request.
-    //  * @return A BitPay generated Bill object.
-    //  * @throws BitPayException       BitPayException class
-    //  * @throws BillCreationException BillCreationException class
-    //  */
-    // public Bill createBill(Bill bill, String facade, boolean signRequest) throws BitPayException, BillCreationException {
-    //     String token = this.getAccessToken(facade);
-    //     bill.setToken(token);
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     String json;
-    //
-    //     try {
-    //         json = mapper.writeValueAsString(bill);
-    //     } catch (JsonProcessingException e) {
-    //         throw new BillCreationException("failed to serialize Bill object : " + e.getMessage());
-    //     }
-    //
-    //     try {
-    //         HttpResponse response = this.post("bills", json, signRequest);
-    //         bill = mapper.readerForUpdating(bill).readValue(this.responseToJsonString(response));
-    //     } catch (Exception e) {
-    //         throw new BillCreationException("failed to deserialize BitPay server response (Bill) : " + e.getMessage());
-    //     }
-    //
-    //     this.cacheToken(bill.getId(), bill.getToken());
-    //     return bill;
-    // }
-    //
-    // /**
-    //  * Retrieve a BitPay bill by bill id using the public facade.
-    //  *
-    //  * @param billId The id of the bill to retrieve.
-    //  * @return A BitPay Bill object.
-    //  * @throws BillQueryException BillQueryException class
-    //  */
-    // public Bill getBill(String billId) throws BillQueryException {
-    //     try {
-    //         return this.getBill(billId, Facade.Merchant, true);
-    //     } catch (Exception e) {
-    //         throw new BillQueryException(e.getMessage());
-    //     }
-    // }
-    //
-    // /**
-    //  * Retrieve a BitPay bill by bill id using the specified facade.
-    //  *
-    //  * @param billId      The id of the bill to retrieve.
-    //  * @param facade      The facade used to retrieve it.
-    //  * @param signRequest Signed request.
-    //  * @return A BitPay Bill object.
-    //  * @throws BitPayException    BitPayException class
-    //  * @throws BillQueryException BillQueryException class
-    //  */
-    // public Bill getBill(String billId, String facade, boolean signRequest) throws BitPayException, BillQueryException {
-    //     String token = this.getAccessToken(facade);
-    //     final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-    //     params.add(new BasicNameValuePair("token", token));
-    //
-    //     Bill bill;
-    //
-    //     try {
-    //         HttpResponse response = this.get("bills/" + billId, params, signRequest);
-    //         bill = new ObjectMapper().readValue(this.responseToJsonString(response), Bill.class);
-    //     } catch (JsonProcessingException e) {
-    //         throw new BillQueryException("failed to deserialize BitPay server response (Bill) : " + e.getMessage());
-    //     } catch (Exception e) {
-    //         throw new BillQueryException("failed to deserialize BitPay server response (Bill) : " + e.getMessage());
-    //     }
-    //
-    //     return bill;
-    // }
-    //
-    // /**
-    //  * Retrieve a collection of BitPay bills.
-    //  *
-    //  * @param status The status to filter the bills.
-    //  * @return A list of BitPay Bill objects.
-    //  * @throws BitPayException    BitPayException class
-    //  * @throws BillQueryException BillQueryException class
-    //  */
-    // public List<Bill> getBills(String status) throws BitPayException, BillQueryException {
-    //     final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-    //     params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
-    //     params.add(new BasicNameValuePair("status", status));
-    //
-    //     List<Bill> bills;
-    //
-    //     try {
-    //         HttpResponse response = this.get("bills", params);
-    //         bills = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Bill[].class));
-    //     } catch (JsonProcessingException e) {
-    //         throw new BillQueryException("failed to deserialize BitPay server response (Bills) : " + e.getMessage());
-    //     } catch (Exception e) {
-    //         throw new BillQueryException("failed to deserialize BitPay server response (Bills) : " + e.getMessage());
-    //     }
-    //
-    //     return bills;
-    // }
-    //
-    // /**
-    //  * Retrieve a collection of BitPay bills.
-    //  *
-    //  * @return A list of BitPay Bill objects.
-    //  * @throws BitPayException    BitPayException class
-    //  * @throws BillQueryException BillQueryException class
-    //  */
-    // public List<Bill> getBills() throws BitPayException, BillQueryException {
-    //     final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-    //     params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
-    //
-    //     List<Bill> bills;
-    //
-    //     try {
-    //         HttpResponse response = this.get("bills", params);
-    //         bills = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Bill[].class));
-    //     } catch (JsonProcessingException e) {
-    //         throw new BillQueryException("failed to deserialize BitPay server response (Bills) : " + e.getMessage());
-    //     } catch (Exception e) {
-    //         throw new BillQueryException("failed to deserialize BitPay server response (Bills) : " + e.getMessage());
-    //     }
-    //
-    //     return bills;
-    // }
-    //
-    // /**
-    //  * Update a BitPay Bill.
-    //  *
-    //  * @param bill   A Bill object with the parameters to update defined.
-    //  * @param billId The Id of the Bill to udpate.
-    //  * @return An updated Bill object.
-    //  * @throws BitPayException     BitPayException class
-    //  * @throws BillUpdateException BillUpdateException class
-    //  */
-    // public Bill updateBill(Bill bill, String billId) throws BitPayException, BillUpdateException {
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     String json;
-    //     try {
-    //         json = mapper.writeValueAsString(bill);
-    //     } catch (JsonProcessingException e) {
-    //         throw new BillUpdateException("failed to serialize Bill object : " + e.getMessage());
-    //     }
-    //
-    //     try {
-    //         HttpResponse response = this.update("bills/" + billId, json);
-    //         bill = mapper.readerForUpdating(bill).readValue(this.responseToJsonString(response));
-    //     } catch (Exception e) {
-    //         throw new BillUpdateException("failed to deserialize BitPay server response (Bill) : " + e.getMessage());
-    //     }
-    //
-    //     this.cacheToken(bill.getId(), bill.getToken());
-    //     return bill;
-    // }
-    //
-    // /**
-    //  * Deliver a BitPay Bill.
-    //  *
-    //  * @param billId    The id of the requested bill.
-    //  * @param billToken The token of the requested bill.
-    //  * @return A response status returned from the API.
-    //  * @throws BillDeliveryException BillDeliveryException class
-    //  */
-    // public String deliverBill(String billId, String billToken) throws BillDeliveryException {
-    //     try {
-    //         return this.deliverBill(billId, billToken, true);
-    //     } catch (Exception e) {
-    //         throw new BillDeliveryException(e.getMessage());
-    //     }
-    // }
-    //
-    // /**
-    //  * Deliver a BitPay Bill.
-    //  *
-    //  * @param billId      The id of the requested bill.
-    //  * @param billToken   The token of the requested bill.
-    //  * @param signRequest Allow unsigned request
-    //  * @return A response status returned from the API.
-    //  * @throws BillDeliveryException BillDeliveryException class
-    //  */
-    // public String deliverBill(String billId, String billToken, boolean signRequest) throws BillDeliveryException {
-    //     Map<String, String> map = new HashMap<>();
-    //     map.put("token", billToken);
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     String json;
-    //     String result;
-    //     try {
-    //         json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
-    //     } catch (JsonProcessingException e) {
-    //         throw new BillDeliveryException("failed to serialize Bill object : " + e.getMessage());
-    //     }
-    //
-    //     try {
-    //         HttpResponse response = this.post("bills/" + billId + "/deliveries", json, signRequest);
-    //         result = this.responseToJsonString(response).replace("\"", "");
-    //     } catch (Exception e) {
-    //         throw new BillDeliveryException("failed to deserialize BitPay server response (Bill) : " + e.getMessage());
-    //     }
-    //
-    //     return result;
-    // }
+    /**
+     * Retrieve a collection of BitPay bills.
+     *
+     * @param status The status to filter the bills.
+     * @return A list of BitPay Bill objects.
+     * @throws BitPayException    BitPayException class
+     * @throws BillQueryException BillQueryException class
+     */
+    public async GetBills(status: string = null): Promise<BillInterface[]> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Merchant)
+        };
+
+        if (status) {
+            params["status"] = status
+        }
+
+        try {
+            return await this._RESTcli.get("bills", params).then(billData => {
+                return <BillInterface[]>JSON.parse(billData);
+            });
+        } catch (e) {
+            throw new Exceptions.BillQuery("failed to deserialize BitPay server response (Bill) : " + e.message);
+        }
+    }
+
+    /**
+     * Update a BitPay Bill.
+     *
+     * @param bill   A Bill object with the parameters to update defined.
+     * @param billId The Id of the Bill to udpate.
+     * @return An updated Bill object.
+     * @throws BitPayException     BitPayException class
+     * @throws BillUpdateException BillUpdateException class
+     */
+    public async UpdateBill(bill: Bill, billId: string): Promise<BillInterface> {
+        try {
+            return await this._RESTcli.update("bills/" + billId, bill).then(billData => {
+                return <BillInterface>JSON.parse(billData);
+            });
+        } catch (e) {
+            throw new Exceptions.BillUpdate("failed to deserialize BitPay server response (Bill) : " + e.message);
+        }
+    }
+
+    /**
+     * Deliver a BitPay Bill.
+     *
+     * @param billId      The id of the requested bill.
+     * @param billToken   The token of the requested bill.
+     * @return A response status returned from the API.
+     * @throws BillDeliveryException BillDeliveryException class
+     */
+    public async DeliverBill(billId: string, billToken: string): Promise<Boolean> {
+        const params = {
+            'token': billToken
+        };
+
+        try {
+            return await this._RESTcli.post("bills/" + billId + "/deliveries", params).then(billData => {
+                return (<string>JSON.parse(billData) == "Success");
+            });
+        } catch (e) {
+            throw new Exceptions.BillDelivery("failed to deserialize BitPay server response (Bill) : " + e.message);
+        }
+    }
+
+    /**
+     * Submit BitPay Payout Recipients.
+     *
+     * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
+     * @return array A list of BitPay PayoutRecipients objects..
+     * @throws BitPayException BitPayException class
+     * @throws PayoutCreationException PayoutCreationException class
+     */
+    public async SubmitPayoutRecipients(recipients: PayoutRecipients): Promise<PayoutRecipientInterface[]> {
+        recipients.token = this.GetAccessToken(Facade.Payroll);
+        recipients.guid = this.getGuid();
+
+        try {
+            return await this._RESTcli.post("recipients", recipients).then(recipientsData => {
+                return <PayoutRecipientInterface[]>JSON.parse(recipientsData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutCreation("failed to deserialize BitPay server response (PayoutRecipients) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve a collection of BitPay Payout Recipients.
+     *
+     * @param status String|null The recipient status you want to query on.
+     * @param limit  int|null Maximum results that the query will return (useful for paging results).
+     *               result).
+     * @return array     A list of BitPayRecipient objects.
+     * @throws BitPayException BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+    public async GetPayoutRecipients(status: string, limit: number): Promise<PayoutRecipientInterface[]> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payroll)
+        };
+
+        if (status) {
+            params["status"] = status
+        }
+        if (limit) {
+            params["limit"] = limit
+        }
+
+        try {
+            return await this._RESTcli.get("recipients", params).then(recipientsData => {
+                return <PayoutRecipientInterface[]>JSON.parse(recipientsData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutRecipients) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve a BitPay payout recipient by batch id using.  The client must have been previously authorized for the
+     * payroll facade.
+     *
+     * @param recipientId String The id of the recipient to retrieve.
+     * @return PayoutRecipient A BitPay PayoutRecipient object.
+     * @throws BitPayException BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+    public async GetPayoutRecipient(recipientId: string): Promise<PayoutRecipientInterface> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payroll)
+        };
+
+        try {
+            return await this._RESTcli.get("recipients/" + recipientId, params).then(recipientData => {
+                return <PayoutRecipientInterface>JSON.parse(recipientData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message);
+        }
+    }
+
+    /**
+     * Update BitPay Payout Recipient.
+     *
+     * @param recipientId String The id of the recipient to update.
+     * @param label String The new label for the recipient.
+     * @param notificationURL String The new notificationURL for the recipient.
+     * @return PayoutRecipient A BitPay PayoutRecipient object.
+     * @throws BitPayException BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+    public async UpdatePayoutRecipient(recipientId: string, label: string, notificationURL: string): Promise<PayoutRecipientInterface> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payroll)
+        };
+
+        if (label) {
+            params["label"] = label
+        }
+        if (notificationURL) {
+            params["notificationURL"] = notificationURL
+        }
+
+        try {
+            return await this._RESTcli.update("recipients/" + recipientId, params).then(recipientData => {
+                return <PayoutRecipientInterface>JSON.parse(recipientData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutUpdate("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message);
+        }
+    }
+
+    /**
+     * Cancel a previously submitted refund request on a BitPay invoice.
+     *
+     * @param invoice  The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
+     * @param refund The refund to be canceled.
+     * @return True if the refund was successfully canceled, false otherwise.
+     * @throws RefundCancellationException RefundCancellationException class
+     */
+    public async DeletePayoutRecipient(recipientId: string): Promise<Boolean> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payroll)
+        };
+
+        try {
+            return await this._RESTcli.delete("recipients/" + recipientId, params).then(recipientData => {
+                const regex = /"/gi;
+                recipientData = recipientData.replace(regex, '');
+                return recipientData.toLowerCase() == "success";
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutDelete("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message);
+        }
+    }
+
+    /**
+     * Submit a BitPay Payout batch.
+     *
+     * @param batch A PayoutBatch object with request parameters defined.
+     * @return A BitPay generated PayoutBatch object.
+     * @throws BitPayException         BitPayException class
+     * @throws PayoutCreationException PayoutCreationException class
+     */
+    public async SubmitPayoutBatch(batch: PayoutBatch): Promise<PayoutBatchInterface> {
+
+        let currencyInfo = await this.GetCurrencyInfo(batch.currency);
+        let precision = !currencyInfo ? 2 : parseInt(currencyInfo["precision"]);
+
+        let amount = 0.0;
+
+        batch.instructions.forEach(instruction => {
+            amount += instruction.amount;
+        });
+
+        batch.amount = parseFloat(amount.toFixed(precision));
+
+
+        batch.token = this.GetAccessToken(Facade.Payroll);
+        batch.guid = this.getGuid();
+
+        try {
+            return await this._RESTcli.post("payouts", batch).then(PayoutBatchData => {
+                return <PayoutBatchInterface>JSON.parse(PayoutBatchData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutCreation("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve a collection of BitPay payout batches.
+     *
+     * @param status The status to filter the Payout Batches.
+     * @return A list of BitPay PayoutBatch objects.
+     * @throws BitPayException      BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+    public async getPayoutBatches(status: string): Promise<PayoutBatchInterface[]> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payroll)
+        };
+
+        if (status) {
+            params["status"] = status
+        }
+
+        try {
+            return await this._RESTcli.get("payouts", params).then(payoutBatchData => {
+                return <PayoutBatchInterface[]>JSON.parse(payoutBatchData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve a BitPay payout batch by batch id using.  The client must have been previously authorized for the payroll facade.
+     *
+     * @param batchId The id of the batch to retrieve.
+     * @return A BitPay PayoutBatch object.
+     * @throws BitPayException      BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+    public async getPayoutBatch(batchId: string): Promise<PayoutBatchInterface> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payroll)
+        };
+
+        try {
+            return await this._RESTcli.get("payouts/" + batchId, params).then(payoutBatchData => {
+                return <PayoutBatchInterface>JSON.parse(payoutBatchData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
+        }
+    }
+
+    /**
+     * Cancel a BitPay Payout batch.
+     *
+     * @param batchId The id of the batch to cancel.
+     * @return A BitPay generated PayoutBatch object.
+     * @throws PayoutCancellationException PayoutCancellationException class
+     */
+    public async cancelPayoutBatch(batchId: string): Promise<PayoutBatchInterface> {
+        let batch: PayoutBatchInterface;
+
+        try {
+            batch = await this.getPayoutBatch(batchId);
+        } catch (e) {
+            throw new Exceptions.PayoutQuery("Payout Batch with ID: " + batchId + " Not Found : " + e.message);
+        }
+
+        const params = {
+            'token': batch.token
+        };
+
+        try {
+            return await this._RESTcli.delete("payouts/" + batchId, params).then(payoutBatchData => {
+                return <PayoutBatchInterface>JSON.parse(payoutBatchData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutCancellation("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
+        }
+    }
+
+    private async init() {
+        try {
+            this._RESTcli = new RESTcli(this._env, this._ecKey);
+            this.LoadAccessTokens();
+            this._currenciesInfo = await this.LoadCurrencies();
+        } catch (e) {
+            throw new Exceptions.Generic(null, "failed to deserialize BitPay server response (Token array) : " + e.message);
+        }
+    }
+
+    private async LoadCurrencies(): Promise<[]> {
+        try {
+            let currenciesInfo = this._RESTcli.get("currencies/", {}, false).then(currenciesInfo => {
+                return <[]>JSON.parse(currenciesInfo);
+            });
+
+            return currenciesInfo;
+        } catch (e) {
+            // No action required
+        }
+    }
 }

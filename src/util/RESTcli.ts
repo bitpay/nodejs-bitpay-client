@@ -39,14 +39,11 @@ export class RESTcli {
     }
 
     private getSignedHeaders(uri: string, formData: string) {
-        let exp1 = this._keyUtils.sign(uri + formData, this._ecKey);
 
-        let result = {
+        return{
             'x-identity': this._identity,
             'x-signature': this._keyUtils.sign(uri + formData, this._ecKey),
         };
-
-        return result;
     }
 
     public async post (
@@ -104,30 +101,42 @@ export class RESTcli {
         uri: string,
         parameters: any = {},
     ): Promise<string> {
-        const _fullURL = this._baseUrl + uri;
-        const _options = JSON.parse(JSON.stringify(this._commonOptions));
-        const _payload = '?' + qs.stringify(parameters);
-        _.extend(_options.headers, this.getSignedHeaders(_fullURL, _payload));
+        try {
+            const _fullURL = this._baseUrl + uri;
+            const _options = JSON.parse(JSON.stringify(this._commonOptions));
+            const _query = '?' + qs.stringify(parameters);
+            _.extend(_options.headers, this.getSignedHeaders(_fullURL, _query));
 
-        _options.uri = _fullURL;
-        _options.qs = parameters;
+            _options.uri = _fullURL;
+            _options.qs = parameters;
 
-        return rp.delete(_options).then((resp: any) => resp.data);
+            return await rp.delete(_options).then((resp: any) => resp.data).then(resp => {
+                return this.responseToJsonString(resp);
+            });
+        } catch (e) {
+            throw new BitPayException(null, "RESTcli DELETE failed : " + e.message);
+        }
     }
 
     public async update (
         uri: string,
         formData: any = {},
     ): Promise<string> {
-        const _fullURL = this._baseUrl + uri;
-        const _formData = JSON.stringify(formData);
-        const _options = JSON.parse(JSON.stringify(this._commonOptions));
+        try {
+            const _fullURL = this._baseUrl + uri;
+            const _formData = JSON.stringify(formData);
+            const _options = JSON.parse(JSON.stringify(this._commonOptions));
             _.extend(_options.headers, this.getSignedHeaders(_fullURL, _formData));
 
-        _options.uri = _fullURL;
-        _options.body = formData;
+            _options.uri = _fullURL;
+            _options.body = formData;
 
-        return rp.put(_options).then((resp: any) => resp.data);
+            return await rp.put(_options).then((resp: any) => resp.data).then(resp => {
+                return this.responseToJsonString(resp);
+            });
+        } catch (e) {
+            throw new BitPayException(null, "RESTcli UPDATE failed : " + e.message);
+        }
     }
 
     public async responseToJsonString(response: any) {
@@ -152,7 +161,11 @@ export class RESTcli {
                 return JSON.stringify(responsObj["success"]);
             }
 
-            return JSON.stringify(responsObj["data"]);
+            if (responsObj.hasOwnProperty("data")) {
+                return JSON.stringify(responsObj["data"]);
+            }
+
+            return JSON.stringify(responsObj);
         } catch (e) {
             throw new BitPayException("failed to retrieve HTTP response body : " + e.message);
         }
