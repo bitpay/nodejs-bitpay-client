@@ -313,6 +313,38 @@ export class Client {
     }
 
     /**
+     * Request a BitPay Invoice Webhook.
+     *
+     * @param invoiceId String The id of the Invoice.
+     * @return True if the webhook was successfully requested, false otherwise.
+     * @throws BitPayException BitPayException class
+     * @throws InvoiceQueryException InvoiceQueryException class
+     */
+    public async GetInvoiceWebHook(invoiceId: string): Promise<Boolean> {
+        let invoice;
+
+        try {
+            invoice = await this.GetInvoice(invoiceId);
+        } catch (e) {
+            throw new Exceptions.InvoiceQuery("Invoice with ID: " + invoiceId + " Not Found : " + e.message);
+        }
+
+        const params = {
+            'token': invoice.token
+        };
+
+        try {
+            return await this._RESTcli.post("invoices/" + invoiceId + "/notifications", params).then(invoiceData => {
+                const regex = /"/gi;
+                invoiceData = invoiceData.replace(regex, '');
+                return invoiceData.toLowerCase() == "success";
+            });
+        } catch (e) {
+            throw new Exceptions.InvoiceQuery("failed to deserialize BitPay server response (InvoiceQuery) : " + e.message);
+        }
+    }
+
+    /**
      * Create a refund for a BitPay invoice.
      *
      * @param invoice     A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
@@ -526,8 +558,7 @@ export class Client {
     }
 
     /**
-     * Retrieve a BitPay payout recipient by batch id using.  The client must have been previously authorized for the
-     * payroll facade.
+     * Retrieve a BitPay payout recipient.
      *
      * @param recipientId String The id of the recipient to retrieve.
      * @return PayoutRecipient A BitPay PayoutRecipient object.
@@ -594,12 +625,32 @@ export class Client {
 
         try {
             return await this._RESTcli.delete("recipients/" + recipientId, params).then(recipientData => {
-                const regex = /"/gi;
-                recipientData = recipientData.replace(regex, '');
-                return recipientData.toLowerCase() == "success";
+                return <Boolean>JSON.parse(recipientData);
             });
         } catch (e) {
             throw new Exceptions.PayoutDelete("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message);
+        }
+    }
+
+    /**
+     * Request a BitPay payout recipient Webhook.
+     *
+     * @param recipientId String The id of the recipient.
+     * @return True if the webhook was successfully requested, false otherwise.
+     * @throws BitPayException BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+    public async GetPayoutRecipientWebHook(recipientId: string): Promise<Boolean> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payroll)
+        };
+
+        try {
+            return await this._RESTcli.post("recipients/" + recipientId + "/notifications", params).then(recipientData => {
+                return <Boolean>JSON.parse(recipientData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message);
         }
     }
 

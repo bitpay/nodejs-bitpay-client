@@ -11,11 +11,11 @@ describe('BitPaySDK.Client', () => {
     beforeAll(() => {
         jest.setTimeout(20000); // browser takes a while
         let tokens = BitPaySDK.Tokens;
-        tokens.merchant = 'EZGKrE4ZifLPPf31jcHd153a5ad9ePnqMx1gAomAjr3W';
-        tokens.payroll = 'F5uY2NNspRyt6WHLkWsTV2eMzSYWzsADiAcznP3hPexL';
+        tokens.merchant = '';
+        tokens.payroll = '';
         let keyFilePath = __dirname+'/../examples/private_key_setup_test.key';
-        let keyPlainText = '7b9ef624577998af6f16e32a1fae18b301274ef3631294c490c582183f21290d';
-        let configFilePath = '/Users/antonio.buedo/Bitpay/Repos/nodejs-bitpay-client/setup/../examples/BitPay.config.json';
+        let keyPlainText = '';
+        let configFilePath = __dirname+'/../examples/BitPay.config.json';
 
         client = new BitPaySDK.Client(null, Env.Test, keyPlainText, tokens);
         // client = new BitPaySDK.Client(configFilePath);
@@ -44,17 +44,23 @@ describe('BitPaySDK.Client', () => {
         buyer.name = "BuyerTest";
         let invoiceData = new BitPaySDK.Models.Invoice(50, Currencies.USD);
         invoiceData.buyer = buyer;
+        invoiceData.notificationURL = "https://hookb.in/1gw8aQxYQDHj002yk79K";
+        invoiceData.extendedNotifications = true;
         let invoice;
         let retrievedInvoice;
         let retrievedInvoices;
+        let webhookRequested;
 
         it('should create invoice', async () => {
             invoice = await client.CreateInvoice(invoiceData);
+
             expect(invoice).toBeDefined();
         });
 
         it('should retrieve invoice', async () => {
+            invoice = await client.CreateInvoice(invoiceData);
             retrievedInvoice = await client.GetInvoice(invoice.id);
+
             expect(retrievedInvoice).toBeDefined();
         });
 
@@ -68,7 +74,16 @@ describe('BitPaySDK.Client', () => {
             let offset = 0;
 
             retrievedInvoices = await client.GetInvoices(dateStart, dateEnd, status, null, limit, offset);
+
             expect(retrievedInvoices).toBeDefined();
+        });
+
+        it('should request invoice webhook', async () => {
+            invoice = await client.CreateInvoice(invoiceData);
+            webhookRequested = await client.GetInvoiceWebHook(invoice.id);
+
+            expect(invoice).toBeDefined();
+            expect(webhookRequested).toBeTruthy();
         });
     });
 
@@ -171,10 +186,11 @@ describe('BitPaySDK.Client', () => {
         let recipients = [];
         let recipientsList = [];
         let recipientsObj;
-        let firstRecipient;
+        let lastRecipient;
         let retrieved;
         let updatedRecipient;
         let deleted;
+        let webhookRequested;
 
         recipientsList.push(new PayoutRecipient("sandbox+recipient1@bitpay.com","recipient1","https://hookb.in/wNDlQMV7WMFz88VDyGnJ"));
         recipientsList.push(new PayoutRecipient("sandbox+recipient2@bitpay.com","recipient2","https://hookb.in/QJOPBdMgRkukpp2WO60o"));
@@ -190,38 +206,51 @@ describe('BitPaySDK.Client', () => {
 
         it('should get payout recipient', async () => {
             recipients = await client.SubmitPayoutRecipients(recipientsObj);
-            firstRecipient = recipients.shift();
+            lastRecipient = recipients.slice(-1).pop();
 
-            retrieved = await client.GetPayoutRecipient(firstRecipient.id);
+            retrieved = await client.GetPayoutRecipient(lastRecipient.id);
 
-            expect(firstRecipient).toBeDefined();
+            expect(lastRecipient).toBeDefined();
             expect(retrieved.id).toBeDefined();
-            expect(firstRecipient.id).toEqual(retrieved.id);
+            expect(lastRecipient.id).toEqual(retrieved.id);
         });
 
         it('should get and update payout recipient', async () => {
             recipients = await client.SubmitPayoutRecipients(recipientsObj);
-            firstRecipient = recipients.shift();
+            lastRecipient = recipients.slice(-1).pop();
 
-            retrieved = await client.GetPayoutRecipient(firstRecipient.id);
+            retrieved = await client.GetPayoutRecipient(lastRecipient.id);
 
-            updatedRecipient = await client.UpdatePayoutRecipient(firstRecipient.id, "label.UPDATED", "https://notificationURL.UPDATED");
+            updatedRecipient = await client.UpdatePayoutRecipient(lastRecipient.id, "label.UPDATED", "https://hookb.in/1gw8aQxYQDHj002yk79K");
 
-            expect(firstRecipient).toBeDefined();
+            expect(lastRecipient).toBeDefined();
             expect(retrieved.id).toBeDefined();
             expect(updatedRecipient.label).toEqual("label.UPDATED");
-            expect(updatedRecipient.notificationURL).toEqual("https://notificationURL.UPDATED");
+            expect(updatedRecipient.notificationURL).toEqual("https://hookb.in/1gw8aQxYQDHj002yk79K");
         });
 
         it('should get and delete payout recipient', async () => {
-            recipients = await client.SubmitPayoutRecipients(recipientsObj);
-            firstRecipient = recipients.shift();
+            recipients = await client.GetPayoutRecipients();
+            lastRecipient = recipients.slice(-1).pop();
 
-            retrieved = await client.GetPayoutRecipient(firstRecipient.id);
+            retrieved = await client.GetPayoutRecipient(lastRecipient.id);
 
             deleted = await client.DeletePayoutRecipient(retrieved.id);
 
             expect(deleted).toBeTruthy();
+        });
+
+        it('should get and request a payout recipient webhook', async () => {
+            recipients = await client.GetPayoutRecipients();
+            lastRecipient = recipients.slice(-1).pop();
+
+            updatedRecipient = await client.UpdatePayoutRecipient(lastRecipient.id, "label.IPN_TEST", "https://hookb.in/1gw8aQxYQDHj002yk79K");
+
+            retrieved = await client.GetPayoutRecipient(updatedRecipient.id);
+
+            webhookRequested = await client.GetPayoutRecipientWebHook(retrieved.id);
+
+            expect(webhookRequested).toBeTruthy();
         });
     });
 
@@ -247,7 +276,6 @@ describe('BitPaySDK.Client', () => {
 
         it('should submit payout batch', async () => {
             createdBatch = await client.SubmitPayoutBatch(batch0);
-            console.log(createdBatch);
             expect(createdBatch).toBeDefined();
             expect(createdBatch.instructions).toBe(3);
         });
