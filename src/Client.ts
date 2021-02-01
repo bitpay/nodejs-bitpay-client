@@ -19,9 +19,9 @@ const fs = require('fs');
 
 /**
  * @author Antonio Buedo
- * @version 1.0.2101
+ * @version 1.0.2102
  * See bitpay.com/api for more information.
- * date 29.11.2021
+ * date 01.02.2021
  */
 
 export class Client {
@@ -146,6 +146,28 @@ export class Client {
         }
     }
 
+    private async init() {
+        try {
+            this._RESTcli = new RESTcli(this._env, this._ecKey);
+            this.LoadAccessTokens();
+            this._currenciesInfo = await this.LoadCurrencies();
+        } catch (e) {
+            throw new Exceptions.Generic(null, "failed to deserialize BitPay server response (Token array) : " + e.message);
+        }
+    }
+
+    private async LoadCurrencies(): Promise<[]> {
+        try {
+            let currenciesInfo = this._RESTcli.get("currencies/", {}, false).then(currenciesInfo => {
+                return <[]>JSON.parse(currenciesInfo);
+            });
+
+            return currenciesInfo;
+        } catch (e) {
+            // No action required
+        }
+    }
+
     /**
      * Gets info for specific currency.
      *
@@ -193,48 +215,6 @@ export class Client {
             return this._tokenCache[key];
         } catch (e) {
             throw new Exceptions.Generic(null,"There is no token for the specified key : " + e.message);
-        }
-    }
-
-    /**
-     * Create a BitPay Bill.
-     *
-     * @param bill        A Bill object with request parameters defined.
-     * @return A BitPay generated Bill object.
-     * @throws BitPayException       BitPayException class
-     * @throws BillCreationException BillCreationException class
-     */
-    public async CreateBill(bill: Bill): Promise<BillInterface> {
-        bill.token = this.GetAccessToken(Facade.Merchant);
-
-        try {
-            return await this._RESTcli.post("bills", bill).then(billData => {
-                return <BillInterface>JSON.parse(billData);
-            });
-        } catch (e) {
-            throw new Exceptions.BillCreation("failed to deserialize BitPay server response (Bill) : " + e.message);
-        }
-    }
-
-    /**
-     * Retrieve a BitPay bill by bill id using the specified facade.
-     *
-     * @param billId      The id of the bill to retrieve.
-     * @return A BitPay Bill object.
-     * @throws BitPayException    BitPayException class
-     * @throws BillQueryException BillQueryException class
-     */
-    public async GetBill(billId: string): Promise<BillInterface> {
-        const params = {
-            'token': this.GetAccessToken(Facade.Merchant)
-        };
-
-        try {
-            return await this._RESTcli.get("bills/" + billId, params).then(billData => {
-                return <BillInterface>JSON.parse(billData);
-            });
-        } catch (e) {
-            throw new Exceptions.BillQuery("failed to deserialize BitPay server response (Bill) : " + e.message);
         }
     }
 
@@ -439,6 +419,26 @@ export class Client {
     }
 
     /**
+     * Create a BitPay Bill.
+     *
+     * @param bill        A Bill object with request parameters defined.
+     * @return A BitPay generated Bill object.
+     * @throws BitPayException       BitPayException class
+     * @throws BillCreationException BillCreationException class
+     */
+    public async CreateBill(bill: Bill): Promise<BillInterface> {
+        bill.token = this.GetAccessToken(Facade.Merchant);
+
+        try {
+            return await this._RESTcli.post("bills", bill).then(billData => {
+                return <BillInterface>JSON.parse(billData);
+            });
+        } catch (e) {
+            throw new Exceptions.BillCreation("failed to deserialize BitPay server response (Bill) : " + e.message);
+        }
+    }
+
+    /**
      * Retrieve a collection of BitPay bills.
      *
      * @param status The status to filter the bills.
@@ -458,6 +458,28 @@ export class Client {
         try {
             return await this._RESTcli.get("bills", params).then(billData => {
                 return <BillInterface[]>JSON.parse(billData);
+            });
+        } catch (e) {
+            throw new Exceptions.BillQuery("failed to deserialize BitPay server response (Bill) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve a BitPay bill by bill id using the specified facade.
+     *
+     * @param billId      The id of the bill to retrieve.
+     * @return A BitPay Bill object.
+     * @throws BitPayException    BitPayException class
+     * @throws BillQueryException BillQueryException class
+     */
+    public async GetBill(billId: string): Promise<BillInterface> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Merchant)
+        };
+
+        try {
+            return await this._RESTcli.get("bills/" + billId, params).then(billData => {
+                return <BillInterface>JSON.parse(billData);
             });
         } catch (e) {
             throw new Exceptions.BillQuery("failed to deserialize BitPay server response (Bill) : " + e.message);
@@ -762,28 +784,6 @@ export class Client {
             });
         } catch (e) {
             throw new Exceptions.PayoutCancellation("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
-        }
-    }
-
-    private async init() {
-        try {
-            this._RESTcli = new RESTcli(this._env, this._ecKey);
-            this.LoadAccessTokens();
-            this._currenciesInfo = await this.LoadCurrencies();
-        } catch (e) {
-            throw new Exceptions.Generic(null, "failed to deserialize BitPay server response (Token array) : " + e.message);
-        }
-    }
-
-    private async LoadCurrencies(): Promise<[]> {
-        try {
-            let currenciesInfo = this._RESTcli.get("currencies/", {}, false).then(currenciesInfo => {
-                return <[]>JSON.parse(currenciesInfo);
-            });
-
-            return currenciesInfo;
-        } catch (e) {
-            // No action required
         }
     }
 }

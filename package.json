@@ -1,7 +1,7 @@
 {
-  "name": "BitPay",
-  "version": "1.0.2021",
-  "description": "Complete version of the PHP library for the new cryptographically secure BitPay API",
+  "name": "bitpayjs",
+  "version": "1.0.2102",
+  "description": "Complete version of the NodeJS library for the new cryptographically secure BitPay API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -24,6 +24,17 @@
     "type": "git",
     "url": "https://github.com/bitpay/nodejs-bitpay-client.git"
   },
+  "keywords": [
+    "bitpay",
+    "bitcoin",
+    "cash",
+    "payment",
+    "gateway"
+  ],
+  "bugs": {
+    "url": "https://github.com/bitpay/nodejs-bitpay-client/issues"
+  },
+  "homepage": "https://github.com/bitpay/nodejs-bitpay-client#readme",
   "dependencies": {
     "bs58": "^4.0.1",
     "elliptic": "^6.5.3",
