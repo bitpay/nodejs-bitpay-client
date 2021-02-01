@@ -24,6 +24,17 @@
     "type": "git",
     "url": "https://github.com/bitpay/nodejs-bitpay-client.git"
   },
+  "keywords": [
+    "bitpay",
+    "bitcoin",
+    "cash",
+    "payment",
+    "gateway"
+  ],
+  "bugs": {
+    "url": "https://github.com/bitpay/nodejs-bitpay-client/issues"
+  },
+  "homepage": "https://github.com/bitpay/nodejs-bitpay-client#readme",
   "dependencies": {
     "bs58": "^4.0.1",
     "elliptic": "^6.5.3",
