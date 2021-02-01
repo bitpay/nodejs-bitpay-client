@@ -1,7 +1,7 @@
 {
-  "name": "BitPay",
-  "version": "1.0.2021",
-  "description": "Complete version of the PHP library for the new cryptographically secure BitPay API",
+  "name": "bitpayjs",
+  "version": "1.0.2102",
+  "description": "Complete version of the NodeJS library for the new cryptographically secure BitPay API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [

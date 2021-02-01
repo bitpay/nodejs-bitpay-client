@@ -19,9 +19,9 @@ const fs = require('fs');
 
 /**
  * @author Antonio Buedo
- * @version 1.0.2101
+ * @version 1.0.2102
  * See bitpay.com/api for more information.
- * date 29.11.2021
+ * date 01.02.2021
  */
 
 export class Client {
