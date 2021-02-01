@@ -5,4 +5,4 @@ export const ProdUrl: string = "https://bitpay.com/";
 export const BitpayApiVersion: string = "2.0.0";
 export const BitpayPluginInfo: string = "BitPay_NodeJs_Client_v1.0.2102";
 export const BitpayApiFrame: string = "custom";
-export const BitpayApiFrameVersion: string = "1.0.0";
+export const BitpayApiFrameVersion: string = "2.0.0";
