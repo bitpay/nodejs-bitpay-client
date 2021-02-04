@@ -7,7 +7,7 @@ export interface BillInterface {
     currency: string | null;
     token: string | null;
     email: string | null;
-    items: Array<Item> | null;
+    items: Item[] | [];
     number: string | null;
     name: string | null;
     address1: string | null;
@@ -16,7 +16,6 @@ export interface BillInterface {
     state: string | null;
     zip: string | null;
     country: string | null;
-    cc: Array<string> | null;
     phone: string | null;
     dueDate: string | null;
     passProcessingFee: number | null;
@@ -31,7 +30,7 @@ export class Bill implements BillInterface {
 
     address1: string | null;
     address2: string | null;
-    cc: Array<string> | null;
+    cc: string[] | [];
     city: string | null;
     country: string | null;
     createDate: string | null;
@@ -39,7 +38,7 @@ export class Bill implements BillInterface {
     dueDate: string | null;
     email: string | null;
     id: string | null;
-    items: Array<Item> | null;
+    items: Item[] | [];
     merchant: string | null;
     name: string | null;
     number: string | null;
@@ -59,7 +58,7 @@ export class Bill implements BillInterface {
      * @param email    The email address of the receiver for this bill.
      * @param items    The list of itens to add to this bill.
      */
-    public constructor(number: string, currency: string, email: string, items: Array<Item>) {
+    public constructor(number: string, currency: string, email: string, items: Item[]) {
         this.number = number;
         this.setCurrency(currency);
         this.email = email;

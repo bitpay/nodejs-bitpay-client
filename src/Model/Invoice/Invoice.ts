@@ -33,7 +33,7 @@ export interface InvoiceInterface {
     itemDesc: string | null;
     itemCode: string | null;
     physical: boolean | null;
-    paymentCurrencies: Array<string> | null;
+    paymentCurrencies: string[] | [];
     acceptanceWindow: number | null;
 
     // Buyer data
@@ -94,7 +94,7 @@ export class Invoice implements InvoiceInterface {
     itemDesc: string | null;
     itemCode: string | null;
     physical: boolean | null;
-    paymentCurrencies: Array<string> | null;
+    paymentCurrencies: string[] | [];
     acceptanceWindow: number | null;
 
     // Buyer data

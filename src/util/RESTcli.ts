@@ -110,7 +110,7 @@ export class RESTcli {
             _options.uri = _fullURL;
             _options.qs = parameters;
 
-            return await rp.delete(_options).then((resp: any) => resp.data).then(resp => {
+            return await rp.delete(_options).then((resp: any) => resp).then(resp => {
                 return this.responseToJsonString(resp);
             });
         } catch (e) {

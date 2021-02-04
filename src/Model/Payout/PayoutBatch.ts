@@ -7,7 +7,7 @@ export interface PayoutBatchInterface {
     amount: number | null;
     currency: string | null;
     effectiveDate: string | null;
-    instructions: Array<PayoutInstruction>;
+    instructions: PayoutInstruction[];
 
     reference: string | null;
     notificationEmail: string | null;
@@ -30,7 +30,7 @@ export interface PayoutBatchInterface {
 export class PayoutBatch implements PayoutBatchInterface {
     static readonly MethodVwap24 = "vwap24hr";
 
-    instructions: Array<PayoutInstruction>;
+    instructions: PayoutInstruction[];
     account: string | null;
     amount: number | null;
     btc: number | null;

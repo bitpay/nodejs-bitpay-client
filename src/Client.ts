@@ -5,6 +5,8 @@ import {
     BillInterface,
     Invoice,
     InvoiceInterface,
+    LedgerInterface,
+    LedgerEntryInterface,
     PayoutBatch,
     PayoutBatchInterface,
     PayoutRecipient,
@@ -14,14 +16,15 @@ import {
     Rates
 } from "./Model";
 import {Refund, RefundInterface} from "./Model/Invoice/Refund";
+import {Settlement, SettlementInterface} from "./Model/Settlement/Settlement";
 
 const fs = require('fs');
 
 /**
  * @author Antonio Buedo
- * @version 1.0.2102
+ * @version 1.1.2102
  * See bitpay.com/api for more information.
- * date 01.02.2021
+ * date 04.02.2021
  */
 
 export class Client {
@@ -528,6 +531,55 @@ export class Client {
     }
 
     /**
+     * Retrieve a list of ledgers by date range using the merchant facade.
+     *
+     * @param currency  The three digit currency string for the ledger to retrieve.
+     * @param dateStart The first date for the query filter.
+     * @param dateEnd   The last date for the query filter.
+     * @return A Ledger object populated with the BitPay ledger entries list.
+     * @throws LedgerQueryException LedgerQueryException class
+     */
+    public async GetLedger(currency: string, dateStart: string, dateEnd: string): Promise<LedgerEntryInterface[]> {
+        let params = {};
+
+        params["token"] = this.GetAccessToken(Facade.Merchant);
+
+        if (currency) {params["currency"] = currency}
+        if (dateStart) {params["startDate"] = dateStart}
+        if (dateEnd) {params["endDate"] = dateEnd}
+
+        try {
+            return await this._RESTcli.get("ledgers/" + currency, params).then(ledgerData => {
+                return <LedgerEntryInterface[]>JSON.parse(ledgerData);
+            });
+        } catch (e)
+        {
+            throw new Exceptions.LedgerQuery("failed to deserialize BitPay server response (Ledger) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve a list of ledgers using the merchant facade.
+     *
+     * @return A list of Ledger objects populated with the currency and current balance of each one.
+     * @throws LedgerQueryException LedgerQueryException class
+     */
+    public async GetLedgers(): Promise<LedgerInterface> {
+        let params = {};
+
+        params["token"] = this.GetAccessToken(Facade.Merchant);
+
+        try {
+            return await this._RESTcli.get("ledgers", params).then(ledgerData => {
+                return <LedgerInterface>JSON.parse(ledgerData);
+            });
+        } catch (e)
+        {
+            throw new Exceptions.LedgerQuery("failed to deserialize BitPay server response (Ledger) : " + e.message);
+        }
+    }
+
+    /**
      * Submit BitPay Payout Recipients.
      *
      * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
@@ -784,6 +836,87 @@ export class Client {
             });
         } catch (e) {
             throw new Exceptions.PayoutCancellation("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieves settlement reports for the calling merchant filtered by query.
+     * The `limit` and `offset` parameters
+     * specify pages for large query sets.
+     *
+     * @param currency  The three digit currency string for the ledger to retrieve.
+     * @param dateStart The start date for the query.
+     * @param dateEnd   The end date for the query.
+     * @param status    Can be `processing`, `completed`, or `failed`.
+     * @param limit     Maximum number of settlements to retrieve.
+     * @param offset    Offset for paging.
+     * @return A list of BitPay Settlement objects.
+     * @throws SettlementQueryException SettlementQueryException class
+     */
+    public async GetSettlements(currency: string, dateStart: string, dateEnd: string, status: string, limit: number, offset: number): Promise<SettlementInterface[]> {
+        let params = {};
+
+        params["token"] = this.GetAccessToken(Facade.Merchant);
+
+        if (currency) {params["currency"] = currency}
+        if (dateStart) {params["dateStart"] = dateStart}
+        if (dateEnd) {params["dateEnd"] = dateEnd}
+        if (currency) {params["currency"] = currency}
+        if (status) {params["status"] = status}
+        if (limit) {params["limit"] = limit}
+        if (offset) {params["offset"] = offset}
+
+        try {
+            return await this._RESTcli.get("settlements", params).then(settlementData => {
+                return <SettlementInterface[]>JSON.parse(settlementData);
+            });
+        } catch (e)
+        {
+            throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieves a summary of the specified settlement.
+     *
+     * @param settlementId Settlement Id.
+     * @return A BitPay Settlement object.
+     * @throws SettlementQueryException SettlementQueryException class
+     */
+    public async GetSettlement(settlementId: string): Promise<SettlementInterface> {
+        let params = {};
+
+        params["token"] = this.GetAccessToken(Facade.Merchant);
+
+        try {
+            return await this._RESTcli.get("settlements", params).then(settlementData => {
+                return <SettlementInterface>JSON.parse(settlementData);
+            });
+        } catch (e)
+        {
+            throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message);
+        }
+    }
+
+    /**
+     * Gets a detailed reconciliation report of the activity within the settlement period.
+     *
+     * @param settlement Settlement to generate report for.
+     * @return A detailed BitPay Settlement object.
+     * @throws SettlementQueryException SettlementQueryException class
+     */
+    public async GetSettlementReconciliationReport(settlement: Settlement): Promise<SettlementInterface> {
+        let params = {};
+
+        params["token"] = settlement.token;
+
+        try {
+            return await this._RESTcli.get("settlements/" + settlement.id + "/reconciliationReport", params).then(settlementData => {
+                return <SettlementInterface>JSON.parse(settlementData);
+            });
+        } catch (e)
+        {
+            throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message);
         }
     }
 }

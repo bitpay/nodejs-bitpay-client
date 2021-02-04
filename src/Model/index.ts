@@ -17,6 +17,8 @@ import {Invoice, InvoiceInterface} from './Invoice/Invoice';
 import {RateInterface, Rates} from './Rates/Rates';
 import {Bill, BillInterface} from "./Bill/Bill";
 import {Item} from "./Bill/Item";
+import {LedgerInterface} from "./Ledger/Ledger";
+import {LedgerEntryInterface} from "./Ledger/LedgerEntry";
 import {PayoutRecipient, PayoutRecipientInterface} from './Payout/PayoutRecipient';
 import {PayoutRecipients, PayoutRecipientsInterface} from './Payout/PayoutRecipients';
 import {PayoutBatch, PayoutBatchInterface} from './Payout/PayoutBatch';
@@ -30,6 +32,8 @@ export {
     Bill,
     BillInterface,
     Item,
+    LedgerInterface,
+    LedgerEntryInterface,
     PayoutRecipient,
     PayoutRecipientInterface,
     PayoutRecipients,
