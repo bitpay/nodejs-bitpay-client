@@ -28,12 +28,16 @@ import {BillCreationException as BillCreation} from './BillCreationException';
 import {BillQueryException as BillQuery} from './BillQueryException';
 import {BillDeliveryException as BillDelivery} from './BillDeliveryException';
 import {BillUpdateException as BillUpdate} from './BillUpdateException';
+import {LedgerException as LedgerGeneric} from './LedgerException';
+import {LedgerQueryException as LedgerQuery} from './LedgerQueryException';
 import {PayoutException as PayoutGeneric} from './PayoutException';
 import {PayoutCreationException as PayoutCreation} from './PayoutCreationException';
 import {PayoutQueryException as PayoutQuery} from './PayoutQueryException';
 import {PayoutCancellationException as PayoutCancellation} from './PayoutCancellationException';
 import {PayoutUpdateException as PayoutUpdate} from './PayoutUpdateException';
 import {PayoutDeleteException as PayoutDelete} from './PayoutDeleteException';
+import {SettlementException as SettlementGeneric} from './SettlementException';
+import {SettlementQueryException as SettlementQuery} from './SettlementQueryException';
 
 export {
     Generic,
@@ -51,10 +55,14 @@ export {
     BillQuery,
     BillDelivery,
     BillUpdate,
+    LedgerGeneric,
+    LedgerQuery,
     PayoutGeneric,
     PayoutCreation,
     PayoutQuery,
     PayoutCancellation,
     PayoutUpdate,
     PayoutDelete,
+    SettlementGeneric,
+    SettlementQuery,
 };

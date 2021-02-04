@@ -65,9 +65,9 @@ describe('BitPaySDK.Client', () => {
         });
 
         it('should retrieve invoice list', async () => {
-            let dateEnd = new Date();
-            let dateStart = new Date();
-            dateStart.setDate(dateEnd.getDate()-30);
+            let date = new Date();
+            let dateEnd = new Date().toISOString().split('T')[0];
+            let dateStart = new Date(date.setDate(date.getDate()-30)).toISOString().split('T')[0];
 
             let status = InvoiceStatus.New;
             let limit = 30;
@@ -88,9 +88,9 @@ describe('BitPaySDK.Client', () => {
     });
 
     describe('Refunds', () => {
-        let dateEnd = new Date();
-        let dateStart = new Date();
-        dateStart.setDate(dateEnd.getDate()-30);
+        let date = new Date();
+        let dateEnd = new Date().toISOString().split('T')[0];
+        let dateStart = new Date(date.setDate(date.getDate()-30)).toISOString().split('T')[0];
 
         let createdRefund;
         let refundEmail = "sandbox@bitpay.com";
@@ -102,21 +102,34 @@ describe('BitPaySDK.Client', () => {
         it('should get first paid invoice', async () => {
             firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
             firstPaidInvoice = firstPaidInvoice.shift();
+
+            expect(firstPaidInvoice).toBeDefined();
         });
 
         it('should create refund request', async () => {
+            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
+            firstPaidInvoice = firstPaidInvoice.shift();
             createdRefund = await client.CreateRefund(firstPaidInvoice, refundEmail, firstPaidInvoice.price, firstPaidInvoice.currency);
+
             expect(createdRefund).toBeDefined();
         });
 
         it('should get refund request', async () => {
+            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
+            firstPaidInvoice = firstPaidInvoice.shift();
             retrievedRefund = await client.GetRefunds(firstPaidInvoice);
             firstRefund = retrievedRefund.shift();
+
             expect(retrievedRefund).toBeDefined();
         });
 
         it('should cancel refund request', async () => {
+            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
+            firstPaidInvoice = firstPaidInvoice.shift();
+            retrievedRefund = await client.GetRefunds(firstPaidInvoice);
+            firstRefund = retrievedRefund.shift();
             canceledRefund = await client.CancelRefund(firstPaidInvoice, firstRefund);
+
             expect(canceledRefund).toBeDefined();
         });
     });
@@ -178,6 +191,28 @@ describe('BitPaySDK.Client', () => {
             basicBillUsd = await client.CreateBill(bill);
             deliveredBill = await client.DeliverBill(basicBillUsd.id, basicBillUsd.token);
             expect(deliveredBill).toBeTruthy();
+        });
+    });
+
+    describe('Ledger', () => {
+        let retrievedLedger;
+
+        it('should get ledgers', async () => {
+            retrievedLedger = await client.GetLedgers();
+
+            expect(retrievedLedger).toBeDefined();
+            expect(retrievedLedger.length).toBeGreaterThan(0);
+        });
+
+        it('should retrieve ledger USD', async () => {
+            let date = new Date();
+            let dateEnd = new Date().toISOString().split('T')[0];
+            let dateStart = new Date(date.setDate(date.getDate()-30)).toISOString().split('T')[0];
+
+            retrievedLedger = await client.GetLedger(Currencies.USD, dateStart, dateEnd);
+
+            expect(retrievedLedger).toBeDefined();
+            expect(retrievedLedger.length).toBeGreaterThan(0);
         });
     });
 
@@ -255,10 +290,9 @@ describe('BitPaySDK.Client', () => {
     });
 
     describe('Payouts', () => {
+
         let date = new Date();
-        let threeDaysFromNow = new Date();
-        threeDaysFromNow.setDate(date.getDate()+3);
-        let effectiveDate = threeDaysFromNow.getDate().toString();
+        let effectiveDate = new Date(date.setDate(date.getDate()+3)).toISOString().split('T')[0];
 
         let createdBatch;
         let retrievedBatch;
@@ -304,6 +338,42 @@ describe('BitPaySDK.Client', () => {
 
             expect(canceledBatch).toBeDefined();
             expect(retrievedBatch.id).toEqual(canceledBatch.id);
+        });
+    });
+
+    describe('Settlements', () => {
+        let retrievedSettlements;
+        let retrievedSettlement;
+        let firstSettlement;
+        let date = new Date();
+        let dateEnd = new Date().toISOString().split('T')[0];
+        let dateStart = new Date(date.setDate(date.getDate()-30)).toISOString().split('T')[0];
+
+        it('should get settlements', async () => {
+            retrievedSettlements = await client.GetSettlements(Currencies.USD, dateStart, dateEnd, null, null, null);
+
+            expect(retrievedSettlements).toBeDefined();
+            expect(retrievedSettlements.length).toBeGreaterThan(0);
+        });
+
+        it('should retrieve settlements USD', async () => {
+            retrievedSettlements = await client.GetSettlements(Currencies.USD, dateStart, dateEnd, null, null, null);
+            firstSettlement = retrievedSettlements.shift();
+            retrievedSettlement = await client.GetSettlement(firstSettlement.id);
+
+            expect(retrievedSettlements).toBeDefined();
+            expect(retrievedSettlement).toBeDefined();
+            expect(firstSettlement.id).toEqual(retrievedSettlement.id);
+        });
+
+        it('should retrieve reconciliation report USD', async () => {
+            retrievedSettlements = await client.GetSettlements(Currencies.USD, dateStart, dateEnd, null, null, null);
+            firstSettlement = retrievedSettlements.shift();
+            retrievedSettlement = await client.GetSettlementReconciliationReport(firstSettlement);
+
+            expect(retrievedSettlements).toBeDefined();
+            expect(retrievedSettlement).toBeDefined();
+            expect(firstSettlement.id).toEqual(retrievedSettlement.id);
         });
     });
 });

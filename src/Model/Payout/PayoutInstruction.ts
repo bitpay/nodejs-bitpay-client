@@ -13,7 +13,7 @@ export interface PayoutInstructionInterface {
     id: string | null;
 
     btc: PayoutInstructionBtcSummary;
-    transactions: Array<PayoutInstructionTransaction>;
+    transactions: PayoutInstructionTransaction[];
     status: string | null;
 }
 
@@ -28,7 +28,7 @@ export class PayoutInstruction implements PayoutInstructionInterface {
     shopperId: string | null;
     status: string | null;
     walletProvider: string | null;
-    transactions: Array<PayoutInstructionTransaction>;
+    transactions: PayoutInstructionTransaction[];
 
     /**
      * Constructor, create a PayoutInstruction object.
