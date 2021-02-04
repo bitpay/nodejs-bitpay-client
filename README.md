@@ -3,6 +3,8 @@
 # BitPay NodeJS client
 [![License](https://img.shields.io/github/license/bitpay/nodejs-bitpay-client.svg?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/bitpay/nodejs-bitpay-client/master/LICENSE)
 
+[![npm version](https://img.shields.io/npm/v/bitpay-sdk)](https://www.npmjs.com/package/bitpay-sdk)
+
 Full implementation of the BitPay Payment Gateway. This library implements BitPay's [Cryptographically Secure RESTful API](https://bitpay.com/api).
 
 ## Getting Started
