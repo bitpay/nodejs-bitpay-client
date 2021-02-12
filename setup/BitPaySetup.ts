@@ -170,7 +170,7 @@ let requestTokens = async (option) => {
     try{
         let reqMerchant = false;
         let reqPayroll = false;
-        switch (option) {
+        switch (option.toLowerCase()) {
             case 'm':
                 reqMerchant = true;
                 reqPayroll = false;
