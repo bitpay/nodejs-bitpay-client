@@ -1,7 +1,7 @@
 const fs = require('fs');
 const request = require('request');
 const BitPaySDK = require('../src/index');
-import * as readline from 'readline';
+const readline = require('readline');
 
 let privateKeyPath = __dirname+'/../examples/private_key_setup';
 let ConfFilePath = __dirname+'/../examples/BitPay.config.json';
@@ -170,7 +170,7 @@ let requestTokens = async (option) => {
     try{
         let reqMerchant = false;
         let reqPayroll = false;
-        switch (option) {
+        switch (option.toLowerCase()) {
             case 'm':
                 reqMerchant = true;
                 reqPayroll = false;
