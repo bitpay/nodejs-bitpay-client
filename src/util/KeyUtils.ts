@@ -41,7 +41,7 @@ export class KeyUtils {
         data: string,
         privkey: elliptic.ec.KeyPair,
     ): string {
-        let dataBuffer = Buffer.from(data, 'utf-8')
+        let dataBuffer = Buffer.from(data, 'utf-8');
         const hashBuffer = crypto
             .createHash('sha256')
             .update(dataBuffer).digest();

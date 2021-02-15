@@ -75,7 +75,6 @@ describe('BitPaySDK.Client', () => {
             let offset = 0;
 
             retrievedInvoices = await client.GetInvoices(dateStart, dateEnd, status, null, limit, offset);
-            console.log(retrievedInvoices);
 
             expect(retrievedInvoices).toBeDefined();
         });
