@@ -71,20 +71,24 @@ Once you have the environment file (JSON previously generated) you can initializ
 ```node
 // Provide the full path to the env file which you have previously stored securely.
 
-let client = new BitPaySDK.Client(configFilePath);
+const {Client, Env, Currency, Models, Tokens} = require('bitpay-sdk');
+
+let client = new Client(configFilePath);
         
 ```
 
 ```node
 // Initialize with separate variables.
 
-let tokens = BitPaySDK.Tokens;
-tokens.merchant = 'AdsBgKAHzQTE8geuC3jg4TPivcbLsiic69SAsZSoKSWk';
-let keyFilePath = __dirname+'/../examples/private_key_test.key';
-let keyPlainText = 'ce2030a2ed82ac2b0337e8ee00943428949e78cd606b8b1af9e08be6cdb442fd';
-let configFilePath = __dirname+'/../examples/BitPay.config.json';
+const {Client, Env, Currency, Models, Tokens} = require('bitpay-sdk');
 
-let client = new BitPaySDK.Client(
+let tokens = Tokens;
+tokens.merchant = 'AdsBgKAHzQTE8geuC3jg4TPivcbLsiic69SAsZSoKSWk';
+let keyFilePath = __dirname+'/../secure/private_key_test.key';
+let keyPlainText = 'ce2030a2ed82ac2b0337e8ee00943428949e78cd606b8b1af9e08be6cdb442fd';
+let configFilePath = __dirname+'/../secure/BitPay.config.json';
+
+let client = new Client(
     null,
     Env.Test,
     [FULL_PATH_TO_THE_PRIVATE_KEY_|OR|_PRIVATE_KEY_AS-PLAIN_TEXT],
@@ -104,7 +108,7 @@ The pairing code is then entered into the BitPay merchant dashboard for the desi
 ### Create an invoice
 
 ```node
-let invoiceData = new BitPaySDK.Models.Invoice(50, Currencies.USD);
+let invoiceData = new Models.Invoice(50, Currencies.USD);
 
 const result = await client.CreateInvoice(invoiceData);
 
@@ -130,5 +134,5 @@ let rate = rates.client(Currencies.USD);
 
 rates.update(); // It will refresh the current Rates object
 ```
-See also the test package for more examples of API calls.
+See also the test package for more secure of API calls.
 

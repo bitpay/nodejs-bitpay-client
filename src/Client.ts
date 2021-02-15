@@ -5,8 +5,8 @@ import {
     BillInterface,
     Invoice,
     InvoiceInterface,
-    LedgerInterface,
     LedgerEntryInterface,
+    LedgerInterface,
     PayoutBatch,
     PayoutBatchInterface,
     PayoutRecipient,
@@ -22,7 +22,7 @@ const fs = require('fs');
 
 /**
  * @author Antonio Buedo
- * @version 1.1.2102
+ * @version 1.3.2102
  * See bitpay.com/api for more information.
  * date 04.02.2021
  */
@@ -687,10 +687,9 @@ export class Client {
     /**
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
-     * @param invoice  The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
-     * @param refund The refund to be canceled.
-     * @return True if the refund was successfully canceled, false otherwise.
-     * @throws RefundCancellationException RefundCancellationException class
+     * @param recipientId The Payout Recipient to be deleted.
+     * @return True if the recipient was successfully deleted, false otherwise.
+     * @throws PayoutDeleteException PayoutDeleteException class
      */
     public async DeletePayoutRecipient(recipientId: string): Promise<Boolean> {
         const params = {
