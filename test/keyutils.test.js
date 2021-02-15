@@ -2,7 +2,7 @@ const fs = require('fs');
 const request = require('request');
 const BitPaySDK = require('../src/index');
 
-let privateKeyPath = '../examples/private_key.key';
+let privateKeyPath = '../secure/private_key.key';
 
 let keyPair;
 let ecKey;

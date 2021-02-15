@@ -13,9 +13,9 @@ describe('BitPaySDK.Client', () => {
         let tokens = BitPaySDK.Tokens;
         tokens.merchant = '';
         tokens.payroll = '';
-        let keyFilePath = __dirname+'/../examples/private_key_setup_test.key';
+        let keyFilePath = __dirname+'/../secure/private_key_test.key';
         let keyPlainText = '';
-        let configFilePath = __dirname+'/../examples/BitPay.config.json';
+        let configFilePath = __dirname+'/../secure/BitPay.config.json';
 
         client = new BitPaySDK.Client(null, Env.Test, keyPlainText, tokens);
         // client = new BitPaySDK.Client(configFilePath);
@@ -53,6 +53,7 @@ describe('BitPaySDK.Client', () => {
 
         it('should create invoice', async () => {
             invoice = await client.CreateInvoice(invoiceData);
+            console.log(invoice);
 
             expect(invoice).toBeDefined();
         });
@@ -74,6 +75,7 @@ describe('BitPaySDK.Client', () => {
             let offset = 0;
 
             retrievedInvoices = await client.GetInvoices(dateStart, dateEnd, status, null, limit, offset);
+            console.log(retrievedInvoices);
 
             expect(retrievedInvoices).toBeDefined();
         });

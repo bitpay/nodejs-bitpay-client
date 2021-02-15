@@ -17,6 +17,6 @@
     "src/**/*.spec.ts",
     "node_modules",
     "test",
-    "examples"
+    "secure"
   ]
 }

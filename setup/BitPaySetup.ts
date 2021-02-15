@@ -3,8 +3,8 @@ const request = require('request');
 const BitPaySDK = require('../src/index');
 const readline = require('readline');
 
-let privateKeyPath = __dirname+'/../examples/private_key_setup';
-let ConfFilePath = __dirname+'/../examples/BitPay.config.json';
+let privateKeyPath = __dirname+'/../secure/private_key';
+let ConfFilePath = __dirname+'/../secure/BitPay.config.json';
 let keyUtils = new BitPaySDK.KeyUtils();
 let keyPair;
 let ecKey;
@@ -95,7 +95,8 @@ let loadKey = async (privateKey) => {
             console.log('Loaded Private Key: ' + ecKey.getPrivate("hex"));
             console.log('With Public Key: ' + keyUtils.getPublicKeyFromPrivateKey(ecKey));
             console.log('From: ' + privateKey);
-            console.log("\n\n");
+            console.log("\n");
+            selectTokens();
         }
         else {
             ecKey = keyUtils.load_keypair(privateKey);
@@ -104,7 +105,8 @@ let loadKey = async (privateKey) => {
             console.log('Loaded Private Key: ' + ecKey.getPrivate("hex"));
             console.log('With Public Key: ' + keyUtils.getPublicKeyFromPrivateKey(ecKey));
             console.log('From: ' + privateKey);
-            console.log("\n\n");
+            console.log("\n");
+            selectTokens();
         }
     } catch (e) {
         console.log(e);
@@ -112,6 +114,9 @@ let loadKey = async (privateKey) => {
 };
 let storeKey = async () => {
     try {
+        if (!fs.existsSync(__dirname+'/../secure')){
+            fs.mkdirSync(__dirname+'/../secure');
+        }
         console.log("Select the way you want to store your private key:");
         rl.question('Press F for storing in a text file or T for plain text in your config file: ', async (answer) => {
             switch (answer.toLowerCase()) {

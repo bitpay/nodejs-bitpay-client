@@ -80,9 +80,9 @@ let client = new BitPaySDK.Client(configFilePath);
 
 let tokens = BitPaySDK.Tokens;
 tokens.merchant = 'AdsBgKAHzQTE8geuC3jg4TPivcbLsiic69SAsZSoKSWk';
-let keyFilePath = __dirname+'/../examples/private_key_test.key';
+let keyFilePath = __dirname+'/../secure/private_key_test.key';
 let keyPlainText = 'ce2030a2ed82ac2b0337e8ee00943428949e78cd606b8b1af9e08be6cdb442fd';
-let configFilePath = __dirname+'/../examples/BitPay.config.json';
+let configFilePath = __dirname+'/../secure/BitPay.config.json';
 
 let client = new BitPaySDK.Client(
     null,
@@ -130,5 +130,5 @@ let rate = rates.client(Currencies.USD);
 
 rates.update(); // It will refresh the current Rates object
 ```
-See also the test package for more examples of API calls.
+See also the test package for more secure of API calls.
 
