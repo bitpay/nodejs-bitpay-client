@@ -3,7 +3,7 @@ import * as qs from "querystring";
 import * as rp from 'request-promise';
 import * as _ from 'underscore';
 import * as elliptic from "elliptic";
-import BitPayException from "../exceptions/BitPayException";
+import BitPayException from "../Exceptions/BitPayException";
 
 export class RESTcli {
     public _ecKey: elliptic.ec.KeyPair;
