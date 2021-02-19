@@ -38,6 +38,10 @@ import {PayoutUpdateException as PayoutUpdate} from './PayoutUpdateException';
 import {PayoutDeleteException as PayoutDelete} from './PayoutDeleteException';
 import {SettlementException as SettlementGeneric} from './SettlementException';
 import {SettlementQueryException as SettlementQuery} from './SettlementQueryException';
+import {SubscriptionException as SubscriptionGeneric} from './SubscriptionException';
+import {SubscriptionCreationException as SubscriptionCreation} from './SubscriptionCreationException';
+import {SubscriptionQueryException as SubscriptionQuery} from './SubscriptionQueryException';
+import {SubscriptionUpdateException as SubscriptionUpdate} from './SubscriptionUpdateException';
 
 export {
     Generic,
@@ -65,4 +69,8 @@ export {
     PayoutDelete,
     SettlementGeneric,
     SettlementQuery,
+    SubscriptionGeneric,
+    SubscriptionCreation,
+    SubscriptionQuery,
+    SubscriptionUpdate
 };

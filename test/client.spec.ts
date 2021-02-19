@@ -1,6 +1,7 @@
 import {Env, RecipientReferenceMethod} from "../src";
 import {Buyer} from "../src/Model/Invoice/Buyer";
-import {Item, PayoutRecipients, PayoutRecipient, PayoutInstruction, PayoutBatch} from "../src/Model";
+import {BillItem, PayoutRecipients, PayoutRecipient, PayoutInstruction, PayoutBatch, BillData, SubscriptionItem} from "../src/Model";
+import {Subscription} from "../src/Model/Subscription/Subscription";
 const BitPaySDK = require('../src/index');
 const Currencies = BitPaySDK.Currency;
 const InvoiceStatus = BitPaySDK.InvoiceStatus;
@@ -143,7 +144,7 @@ describe('BitPaySDK.Client', () => {
         let deliveredBill;
 
         let items = [];
-        let item = new Item();
+        let item = new BillItem();
         item.price = 30;
         item.quantity = 9;
         item.description = "product-a";
@@ -317,7 +318,7 @@ describe('BitPaySDK.Client', () => {
 
         it('should get payout batch', async () => {
             createdBatch = await client.SubmitPayoutBatch(batch0);
-            retrievedBatch = await client.getPayoutBatch(createdBatch.id);
+            retrievedBatch = await client.GetPayoutBatch(createdBatch.id);
 
             expect(retrievedBatch).toBeDefined();
             expect(retrievedBatch.id).toBeDefined();
@@ -325,7 +326,7 @@ describe('BitPaySDK.Client', () => {
         });
 
         it('should get payout batches by status', async () => {
-            retrievedBatches = await client.getPayoutBatches(PayoutStatus.New);
+            retrievedBatches = await client.GetPayoutBatches(PayoutStatus.New);
 
             expect(retrievedBatches).toBeDefined();
         });
@@ -333,9 +334,9 @@ describe('BitPaySDK.Client', () => {
         it('should create, get and cancel payout batch', async () => {
             createdBatch = await client.SubmitPayoutBatch(batch0);
 
-            retrievedBatch = await client.getPayoutBatch(createdBatch.id);
+            retrievedBatch = await client.GetPayoutBatch(createdBatch.id);
 
-            canceledBatch = await client.cancelPayoutBatch(retrievedBatch.id);
+            canceledBatch = await client.CancelPayoutBatch(retrievedBatch.id);
 
             expect(canceledBatch).toBeDefined();
             expect(retrievedBatch.id).toEqual(canceledBatch.id);
@@ -375,6 +376,66 @@ describe('BitPaySDK.Client', () => {
             expect(retrievedSettlements).toBeDefined();
             expect(retrievedSettlement).toBeDefined();
             expect(firstSettlement.id).toEqual(retrievedSettlement.id);
+        });
+    });
+
+    describe('Subscriptions', () => {
+
+        let subscription;
+        let subscriptions;
+        let items = [];
+        let billData;
+        let subscriptionObj;
+        let lastSubscription;
+        let retrievedSubscription;
+        let updatedSubscription;
+
+        items.push(new SubscriptionItem(6, 10, "Item 1"));
+        items.push(new SubscriptionItem(4.3, 35, "Item 2"));
+
+        billData = new BillData('USD', 'sandbox+sub@bitpay.com', '2021-02-21', items);
+        billData.cc = 'sandbox+cc@bitpay.com';
+        billData.passProcessingFee = true;
+        billData.emailBill = true;
+        billData.name = 'aaaa';
+        billData.currency = 'USD';
+        billData.email = 'sandbox+sub2@bitpay.com';
+
+        subscriptionObj = new Subscription();
+        subscriptionObj.id = '123';
+        subscriptionObj.status = 'draft';
+        subscriptionObj.nextDelivery = '2021-02-19';
+        subscriptionObj.schedule = 'weekly';
+        subscriptionObj.billData = billData;
+
+        it('should submit subscription', async () => {
+            subscription = await client.CreateSubscription(subscriptionObj);
+            expect(subscription).toBeDefined();
+            expect(subscription.billData.items.length).toBe(2);
+        });
+
+        it('should get subscription', async () => {
+            subscriptions = await client.GetSubscriptions();
+            lastSubscription = subscriptions.slice(-1).pop();
+
+            retrievedSubscription = await client.GetSubscription(lastSubscription.id);
+
+            expect(lastSubscription).toBeDefined();
+            expect(retrievedSubscription.id).toBeDefined();
+            expect(lastSubscription.id).toEqual(retrievedSubscription.id);
+        });
+
+        it('should get and update subscription', async () => {
+            subscription = await client.CreateSubscription(subscriptionObj);
+            retrievedSubscription = await client.GetSubscription(subscription.id);
+
+            retrievedSubscription.nextDelivery = '2021-02-20';
+
+            updatedSubscription = await client.UpdateSubscription(retrievedSubscription, retrievedSubscription.id);
+
+            expect(subscription).toBeDefined();
+            expect(retrievedSubscription.id).toBeDefined();
+            expect(updatedSubscription).toBeDefined();
         });
     });
 });

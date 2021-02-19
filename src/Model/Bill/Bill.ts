@@ -1,5 +1,5 @@
 import {Currency} from "../../Currency";
-import BitPayException from "../../exceptions/BitPayException";
+import BitPayException from "../../Exceptions/BitPayException";
 import {Item} from "./Item";
 
 export interface BillInterface {

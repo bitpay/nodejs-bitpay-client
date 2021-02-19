@@ -1,5 +1,5 @@
 import {Client} from "../../Client";
-import RateQueryException from "../../exceptions/RateQueryException";
+import RateQueryException from "../../Exceptions/RateQueryException";
 
 interface RateInterface {
     Name: string;
