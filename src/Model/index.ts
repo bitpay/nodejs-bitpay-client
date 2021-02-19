@@ -16,13 +16,15 @@
 import {Invoice, InvoiceInterface} from './Invoice/Invoice';
 import {RateInterface, Rates} from './Rates/Rates';
 import {Bill, BillInterface} from "./Bill/Bill";
-import {Item} from "./Bill/Item";
+import {Item as BillItem} from "./Bill/Item";
 import {LedgerInterface} from "./Ledger/Ledger";
 import {LedgerEntryInterface} from "./Ledger/LedgerEntry";
 import {PayoutRecipient, PayoutRecipientInterface} from './Payout/PayoutRecipient';
 import {PayoutRecipients, PayoutRecipientsInterface} from './Payout/PayoutRecipients';
 import {PayoutBatch, PayoutBatchInterface} from './Payout/PayoutBatch';
 import {PayoutInstruction, PayoutInstructionInterface} from './Payout/PayoutInstruction';
+import {BillData} from "./Subscription/BillData";
+import {Item as SubscriptionItem} from "./Subscription/Item";
 
 export {
     Invoice,
@@ -31,7 +33,7 @@ export {
     Rates,
     Bill,
     BillInterface,
-    Item,
+    BillItem,
     LedgerInterface,
     LedgerEntryInterface,
     PayoutRecipient,
@@ -42,4 +44,6 @@ export {
     PayoutBatchInterface,
     PayoutInstruction,
     PayoutInstructionInterface,
+    BillData,
+    SubscriptionItem,
 };

@@ -1,5 +1,5 @@
 import {Currency} from "../../Currency";
-import BitPayException from "../../exceptions/BitPayException";
+import BitPayException from "../../Exceptions/BitPayException";
 import {Buyer} from "./Buyer";
 import {InvoiceBuyerProvidedInfo} from "./InvoiceBuyerProvidedInfo";
 import {InvoiceTransaction} from "./InvoiceTransaction";
@@ -23,7 +23,7 @@ export interface InvoiceInterface {
     //
 
     price: number | null;
-    posData: string | null;
+    posData: any | null;
     notificationURL: string | null;
     transactionSpeed: string | null;
     fullNotifications: boolean | null;

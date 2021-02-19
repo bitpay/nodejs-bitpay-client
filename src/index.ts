@@ -15,7 +15,7 @@
 
 import {KeyUtils} from './util/KeyUtils';
 import {RESTcli} from './util/RESTcli';
-import * as BitPayExceptions from "./exceptions/index";
+import * as BitPayExceptions from "./Exceptions/index";
 import * as Models from "./Model/index";
 import {Client} from './Client';
 import {Config} from './Config';

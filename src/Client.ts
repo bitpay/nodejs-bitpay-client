@@ -17,14 +17,15 @@ import {
 } from "./Model";
 import {Refund, RefundInterface} from "./Model/Invoice/Refund";
 import {Settlement, SettlementInterface} from "./Model/Settlement/Settlement";
+import {Subscription, SubscriptionInterface} from "./Model/Subscription/Subscription";
 
 const fs = require('fs');
 
 /**
  * @author Antonio Buedo
- * @version 1.3.2102
+ * @version 1.4.2102
  * See bitpay.com/api for more information.
- * date 04.02.2021
+ * date 19.02.2021
  */
 
 export class Client {
@@ -193,7 +194,7 @@ export class Client {
         return currencyInfo;
     }
 
-    private getGuid(): string {
+    private GetGuid(): string {
         let Min = 0;
         let Max = 99999999;
 
@@ -245,7 +246,7 @@ export class Client {
 
 
     public async CreateInvoice(invoice: Invoice, facade: string = Facade.Merchant, signRequest: boolean = true): Promise<InvoiceInterface> {
-        invoice.guid = this.getGuid();
+        invoice.guid = this.GetGuid();
         invoice.token = this.GetAccessToken(facade);
 
         try {
@@ -340,7 +341,7 @@ export class Client {
     public async CreateRefund(invoice: Invoice, refundEmail: string, amount: number, currency: string): Promise<Boolean> {
         let refund = new Refund();
         refund.token = invoice.token;
-        refund.guid = this.getGuid();
+        refund.guid = this.GetGuid();
         refund.amount = amount;
         refund.refundEmail = refundEmail;
         refund.currency = currency;
@@ -589,7 +590,7 @@ export class Client {
      */
     public async SubmitPayoutRecipients(recipients: PayoutRecipients): Promise<PayoutRecipientInterface[]> {
         recipients.token = this.GetAccessToken(Facade.Payroll);
-        recipients.guid = this.getGuid();
+        recipients.guid = this.GetGuid();
 
         try {
             return await this._RESTcli.post("recipients", recipients).then(recipientsData => {
@@ -750,7 +751,7 @@ export class Client {
 
 
         batch.token = this.GetAccessToken(Facade.Payroll);
-        batch.guid = this.getGuid();
+        batch.guid = this.GetGuid();
 
         try {
             return await this._RESTcli.post("payouts", batch).then(PayoutBatchData => {
@@ -769,7 +770,7 @@ export class Client {
      * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
      */
-    public async getPayoutBatches(status: string): Promise<PayoutBatchInterface[]> {
+    public async GetPayoutBatches(status: string): Promise<PayoutBatchInterface[]> {
         const params = {
             'token': this.GetAccessToken(Facade.Payroll)
         };
@@ -795,7 +796,7 @@ export class Client {
      * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
      */
-    public async getPayoutBatch(batchId: string): Promise<PayoutBatchInterface> {
+    public async GetPayoutBatch(batchId: string): Promise<PayoutBatchInterface> {
         const params = {
             'token': this.GetAccessToken(Facade.Payroll)
         };
@@ -816,11 +817,11 @@ export class Client {
      * @return A BitPay generated PayoutBatch object.
      * @throws PayoutCancellationException PayoutCancellationException class
      */
-    public async cancelPayoutBatch(batchId: string): Promise<PayoutBatchInterface> {
+    public async CancelPayoutBatch(batchId: string): Promise<PayoutBatchInterface> {
         let batch: PayoutBatchInterface;
 
         try {
-            batch = await this.getPayoutBatch(batchId);
+            batch = await this.GetPayoutBatch(batchId);
         } catch (e) {
             throw new Exceptions.PayoutQuery("Payout Batch with ID: " + batchId + " Not Found : " + e.message);
         }
@@ -916,6 +917,99 @@ export class Client {
         } catch (e)
         {
             throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message);
+        }
+    }
+
+    /**
+     * Create a BitPay Subscription.
+     *
+     * @param  subscription Subscription A Subscription object with request parameters defined.
+     * @return Subscription A BitPay generated Subscription object.
+     * @throws SubscriptionCreationException SubscriptionCreationException class
+     */
+    public async CreateSubscription(subscription: Subscription): Promise<SubscriptionInterface> {
+        subscription.token = this.GetAccessToken(Facade.Merchant);
+
+        try {
+            return await this._RESTcli.post("subscriptions", subscription).then(subscriptionsData => {
+                return <SubscriptionInterface>JSON.parse(subscriptionsData);
+            });
+        } catch (e) {
+            throw new Exceptions.SubscriptionCreation("failed to deserialize BitPay server response (Subscription) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve a BitPay subscription by subscription id using the specified facade.
+     *
+     * @param  subscriptionId string The id of the subscription to retrieve.
+     * @return Subscription A BitPay Subscription object.
+     * @throws BitPayException BitPayException class
+     */
+    public async GetSubscription(subscriptionId: string): Promise<SubscriptionInterface> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Merchant)
+        };
+
+        try {
+            return await this._RESTcli.get("subscriptions/" + subscriptionId, params).then(subscriptionData => {
+                return <SubscriptionInterface>JSON.parse(subscriptionData);
+            });
+        } catch (e) {
+            throw new Exceptions.SubscriptionQuery("failed to deserialize BitPay server response (Subscription) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve a collection of BitPay subscriptions.
+     *
+     * @param  status string|null The status to filter the subscriptions.
+     * @return array A list of BitPay Subscription objects.
+     * @throws BitPayException BitPayException class
+     */
+    public async GetSubscriptions(status: string): Promise<SubscriptionInterface[]> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Merchant)
+        };
+
+        if (status) {
+            params["status"] = status
+        }
+
+        try {
+            return await this._RESTcli.get("subscriptions", params).then(subscriptionsData => {
+                return <SubscriptionInterface[]>JSON.parse(subscriptionsData);
+            });
+        } catch (e) {
+            throw new Exceptions.SubscriptionQuery("failed to deserialize BitPay server response (Subscriptions) : " + e.message);
+        }
+    }
+
+    /**
+     * Update a BitPay Subscription.
+     *
+     * @param  subscription   Subscription A Subscription object with the parameters to update defined.
+     * @param  subscriptionId string $subscriptionIdThe Id of the Subscription to update.
+     * @return Subscription An updated Subscription object.
+     * @throws BitPayException BitPayException class
+     */
+    public async UpdateSubscription(subscription: Subscription, subscriptionId: string): Promise<SubscriptionInterface> {
+        let subscriptionObj;
+
+        try {
+            subscriptionObj = await this.GetSubscription(subscriptionId);
+        } catch (e) {
+            throw new Exceptions.PayoutQuery("Subscription with ID: " + subscriptionId + " Not Found : " + e.message);
+        }
+
+        subscription.token = subscriptionObj.token;
+
+        try {
+            return await this._RESTcli.update("subscriptions/" + subscriptionId, subscription).then(subscriptionData => {
+                return <SubscriptionInterface>JSON.parse(subscriptionData);
+            });
+        } catch (e) {
+            throw new Exceptions.SubscriptionUpdate("failed to deserialize BitPay server response (Subscription) : " + e.message);
         }
     }
 }
