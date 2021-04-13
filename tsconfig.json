@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
     "target": "es5",
+    "outDir": "./dist",
     "sourceMap": true,
     "strictNullChecks": false,
     "strictPropertyInitialization": false
@@ -15,8 +18,5 @@
   ],
   "exclude": [
     "src/**/*.spec.ts",
-    "node_modules",
-    "test",
-    "secure"
   ]
 }

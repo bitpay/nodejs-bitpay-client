@@ -211,7 +211,7 @@ export class Client {
     }
 
     private ClearAccessTokenCache() {
-        this._tokenCache = Tokens;
+        this._tokenCache = { merchant: null, payroll: null };
     }
 
     private GetAccessToken(key: string): string {
