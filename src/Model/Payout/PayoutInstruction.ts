@@ -11,6 +11,7 @@ export interface PayoutInstructionInterface {
     label: string | null;
     walletProvider: string | null;
     id: string | null;
+    address: string | null;
 
     btc: PayoutInstructionBtcSummary;
     transactions: PayoutInstructionTransaction[];
@@ -29,6 +30,7 @@ export class PayoutInstruction implements PayoutInstructionInterface {
     status: string | null;
     walletProvider: string | null;
     transactions: PayoutInstructionTransaction[];
+    address: string | null;
 
     /**
      * Constructor, create a PayoutInstruction object.

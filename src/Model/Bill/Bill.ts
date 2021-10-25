@@ -18,12 +18,13 @@ export interface BillInterface {
     country: string | null;
     phone: string | null;
     dueDate: string | null;
-    passProcessingFee: number | null;
+    passProcessingFee: boolean | null;
     status: string | null;
     url: string | null;
-    createDate: string | null;
+    createdDate: string | null;
     id: string | null;
     merchant: string | null;
+    cc: string[] | [];
 }
 
 export class Bill implements BillInterface {
@@ -33,7 +34,7 @@ export class Bill implements BillInterface {
     cc: string[] | [];
     city: string | null;
     country: string | null;
-    createDate: string | null;
+    createdDate: string | null;
     currency: string | null;
     dueDate: string | null;
     email: string | null;
@@ -42,7 +43,7 @@ export class Bill implements BillInterface {
     merchant: string | null;
     name: string | null;
     number: string | null;
-    passProcessingFee: number | null;
+    passProcessingFee: boolean | null;
     phone: string | null;
     state: string | null;
     status: string | null;

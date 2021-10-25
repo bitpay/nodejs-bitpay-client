@@ -23,7 +23,7 @@ export interface PayoutBatchInterface {
     depositTotal: number | null;
     rate: number | null;
     btc: number | null;
-    requestDate: number | null;
+    requestDate: string | null;
     dateExecuted: number | null;
 }
 
@@ -47,7 +47,7 @@ export class PayoutBatch implements PayoutBatchInterface {
     pricingMethod: string | null;
     rate: number | null;
     reference: string | null;
-    requestDate: number | null;
+    requestDate: string | null;
     status: string | null;
     supportPhone: string | null;
     token: string | null;

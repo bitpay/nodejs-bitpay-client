@@ -8,7 +8,7 @@
     "^.+\\.ts$": "ts-jest"
   },
   "testEnvironment" : "node",
-  "testRegex": "/tests/.(test|spec)\\.(ts)$",
+  "testRegex": "(/__test__/.*|(\\.|/)(test|spec))\\.(tsx?)$",
   "testURL": "http://localhost/",
   "coverageThreshold": {
     "global": {

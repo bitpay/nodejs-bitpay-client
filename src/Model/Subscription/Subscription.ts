@@ -6,6 +6,8 @@ export interface SubscriptionInterface {
     nextDelivery: string | null;
     createdDate: string | null;
     token: string | null;
+    id: string | null;
+    status: string | null;
 }
 
 export class Subscription implements SubscriptionInterface {
@@ -14,6 +16,8 @@ export class Subscription implements SubscriptionInterface {
     nextDelivery: string | null;
     createdDate: string | null;
     token: string | null;
+    id: string | null;
+    status: string | null;
 
     public constructor() {
     }
