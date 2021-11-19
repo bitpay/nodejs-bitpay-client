@@ -3,20 +3,20 @@ export interface PayoutRecipientInterface {
     label: string;
     notificationURL: string;
 
-    statu: string | null;
-    i: string | null;
-    shopperI: string | null;
-    toke: string | null;
+    status: string | null;
+    id: string | null;
+    shopperId: string | null;
+    token: string | null;
 }
 
 export class PayoutRecipient implements PayoutRecipientInterface {
     email: string;
-    i: string | null;
+    id: string | null;
     label: string;
     notificationURL: string;
-    shopperI: string | null;
-    statu: string | null;
-    toke: string | null;
+    shopperId: string | null;
+    status: string | null;
+    token: string | null;
 
     /**
      * Constructor, create a minimal Recipient object.

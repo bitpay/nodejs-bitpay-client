@@ -15,6 +15,7 @@ export interface PayoutInfoInterface {
     wire: string | null;
     bankName: string | null;
     bankAddress: string | null;
+    bankAddress2: string | null;
     iban: string | null;
     additionalInformation: string | null;
     accountHolderName: string | null;
@@ -42,6 +43,7 @@ export class PayoutInfo implements PayoutInfoInterface{
     wire: string | null;
     bankName: string | null;
     bankAddress: string | null;
+    bankAddress2: string | null;
     iban: string | null;
     additionalInformation: string | null;
     accountHolderName: string | null;

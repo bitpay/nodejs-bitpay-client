@@ -29,12 +29,14 @@ export interface InvoiceInterface {
     fullNotifications: boolean | null;
     notificationEmail: string | null;
     redirectURL: string | null;
+    closeURL: string | null;
     orderId: string | null;
     itemDesc: string | null;
     itemCode: string | null;
     physical: boolean | null;
     paymentCurrencies: string[] | [];
     acceptanceWindow: number | null;
+    autoRedirect: boolean | null;
 
     // Buyer data
     //
@@ -66,7 +68,17 @@ export interface InvoiceInterface {
     extendedNotifications: boolean | null;
     transactionCurrency: string | null;
     amountPaid: number | null;
+    displayAmountPaid: number | null;
     exchangeRates: Array<[string, Array<[string, number]>]> | null;
+    paymentSubtotals: Array<[string, number]> | null;
+    paymentTotals: Array<[string, number]> | null;
+    paymentDisplayTotals: Array<[string, number]> | null;
+    paymentDisplaySubTotals: Array<[string, number]> | null;
+    nonPayProPaymentReceived: boolean | null;
+    jsonPayProRequired: boolean | null;
+    underpaidAmount: number | null;
+    overpaidAmount: number | null;
+    paymentCodes: Array<[string, Array<[string, number]>]> | null;
 }
 
 export class Invoice implements InvoiceInterface {
@@ -90,12 +102,14 @@ export class Invoice implements InvoiceInterface {
     fullNotifications: boolean | null;
     notificationEmail: string | null;
     redirectURL: string | null;
+    closeURL: string | null;
     orderId: string | null;
     itemDesc: string | null;
     itemCode: string | null;
     physical: boolean | null;
     paymentCurrencies: string[] | [];
     acceptanceWindow: number | null;
+    autoRedirect: boolean | null;
 
     // Buyer data
     //
@@ -127,7 +141,17 @@ export class Invoice implements InvoiceInterface {
     extendedNotifications: boolean | null;
     transactionCurrency: string | null;
     amountPaid: number | null;
+    displayAmountPaid: number | null;
     exchangeRates: Array<[string, Array<[string, number]>]> | null;
+    paymentSubtotals: Array<[string, number]> | null;
+    paymentTotals: Array<[string, number]> | null;
+    paymentDisplayTotals: Array<[string, number]> | null;
+    paymentDisplaySubTotals: Array<[string, number]> | null;
+    nonPayProPaymentReceived: boolean | null;
+    jsonPayProRequired: boolean | null;
+    underpaidAmount: number | null;
+    overpaidAmount: number | null;
+    paymentCodes: Array<[string, Array<[string, number]>]> | null;
 
     /**
      * Constructor, create a minimal request Invoice object.

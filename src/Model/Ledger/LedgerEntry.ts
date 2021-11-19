@@ -15,6 +15,7 @@ export interface LedgerEntryInterface {
     invoiceCurrency: string | null;
     transactionCurrency: string | null;
     id: string | null;
+    supportRequest: string | null;
 }
 
 export class LedgerEntry implements LedgerEntryInterface{
@@ -32,6 +33,7 @@ export class LedgerEntry implements LedgerEntryInterface{
     invoiceCurrency: string | null;
     transactionCurrency: string | null;
     id: string | null;
+    supportRequest: string | null;
 
     public constructor(){
 
