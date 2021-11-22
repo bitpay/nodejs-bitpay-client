@@ -1,18 +1,19 @@
 import {PayoutInstruction} from "./PayoutInstruction";
 
 export interface PayoutBatchInterface {
-    guid: string | null;
     token: string | null;
 
     amount: number | null;
     currency: string | null;
     effectiveDate: string | null;
     instructions: PayoutInstruction[];
+    ledgerCurrency: string | null;
 
     reference: string | null;
     notificationEmail: string | null;
-    notificationUrl: string | null;
+    notificationURL: string | null;
     pricingMethod: string | null;
+    message: string | null;
 
     id: string | null;
     account: string | null;
@@ -25,11 +26,10 @@ export interface PayoutBatchInterface {
     btc: number | null;
     requestDate: string | null;
     dateExecuted: number | null;
+    exchangeRates: string | null;
 }
 
 export class PayoutBatch implements PayoutBatchInterface {
-    static readonly MethodVwap24 = "vwap24hr";
-
     instructions: PayoutInstruction[];
     account: string | null;
     amount: number | null;
@@ -39,10 +39,9 @@ export class PayoutBatch implements PayoutBatchInterface {
     depositTotal: number | null;
     effectiveDate: string | null;
     fee: number | null;
-    guid: string | null;
     id: string | null;
     notificationEmail: string | null;
-    notificationUrl: string | null;
+    notificationURL: string | null;
     percentFee: number | null;
     pricingMethod: string | null;
     rate: number | null;
@@ -51,18 +50,22 @@ export class PayoutBatch implements PayoutBatchInterface {
     status: string | null;
     supportPhone: string | null;
     token: string | null;
+    ledgerCurrency: string | null;
+    exchangeRates: string | null;
+    message: string | null;
 
     /**
      * Constructor, create an instruction-full request PayoutBatch object.
      *
      * @param currency      The three digit currency string for the PayoutBatch to use.
-     * @param effectiveDate Date when request is effective. Note that the time of day will automatically be set to 09:00:00.000 UTC time for the given day. Only requests submitted before 09:00:00.000 UTC are guaranteed to be processed on the same day.
+     * @param ledgerCurrency string Ledger currency code set for the payout request (ISO 4217 3-character currency code), it indicates on which ledger the payout request will be recorded. If not provided in the request, this parameter will be set by default to the active ledger currency on your account, e.g. your settlement currency.
      * @param instructions  Payout instructions.
      */
-    public constructor(currency: string, effectiveDate: string, instructions: PayoutInstruction[]) {
+    public constructor(currency: string, instructions: PayoutInstruction[], ledgerCurrency: string) {
         this.currency = currency;
-        this.effectiveDate = effectiveDate;
+        //this.effectiveDate = effectiveDate;
         this.instructions = instructions;
+        this.ledgerCurrency = ledgerCurrency;
         // this.computeAndSetAmount()
     }
 

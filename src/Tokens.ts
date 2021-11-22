@@ -1,4 +1,4 @@
 export interface Tokens {
     merchant: string | null;
-    payroll: string | null;
+    payout: string | null;
 }

@@ -147,6 +147,12 @@ export class RESTcli {
 
             let responsObj = JSON.parse(JSON.stringify(response));
 
+            if (responsObj.hasOwnProperty("status")) {
+                if(responsObj["status"] === 'error'){
+                    throw new BitPayException(null, "Error: " + responsObj["error"], null, responsObj["code"]);
+                }
+            }
+
             if (responsObj.hasOwnProperty("error")) {
                 throw new BitPayException(null, "Error: " + responsObj["error"]);
             } else if (responsObj.hasOwnProperty("errors")) {
@@ -167,7 +173,7 @@ export class RESTcli {
 
             return JSON.stringify(responsObj);
         } catch (e) {
-            throw new BitPayException("failed to retrieve HTTP response body : " + e.message);
+            throw new BitPayException(null, "failed to retrieve HTTP response body : " + e.message);
         }
     }
 }

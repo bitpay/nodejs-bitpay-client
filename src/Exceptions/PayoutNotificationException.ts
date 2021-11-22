@@ -1,15 +1,15 @@
-import InvoiceException from "./InvoiceException";
+import PayoutException from "./PayoutException";
 
-export class InvoiceCreationException implements InvoiceException {
+export class PayoutNotificationException implements PayoutException {
 
-    public readonly message: string = "Failed to create invoice";
-    public readonly name: string = "BITPAY-INVOICE-CREATE";
-    public readonly code: number = 102;
+    public readonly message: string = "Failed to payout notification";
+    public readonly name: string = "BITPAY-PAYOUT-NOTIFICATION";
+    public readonly code: number = 127;
     public readonly stack: string;
     public readonly apiCode: string = "000000";
 
     /**
-     * Construct the InvoiceCreationException.
+     * Construct the PayoutNotificationException.
      *
      * @param message string [optional] The Exception message to throw.
      * @param apiCode string [optional] The API Exception code to throw.
@@ -20,4 +20,4 @@ export class InvoiceCreationException implements InvoiceException {
     }
 }
 
-export default InvoiceCreationException;
+export default PayoutNotificationException;

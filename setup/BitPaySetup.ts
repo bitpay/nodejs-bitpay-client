@@ -13,8 +13,8 @@ let storeFile = true;
 let apiUrl;
 let merchantToken;
 let merchantPairCode;
-let payrollToken;
-let payrollPairCode;
+let payoutToken;
+let payoutPairCode;
 let keyPath = '';
 let keyPlain = '';
 
@@ -153,7 +153,7 @@ let storeKey = async () => {
 let selectTokens = async () => {
     try{
         console.log("Select the tokens that you would like to request:");
-        rl.question('Press M for merchant, P for Payroll or B for both: \n', async (answer) => {
+        rl.question('Press M for merchant, P for payout, or B for both: \n', async (answer) => {
             switch(answer.toLowerCase()) {
                 case 'm':
                 case 'p':
@@ -174,19 +174,19 @@ let selectTokens = async () => {
 let requestTokens = async (option) => {
     try{
         let reqMerchant = false;
-        let reqPayroll = false;
+        let reqPayout = false;
         switch (option.toLowerCase()) {
             case 'm':
                 reqMerchant = true;
-                reqPayroll = false;
+                reqPayout = false;
                 break;
             case 'p':
                 reqMerchant = false;
-                reqPayroll = true;
+                reqPayout = true;
                 break;
             case 'b':
                 reqMerchant = true;
-                reqPayroll = true;
+                reqPayout = true;
                 break;
         }
 
@@ -215,9 +215,10 @@ let requestTokens = async (option) => {
             });
             await sleep(2000);
         }
-        if (reqPayroll) {
-            console.log("Requesting Payroll token... \n");
-            let facade = 'payroll';
+        
+        if (reqPayout) {
+            console.log("Requesting Payout token... \n");
+            let facade = 'payout';
             let postData = {id: sin,facade: facade};
             let options = {
                 url: apiUrl + '/tokens',
@@ -229,8 +230,8 @@ let requestTokens = async (option) => {
 
             request(options, function (error, response, body) {
                 let jsonResponse = JSON.parse(JSON.stringify(body.data[0]));
-                payrollToken = jsonResponse['token'];
-                payrollPairCode = jsonResponse['pairingCode'];
+                payoutToken = jsonResponse['token'];
+                payoutPairCode = jsonResponse['pairingCode'];
             });
             await sleep(2000);
         }
@@ -243,7 +244,7 @@ let requestTokens = async (option) => {
 };
 let updateConfigFile = async () => {
     // console.log(merchantToken);
-    // console.log(payrollToken);
+    // console.log(payoutToken);
     let confObj;
 
     if (environment == 'Test') {
@@ -256,7 +257,7 @@ let updateConfigFile = async () => {
                         "PrivateKey": keyPlain,
                         "ApiTokens": {
                             "merchant": merchantToken,
-                            "payroll": payrollToken
+                            "payout": payoutToken
                         }
                     }
                 }
@@ -272,7 +273,7 @@ let updateConfigFile = async () => {
                         "PrivateKey": keyPlain,
                         "ApiTokens": {
                             "merchant": merchantToken,
-                            "payroll": payrollToken
+                            "payout": payoutToken
                         }
                     }
                 }
@@ -285,7 +286,7 @@ let updateConfigFile = async () => {
         "PrivateKey" : keyPlain,
         "ApiTokens" : {
             "merchant" : merchantToken,
-            "payroll" : payrollToken
+            "payout": payoutToken
         }
     };
 
@@ -301,8 +302,8 @@ let updateConfigFile = async () => {
     if (merchantToken) {
         console.log(merchantPairCode + " for the Merchant facade.");
     }
-    if (payrollToken) {
-        console.log(payrollPairCode + " for the Payroll facade ONLY if you have requested access for this role.");
+    if (payoutToken) {
+        console.log(payoutPairCode + " for the Payout facade ONLY if you have requested access for this role.");
     }
 
     process.exit();

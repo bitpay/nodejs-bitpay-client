@@ -1,6 +1,6 @@
 import {Env, RecipientReferenceMethod} from "../src";
 import {Buyer} from "../src/Model/Invoice/Buyer";
-import {BillItem, PayoutRecipients, PayoutRecipient, PayoutInstruction, PayoutBatch, BillData, SubscriptionItem} from "../src/Model";
+import {BillItem, PayoutRecipients, PayoutRecipient, PayoutInstruction, Payout, PayoutBatch, BillData, SubscriptionItem} from "../src/Model";
 import {Subscription} from "../src/Model/Subscription/Subscription";
 const BitPaySDK = require('../src/index');
 const Currencies = BitPaySDK.Currency;
@@ -13,7 +13,7 @@ describe('BitPaySDK.Client', () => {
         jest.setTimeout(20000); // browser takes a while
         let tokens = BitPaySDK.Tokens;
         tokens.merchant = '';
-        tokens.payroll = '';
+        tokens.payout = '';
         let keyFilePath = __dirname+'/../secure/private_key_test.key';
         let keyPlainText = '';
         let configFilePath = __dirname+'/../secure/BitPay.config.json';
@@ -43,7 +43,7 @@ describe('BitPaySDK.Client', () => {
         let buyer = new Buyer();
         buyer.email = "sandbox@bitpay.com";
         buyer.name = "BuyerTest";
-        let invoiceData = new BitPaySDK.Models.Invoice(50, Currencies.USD);
+        let invoiceData = new BitPaySDK.Models.Invoice(7, Currencies.USD);
         invoiceData.buyer = buyer;
         invoiceData.notificationURL = "https://hookb.in/1gw8aQxYQDHj002yk79K";
         invoiceData.extendedNotifications = true;
@@ -236,7 +236,8 @@ describe('BitPaySDK.Client', () => {
         recipientsObj = new PayoutRecipients(recipientsList);
 
         it('should submit payout recipient', async () => {
-            recipients = await client.SubmitPayoutRecipients(recipientsObj);
+            recipients = await client.GetPayoutRecipients(PayoutStatus.Active, 3);
+            
             expect(recipients).toBeDefined();
             expect(recipients.length).toBe(3);
         });
@@ -292,54 +293,136 @@ describe('BitPaySDK.Client', () => {
     });
 
     describe('Payouts', () => {
+        
+        let createdPayout;
+        let retrievedPayout;
+        let retrievedPayouts;
+        let cancelledPayout;
+        let recipients;
+        let requestedNotification;
 
-        let date = new Date();
-        let effectiveDate = new Date(date.setDate(date.getDate()+3)).toISOString().split('T')[0];
+        let payout0 = new Payout(6.75, Currencies.USD, Currencies.ETH);
+
+        it('should submit payout', async () => {
+            recipients = await client.GetPayoutRecipients('active', 2);
+            payout0.recipientId = recipients[1].id;
+
+            createdPayout = await client.SubmitPayout(payout0);
+            cancelledPayout = await client.CancelPayout(createdPayout.id);
+            
+            expect(createdPayout).toBeDefined();
+            expect(cancelledPayout).toBeTruthy();
+        });
+
+        it('should get payout', async () => {
+            createdPayout = await client.SubmitPayout(payout0);
+            retrievedPayout = await client.GetPayout(createdPayout.id);
+            cancelledPayout = await client.CancelPayout(retrievedPayout.id);
+            
+            expect(createdPayout).toBeDefined();
+            expect(retrievedPayout).toBeDefined();
+            expect(retrievedPayout.id).toBeDefined();
+            expect(retrievedPayout.id).toEqual(createdPayout.id);
+            expect(cancelledPayout).toBeTruthy();
+        });
+
+        it('should get payouts by status', async () => {
+            retrievedPayouts = await client.GetPayouts(null, null, PayoutStatus.New);
+
+            expect(retrievedPayouts).toBeDefined();
+        });
+
+        it('should create, get and cancel payout', async () => {
+            createdPayout = await client.SubmitPayout(payout0);
+            retrievedPayout = await client.GetPayout(createdPayout.id);
+            cancelledPayout = await client.CancelPayout(retrievedPayout.id);
+            
+            expect(createdPayout).toBeDefined();
+            expect(retrievedPayout).toBeDefined();
+            expect(retrievedPayout.id).toBeDefined();
+            expect(retrievedPayout.id).toEqual(createdPayout.id);
+            expect(cancelledPayout).toBeTruthy();
+        });
+
+        it('should request payout notification', async () => {
+            recipients = await client.GetPayoutRecipients('active', 2);
+            
+            payout0.recipientId = recipients[1].id;
+            payout0.notificationEmail = 'sandbox@bitpay.com';
+            payout0.notificationURL = 'https://hookb.in/QJOPBdMgRkukpp2WO60o';
+
+            createdPayout = await client.SubmitPayout(payout0);
+            requestedNotification = await client.RequestPayoutNotification(createdPayout.id);
+            cancelledPayout = await client.CancelPayout(createdPayout.id);
+
+            expect(createdPayout).toBeDefined();
+            expect(requestedNotification).toBeTruthy();
+            expect(cancelledPayout).toBeTruthy();
+        });
+    });
+
+    describe('PayoutBatches', () => {
 
         let createdBatch;
         let retrievedBatch;
         let retrievedBatches;
         let canceledBatch;
-
+        let requestedNotification;
 
         let instructionsList = [];
 
-        instructionsList.push(new PayoutInstruction(100.05, RecipientReferenceMethod.EMAIL, "sandbox+recipient1@bitpay.com"));
+        instructionsList.push(new PayoutInstruction(7.05, RecipientReferenceMethod.EMAIL, "sandbox+recipient1@bitpay.com"));
         instructionsList.push(new PayoutInstruction(22.36, RecipientReferenceMethod.EMAIL, "sandbox+recipient2@bitpay.com"));
         instructionsList.push(new PayoutInstruction(251.29, RecipientReferenceMethod.EMAIL, "sandbox+recipient3@bitpay.com"));
 
-        let batch0 = new PayoutBatch(Currencies.USD, effectiveDate, instructionsList);
+        let batch0 = new PayoutBatch(Currencies.USD, instructionsList, Currencies.ETH);
 
         it('should submit payout batch', async () => {
             createdBatch = await client.SubmitPayoutBatch(batch0);
+            canceledBatch = await client.CancelPayoutBatch(createdBatch.id);
+            
             expect(createdBatch).toBeDefined();
-            expect(createdBatch.instructions).toBe(3);
+            expect(createdBatch.instructions.length).toBe(3);
+            expect(canceledBatch).toBeTruthy();
         });
 
         it('should get payout batch', async () => {
             createdBatch = await client.SubmitPayoutBatch(batch0);
             retrievedBatch = await client.GetPayoutBatch(createdBatch.id);
+            canceledBatch = await client.CancelPayoutBatch(retrievedBatch.id);
 
             expect(retrievedBatch).toBeDefined();
             expect(retrievedBatch.id).toBeDefined();
             expect(createdBatch.id).toEqual(retrievedBatch.id);
+            expect(canceledBatch).toBeTruthy();
         });
 
         it('should get payout batches by status', async () => {
-            retrievedBatches = await client.GetPayoutBatches(PayoutStatus.New);
+            retrievedBatches = await client.GetPayoutBatches(null, null, PayoutStatus.New);
 
             expect(retrievedBatches).toBeDefined();
         });
 
         it('should create, get and cancel payout batch', async () => {
             createdBatch = await client.SubmitPayoutBatch(batch0);
-
             retrievedBatch = await client.GetPayoutBatch(createdBatch.id);
-
             canceledBatch = await client.CancelPayoutBatch(retrievedBatch.id);
+            
+            expect(retrievedBatch.id).toEqual(createdBatch.id);
+            expect(canceledBatch).toBeTruthy();
+        });
 
-            expect(canceledBatch).toBeDefined();
-            expect(retrievedBatch.id).toEqual(canceledBatch.id);
+        it('should request payout batch notification', async () => {
+            batch0.notificationEmail = 'sandbox@bitpay.com';
+            batch0.notificationURL = 'https://hookb.in/QJOPBdMgRkukpp2WO60o';
+
+            createdBatch = await client.SubmitPayoutBatch(batch0);
+            requestedNotification = await client.RequestPayoutBatchNotification(createdBatch.id);
+            canceledBatch = await client.CancelPayoutBatch(createdBatch.id);
+
+            expect(createdBatch).toBeDefined();
+            expect(requestedNotification).toBeTruthy();
+            expect(canceledBatch).toBeTruthy();
         });
     });
 
