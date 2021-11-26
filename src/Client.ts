@@ -13,7 +13,9 @@ import {
     PayoutRecipientInterface,
     PayoutRecipients,
     RateInterface,
-    Rates
+    Rates,
+    Wallet,
+    WalletInterface
 } from "./Model";
 import {Refund, RefundInterface} from "./Model/Invoice/Refund";
 import {Settlement, SettlementInterface} from "./Model/Settlement/Settlement";
@@ -244,7 +246,15 @@ export class Client {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
+    /**
+     * Create a BitPay invoice.
+     *
+     * @param invoice     Invoice An Invoice object with request parameters defined.
+     * @param facade      string The facade used to create it.
+     * @param signRequest bool Signed request.
+     * @return Invoice A BitPay generated Invoice object.
+     * @throws BitPayException BitPayException class
+     */
     public async CreateInvoice(invoice: Invoice, facade: string = Facade.Merchant, signRequest: boolean = true): Promise<InvoiceInterface> {
         invoice.guid = this.GetGuid();
         invoice.token = this.GetAccessToken(facade);
@@ -259,6 +269,16 @@ export class Client {
         }
     }
 
+    /**
+     * Retrieve a BitPay invoice by invoice id using the specified facade.  The client must have been previously
+     * authorized for the specified facade (the public facade requires no authorization).
+     *
+     * @param invoiceId   string The id of the invoice to retrieve.
+     * @param facade      string The facade used to create it.
+     * @param signRequest bool Signed request.
+     * @return Invoice A BitPay Invoice object.
+     * @throws BitPayException BitPayException class
+     */
     public async GetInvoice(invoiceId: string, facade: string = Facade.Merchant, signRequest: boolean = true): Promise<InvoiceInterface> {
         const params = {
             'token': this.GetAccessToken(facade)
@@ -274,6 +294,19 @@ export class Client {
         }
     }
 
+    /**
+     * Retrieve a collection of BitPay invoices.
+     *
+     * @param dateStart string The start of the date window to query for invoices. Format YYYY-MM-DD.
+     * @param dateEnd   string The end of the date window to query for invoices. Format YYYY-MM-DD.
+     * @param status    string|null The invoice status you want to query on.
+     * @param orderId   string|null The optional order id specified at time of invoice creation.
+     * @param limit     int|null Maximum results that the query will return (useful for paging results).
+     * @param offset    int|null Number of results to offset (ex. skip 10 will give you results starting with the 11th
+     *                   result).
+     * @return array     A list of BitPay Invoice objects.
+     * @throws BitPayException BitPayException class
+     */
     public async GetInvoices(dateStart: string, dateEnd: string, status: string = null, orderId: string = null, limit: number = null, offset: number = null): Promise<InvoiceInterface[]> {
         let params = {};
 
@@ -293,6 +326,56 @@ export class Client {
         } catch (e)
         {
             throw new Exceptions.InvoiceQuery("failed to deserialize BitPay server response (Invoice) : " + e.message);
+        }
+    }
+
+    /**
+     * Update a BitPay invoice.
+     *
+     * @param invoiceId    string The id of the invoice to updated.
+     * @param buyerEmail   string The buyer's email address.
+     * @return              Invoice A BitPay updated Invoice object.
+     * @throws InvoiceUpdateException InvoiceUpdateException class
+     * @throws BitPayException BitPayException class
+     */
+    public async UpdateInvoice(invoiceId: string, buyerEmail: string): Promise<InvoiceInterface> {
+        let params = {};
+
+        params["token"] = this.GetAccessToken(Facade.Merchant);
+
+        if (buyerEmail) {
+            params["buyerEmail"] = buyerEmail
+        }
+        
+        try {
+            return await this._RESTcli.update("invoices/"  + invoiceId, params).then(invoiceData => {
+                return <InvoiceInterface>JSON.parse(invoiceData);
+            });
+        } catch (e)
+        {
+            throw new Exceptions.InvoiceUpdate("failed to deserialize BitPay server response (Invoice) : " + e.message);
+        }
+    }
+
+    /**
+     * Cancel a BitPay invoice.
+     *
+     * @param invoiceId    string The id of the invoice to updated.
+     * @return True        If invoice cancelled successfully.
+     * @throws InvoiceCancellationException InvoiceCancellationException class
+     * @throws BitPayException BitPayException class
+     */
+    public async CancelInvoice(invoiceId: string): Promise<Boolean> {
+        const params = {
+            "token": this.GetAccessToken(Facade.Merchant)
+        };
+
+        try {
+            return await this._RESTcli.delete("invoices/" + invoiceId, params).then(invoiceData => {
+                return <Boolean>JSON.parse(invoiceData);
+            });
+        } catch (e) {
+            throw new Exceptions.InvoiceCancellation("failed to deserialize BitPay server response (Invoice) : " + e.message);
         }
     }
 
@@ -331,24 +414,29 @@ export class Client {
     /**
      * Create a refund for a BitPay invoice.
      *
-     * @param invoice     A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
-     * @param refundEmail The email of the buyer to which the refund email will be sent
+     * @param invoiceId   String The id of the Invoice.
      * @param amount      The amount of money to refund. If zero then a request for 100% of the invoice value is created.
      * @param currency    The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
-     * @return True if the refund was successfully canceled, false otherwise.
+     * @param preview            bool Whether to create the refund request as a preview (which will not be acted on until status is updated)
+     * @param immediate          bool Whether funds should be removed from merchant ledger immediately on submission or at time of processing
+     * @param buyerPaysRefundFee bool Whether the buyer should pay the refund fee (default is merchant)
+     * @return Refund A Refund BitPay generated Refund object.
      * @throws RefundCreationException RefundCreationException class
      */
-    public async CreateRefund(invoice: Invoice, refundEmail: string, amount: number, currency: string): Promise<Boolean> {
-        let refund = new Refund();
-        refund.token = invoice.token;
-        refund.guid = this.GetGuid();
-        refund.amount = amount;
-        refund.refundEmail = refundEmail;
-        refund.currency = currency;
+    public async CreateRefund(invoiceId: string, amount: number, currency: string, preview: boolean = false, immediate: boolean = false, buyerPaysRefundFee: boolean = false): Promise<Refund> {
+        let params = {};
+
+        params["token"] = this.GetAccessToken(Facade.Merchant);
+        params["invoiceId"] =  invoiceId;
+        params["amount"] = amount;
+        params["currency"] = currency;
+        params["preview"] = preview;
+        params["immediate"] = immediate;
+        params["buyerPaysRefundFee"] = buyerPaysRefundFee;
 
         try {
-            return await this._RESTcli.post("invoices/" + invoice.id + "/refunds", refund).then(refundData => {
-                return <Boolean>JSON.parse(refundData);
+            return await this._RESTcli.post("refunds", params, true).then(refundData => {
+                return <Refund>JSON.parse(refundData);
             });
         } catch (e) {
             throw new Exceptions.RefundCreation("failed to deserialize BitPay server response (Refund) : " + e.message);
@@ -358,18 +446,17 @@ export class Client {
     /**
      * Retrieve a previously made refund request on a BitPay invoice.
      *
-     * @param invoice  The BitPay invoice having the associated refund.
      * @param refundId The refund id for the refund to be updated with new status.
      * @return A BitPay invoice object with the associated Refund object updated.
      * @throws RefundQueryException RefundQueryException class
      */
-    public async GetRefund(invoice: Invoice, refundId: string): Promise<RefundInterface> {
+    public async GetRefund(refundId: string): Promise<RefundInterface> {
         const params = {
             'token': this.GetAccessToken(Facade.Merchant)
         };
 
         try {
-            return await this._RESTcli.get("invoices/" + invoice.id + "/refunds/" + refundId, params).then(refundData => {
+            return await this._RESTcli.get("refunds/" + refundId, params).then(refundData => {
                 return <RefundInterface>JSON.parse(refundData);
             });
         } catch (e) {
@@ -380,17 +467,18 @@ export class Client {
     /**
      * Retrieve all refund requests on a BitPay invoice.
      *
-     * @param invoice The BitPay invoice object having the associated refunds.
+     * @param invoiceId   String The id of the Invoice.
      * @return A BitPay invoice object with the associated Refund objects updated.
      * @throws RefundQueryException RefundQueryException class
      */
-    public async GetRefunds(invoice: Invoice): Promise<RefundInterface[]> {
-        const params = {
-            'token': invoice.token
-        };
+    public async GetRefunds(invoiceId: string): Promise<RefundInterface[]> {
+        let params = {};
+
+        params["token"] = this.GetAccessToken(Facade.Merchant);
+        params["invoiceId"] = invoiceId;
 
         try {
-            return await this._RESTcli.get("invoices/" + invoice.id + "/refunds", params).then(refundData => {
+            return await this._RESTcli.get("refunds", params).then(refundData => {
                 return <RefundInterface[]>JSON.parse(refundData);
             });
         } catch (e) {
@@ -399,26 +487,94 @@ export class Client {
     }
 
     /**
+     * Update the status of a BitPay invoice.
+     *
+     * @param refundId     string BitPay refund ID.
+     * @param status       string The new status for the refund to be updated.
+     * @return refund      Refund A BitPay generated Refund object.
+     * @throws RefundUpdateException RefundUpdateException class
+     * @throws BitPayException BitPayException class
+     */
+    public async UpdateRefund(refundId: string, status: string): Promise<Refund> {
+        let params = {};
+
+        params["token"] = this.GetAccessToken(Facade.Merchant);
+
+        if (status) {
+            params["status"] = status
+        }
+
+        try {
+            return await this._RESTcli.update("refunds/"  + refundId, params).then(refundData => {
+                return <Refund>JSON.parse(refundData);
+            });
+        } catch (e)
+        {
+            throw new Exceptions.RefundUpdate("failed to deserialize BitPay server response (Refund) : " + e.message);
+        }
+    }
+
+    /**
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
-     * @param invoice  The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
-     * @param refund The refund to be canceled.
-     * @return True if the refund was successfully canceled, false otherwise.
+     * @param refundId The refund id for the refund to be updated with new status.
+     * @return Refund A BitPay generated Refund object.
      * @throws RefundCancellationException RefundCancellationException class
      */
-    public async CancelRefund(invoice: Invoice, refund: Refund): Promise<Boolean> {
+    public async CancelRefund(refundId: string): Promise<Refund> {
         const params = {
-            'token': refund.token
+            'token': this.GetAccessToken(Facade.Merchant)
         };
 
         try {
-            return await this._RESTcli.delete("invoices/" + invoice.id + "/refunds/" + refund.id, params).then(refundData => {
-                const regex = /"/gi;
-                refundData = refundData.replace(regex, '');
-                return refundData.toLowerCase() == "success";
+            return await this._RESTcli.delete("refunds/"  + refundId, params).then(refundData => {
+                return <Refund>JSON.parse(refundData);
             });
         } catch (e) {
-            throw new Exceptions.RefundCreation("failed to deserialize BitPay server response (Refund) : " + e.message);
+            throw new Exceptions.RefundCancellation("failed to deserialize BitPay server response (Refund) : " + e.message);
+        }
+    }
+
+    /**
+     * Send a refund notification.
+     *
+     * @param refundId     string A BitPay refund ID.
+     * @return True      If successfully requested notification.
+     * @throws RefundNotificationException RefundNotificationException class
+     * @throws BitPayException BitPayException class
+     */
+    public async RequestRefundNotification(refundId: string): Promise<Boolean> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Merchant)
+        };
+
+        try {
+            return await this._RESTcli.post("refunds/"  + refundId + "/notifications", params).then(refundData => {
+                return <Boolean>JSON.parse(refundData);
+            });
+        } catch (e) {
+            throw new Exceptions.RefundNotification("failed to deserialize BitPay server response (Refund) : " + e.message);
+        }
+    }
+
+    /**
+     * Retrieve all supported wallets.
+     *
+     * @return wallets     array A list of wallet objets.
+     * @throws WalletQueryException WalletQueryException class
+     * @throws BitPayException BitPayException class
+     */
+    public async GetSupportedWallets(): Promise<WalletInterface[]> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Merchant)
+        };
+
+        try {
+            return await this._RESTcli.get("supportedWallets", null, false).then(walletData => {
+                return <WalletInterface[]>JSON.parse(walletData);
+            });
+        } catch (e) {
+            throw new Exceptions.WalletQuery("failed to deserialize BitPay server response (Wallet) : " + e.message);
         }
     }
 

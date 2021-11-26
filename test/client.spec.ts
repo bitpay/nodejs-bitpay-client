@@ -51,6 +51,9 @@ describe('BitPaySDK.Client', () => {
         let retrievedInvoice;
         let retrievedInvoices;
         let webhookRequested;
+        let updatedInvoice;
+        let cancelledInvoice;
+        let retrieveCancelledInvoice;
 
         it('should create invoice', async () => {
             invoice = await client.CreateInvoice(invoiceData);
@@ -64,6 +67,7 @@ describe('BitPaySDK.Client', () => {
             retrievedInvoice = await client.GetInvoice(invoice.id);
 
             expect(retrievedInvoice).toBeDefined();
+            expect(invoice.id).toEqual(retrievedInvoice.id);
         });
 
         it('should retrieve invoice list', async () => {
@@ -83,9 +87,28 @@ describe('BitPaySDK.Client', () => {
         it('should request invoice webhook', async () => {
             invoice = await client.CreateInvoice(invoiceData);
             webhookRequested = await client.GetInvoiceWebHook(invoice.id);
+            cancelledInvoice = await client.CancelInvoice(invoice.id);
 
             expect(invoice).toBeDefined();
             expect(webhookRequested).toBeTruthy();
+            expect(cancelledInvoice).toBeTruthy();
+        });
+
+        it('should create update and delete the invoice', async () => {
+            invoice = await client.CreateInvoice(invoiceData);
+            retrievedInvoice = await client.GetInvoice(invoice.id);
+            updatedInvoice = await client.UpdateInvoice(retrievedInvoice.id, 'sandbox@bitpay.com');
+            cancelledInvoice = await client.CancelInvoice(updatedInvoice.id);
+            retrieveCancelledInvoice = await client.GetInvoice(cancelledInvoice.id);
+
+            expect(invoice).toBeDefined();
+            expect(retrievedInvoice).toBeDefined();
+            expect(invoice.id).toEqual(retrievedInvoice.id);
+            expect(updatedInvoice).toBeDefined();
+            expect(retrievedInvoice.id).toEqual(updatedInvoice.id);
+            expect(cancelledInvoice).toBeTruthy();
+            expect(retrieveCancelledInvoice).toBeDefined();
+            expect(retrieveCancelledInvoice.id).toEqual(cancelledInvoice.id);
         });
     });
 
@@ -95,44 +118,60 @@ describe('BitPaySDK.Client', () => {
         let dateStart = new Date(date.setDate(date.getDate()-30)).toISOString().split('T')[0];
 
         let createdRefund;
-        let refundEmail = "sandbox@bitpay.com";
         let canceledRefund;
         let firstPaidInvoice;
         let retrievedRefund;
-        let firstRefund;
+        let lastRefund;
+        let requestNotification;
+        let updatedRefund;
+        let supportedWallets;
 
         it('should get first paid invoice', async () => {
-            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
-            firstPaidInvoice = firstPaidInvoice.shift();
+            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null);
+            firstPaidInvoice.shift();
 
             expect(firstPaidInvoice).toBeDefined();
         });
 
         it('should create refund request', async () => {
-            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
-            firstPaidInvoice = firstPaidInvoice.shift();
-            createdRefund = await client.CreateRefund(firstPaidInvoice, refundEmail, firstPaidInvoice.price, firstPaidInvoice.currency);
+            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null);
+            firstPaidInvoice.shift();
+            
+            createdRefund = await client.CreateRefund(firstPaidInvoice[0].id, firstPaidInvoice.price, firstPaidInvoice.currency);
+            canceledRefund = await client.CancelRefund(createdRefund.id);
 
+            expect(firstPaidInvoice).toBeDefined();
             expect(createdRefund).toBeDefined();
+            expect(canceledRefund).toBeDefined();
         });
 
         it('should get refund request', async () => {
-            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
-            firstPaidInvoice = firstPaidInvoice.shift();
-            retrievedRefund = await client.GetRefunds(firstPaidInvoice);
-            firstRefund = retrievedRefund.shift();
+            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null);
+            firstPaidInvoice.shift();
+            retrievedRefund = await client.GetRefunds(firstPaidInvoice[0].id);
 
+            expect(firstPaidInvoice).toBeDefined();
             expect(retrievedRefund).toBeDefined();
         });
 
-        it('should cancel refund request', async () => {
-            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
-            firstPaidInvoice = firstPaidInvoice.shift();
-            retrievedRefund = await client.GetRefunds(firstPaidInvoice);
-            firstRefund = retrievedRefund.shift();
-            canceledRefund = await client.CancelRefund(firstPaidInvoice, firstRefund);
+        it('should create get update and delete refund request', async () => {
+            firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null);
+            firstPaidInvoice.shift();
+            createdRefund = await client.CreateRefund(firstPaidInvoice[0].id, firstPaidInvoice.price, firstPaidInvoice.currency, true);
+            retrievedRefund = await client.GetRefunds(firstPaidInvoice[0].id);
+            lastRefund = retrievedRefund.slice(-1).pop();
+            updatedRefund = await client.UpdateRefund(lastRefund.id, 'created');
+            requestNotification = await client.RequestRefundNotification(lastRefund.id);
+            canceledRefund = await client.CancelRefund(lastRefund.id);
+            supportedWallets = await client.GetSupportedWallets();
 
+            expect(firstPaidInvoice).toBeDefined();
+            expect(createdRefund).toBeDefined();
+            expect(retrievedRefund).toBeDefined();
+            expect(createdRefund.id).toEqual(lastRefund.id);
+            expect(requestNotification).toBeTruthy();
             expect(canceledRefund).toBeDefined();
+            expect(canceledRefund.status).toEqual('canceled');
         });
     });
 

@@ -10,6 +10,14 @@ export interface RefundInterface {
     requestDate: Date ;
     status: string ;
     params : RefundParams;
+
+    invoiceId: string;
+    preview: boolean;
+    immediate: boolean;
+    buyerPaysRefundFee: boolean;
+    refundFee: boolean;
+    lastRefundNotification: string;
+    invoice: string;
 }
 
 export class Refund implements RefundInterface {
@@ -22,6 +30,14 @@ export class Refund implements RefundInterface {
     requestDate: Date;
     status: string;
     token: string;
+
+    invoiceId: string;
+    preview: boolean;
+    immediate: boolean;
+    buyerPaysRefundFee: boolean;
+    refundFee: boolean;
+    lastRefundNotification: string;
+    invoice: string;
 
     public constructor() {
 

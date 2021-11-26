@@ -8,4 +8,7 @@ export interface MinerFees {
     gusd: MinerFeesItem;
     pax: MinerFeesItem;
     xrp: MinerFeesItem;
+    busd: MinerFeesItem;
+    doge: MinerFeesItem;
+    ltc: MinerFeesItem;
 }

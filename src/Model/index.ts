@@ -25,6 +25,7 @@ import {PayoutBatch, PayoutBatchInterface} from './Payout/PayoutBatch';
 import {PayoutInstruction, PayoutInstructionInterface} from './Payout/PayoutInstruction';
 import {BillData} from "./Subscription/BillData";
 import {Item as SubscriptionItem} from "./Subscription/Item";
+import {Wallet, WalletInterface} from "./Wallet/Wallet";
 
 export {
     Invoice,
@@ -46,4 +47,6 @@ export {
     PayoutInstructionInterface,
     BillData,
     SubscriptionItem,
+    Wallet,
+    WalletInterface
 };

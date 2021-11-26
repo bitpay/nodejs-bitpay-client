@@ -1,12 +1,15 @@
 import {Currency} from "../../Currency";
 import BitPayException from "../../Exceptions/BitPayException";
 import {Buyer} from "./Buyer";
+import {BuyerProvidedInfo} from "./BuyerProvidedInfo";
 import {InvoiceBuyerProvidedInfo} from "./InvoiceBuyerProvidedInfo";
 import {InvoiceTransaction} from "./InvoiceTransaction";
+import {ItemizedDetails} from "./ItemizedDetails";
 import {MinerFees} from "./MinerFees";
 import {Shopper} from "./Shopper";
 import {RefundInfo} from "./RefundInfo";
 import {SupportedTransactionCurrencies} from "./SupportedTransactionCurrencies";
+import {UniversalCodes} from "./UniversalCodes";
 
 export interface InvoiceInterface {
 
@@ -59,6 +62,7 @@ export interface InvoiceInterface {
     refundAddresses: any | null;
     refundAddressRequestPending: boolean | null;
     buyerProvidedEmail: string | null;
+    buyerProvidedInfo: BuyerProvidedInfo;
     invoiceBuyerProvidedInfo: InvoiceBuyerProvidedInfo;
     supportedTransactionCurrencies: SupportedTransactionCurrencies | null;
     minerFees: MinerFees | null;
@@ -79,6 +83,14 @@ export interface InvoiceInterface {
     underpaidAmount: number | null;
     overpaidAmount: number | null;
     paymentCodes: Array<[string, Array<[string, number]>]> | null;
+
+    buyerEmail: string | null;
+    merchantName: string | null;
+    forcedBuyerSelectedWallet: string | null;
+    forcedBuyerSelectedTransactionCurrency: string | null;
+    itemizedDetails: ItemizedDetails;
+    isCancelled: boolean | null;
+    universalCodes: UniversalCodes;
 }
 
 export class Invoice implements InvoiceInterface {
@@ -132,6 +144,7 @@ export class Invoice implements InvoiceInterface {
     refundAddresses: any | null;
     refundAddressRequestPending: boolean | null;
     buyerProvidedEmail: string | null;
+    buyerProvidedInfo: BuyerProvidedInfo;
     invoiceBuyerProvidedInfo: InvoiceBuyerProvidedInfo;
     supportedTransactionCurrencies: SupportedTransactionCurrencies | null;
     minerFees: MinerFees | null;
@@ -152,6 +165,14 @@ export class Invoice implements InvoiceInterface {
     underpaidAmount: number | null;
     overpaidAmount: number | null;
     paymentCodes: Array<[string, Array<[string, number]>]> | null;
+
+    buyerEmail: string | null;
+    merchantName: string | null;
+    forcedBuyerSelectedWallet: string | null;
+    forcedBuyerSelectedTransactionCurrency: string | null;
+    itemizedDetails: ItemizedDetails;
+    isCancelled: boolean | null;
+    universalCodes: UniversalCodes;
 
     /**
      * Constructor, create a minimal request Invoice object.
