@@ -889,7 +889,7 @@ export class Client {
         params["token"] = this.GetAccessToken(Facade.Merchant);
 
         try {
-            return await this._RESTcli.get("settlements", params).then(settlementData => {
+            return await this._RESTcli.get("settlements/" + settlementId, params).then(settlementData => {
                 return <SettlementInterface>JSON.parse(settlementData);
             });
         } catch (e)
