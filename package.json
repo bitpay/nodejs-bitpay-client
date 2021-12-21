@@ -6,7 +6,7 @@
   "typings": "dist/index",
   "files": [
     "dist/**/*.js",
-    "dist/index.d.ts",
+    "dist/**/*.d.ts",
     "setup/BitPaySetup.js"
   ],
   "scripts": {
