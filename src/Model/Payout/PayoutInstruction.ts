@@ -9,7 +9,6 @@ export interface PayoutInstructionInterface {
     recipientId: string | null;
     shopperId: string | null;
     label: string | null;
-    walletProvider: string | null;
     id: string | null;
     address: string | null;
 
@@ -28,7 +27,6 @@ export class PayoutInstruction implements PayoutInstructionInterface {
     recipientId: string | null;
     shopperId: string | null;
     status: string | null;
-    walletProvider: string | null;
     transactions: PayoutInstructionTransaction[];
     address: string | null;
 

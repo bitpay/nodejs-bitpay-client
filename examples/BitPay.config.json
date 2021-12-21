@@ -6,14 +6,16 @@
                 "PrivateKeyPath": "",
                 "PrivateKey": "",
                 "ApiTokens": {
-                    "merchant": ""
+                    "merchant": "",
+                    "payout": ""
                 }
             },
             "Prod": {
                 "PrivateKeyPath": "",
                 "PrivateKey": "",
                 "ApiTokens": {
-                    "merchant": ""
+                    "merchant": "",
+                    "payout": ""
                 }
             }
         }

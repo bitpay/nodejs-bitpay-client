@@ -7,6 +7,8 @@ import {
     InvoiceInterface,
     LedgerEntryInterface,
     LedgerInterface,
+    Payout,
+    PayoutInterface,
     PayoutBatch,
     PayoutBatchInterface,
     PayoutRecipient,
@@ -58,7 +60,7 @@ export class Client {
                 this.init();
             }
         } catch (e) {
-            throw new Exceptions.Generic(null, "failed to initiate client : " + e.message);
+            throw new Exceptions.Generic(null, "failed to initiate client : " + e.message, null, e.apiCode);
         }
     }
 
@@ -72,7 +74,7 @@ export class Client {
                     this._env = ConfigObj['Environment'];
                     envConfig = ConfigObj['EnvConfig'][this._env];
                 } catch (e) {
-                    throw new Exceptions.Generic(null, "Error when reading configuration file");
+                    throw new Exceptions.Generic(null, "Error when reading configuration file", null, e.apiCode);
                 }
             } else {
                 throw new Exceptions.Generic(null, "Configuration file not found")
@@ -87,7 +89,7 @@ export class Client {
             config.envConfig = envTarget;
             this._configuration = config;
         } catch (e) {
-            throw new Exceptions.Generic(null, "failed to process configuration : " + e.message);
+            throw new Exceptions.Generic(null, "failed to process configuration : " + e.message, null, e.apiCode);
         }
     }
 
@@ -101,13 +103,13 @@ export class Client {
                     this._ecKey = this._keyUtils.load_keypair(Buffer.from(privateKey).toString().trim());
                     keyHex = privateKey
                 } catch (e) {
-                    throw new Exceptions.Generic(null, "Private Key file not found");
+                    throw new Exceptions.Generic(null, "Private Key file not found", null, e.apiCode);
                 }
             } else {
                 try {
                     keyFile = privateKey;
                 } catch (e) {
-                    throw new Exceptions.Generic(null, "Could not read private Key file")
+                    throw new Exceptions.Generic(null, "Could not read private Key file", null, e.apiCode)
                 }
             }
 
@@ -127,7 +129,7 @@ export class Client {
             config.envConfig = envTarget;
             this._configuration = config;
         } catch (e) {
-            throw new Exceptions.Generic(null, "failed to process configuration : " + e.message);
+            throw new Exceptions.Generic(null, "failed to process configuration : " + e.message, null, e.apiCode);
         }
     }
 
@@ -145,7 +147,7 @@ export class Client {
                     }
                 }
             } catch (e) {
-                throw new Exceptions.Generic(null, "When trying to load private key. Make sure the configuration details are correct and the private key and tokens are valid : " + e.message);
+                throw new Exceptions.Generic(null, "When trying to load private key. Make sure the configuration details are correct and the private key and tokens are valid : " + e.message, null, e.apiCode);
             }
         }
     }
@@ -156,7 +158,7 @@ export class Client {
             this.LoadAccessTokens();
             this._currenciesInfo = await this.LoadCurrencies();
         } catch (e) {
-            throw new Exceptions.Generic(null, "failed to deserialize BitPay server response (Token array) : " + e.message);
+            throw new Exceptions.Generic(null, "failed to deserialize BitPay server response (Token array) : " + e.message, null, e.apiCode);
         }
     }
 
@@ -206,19 +208,19 @@ export class Client {
             this.ClearAccessTokenCache();
             this._tokenCache = this._configuration.envConfig[this._env]["ApiTokens"];
         } catch (e) {
-            throw new Exceptions.Generic(null, "When trying to load the tokens : " + e.message);
+            throw new Exceptions.Generic(null, "When trying to load the tokens : " + e.message, null, e.apiCode);
         }
     }
 
     private ClearAccessTokenCache() {
-        this._tokenCache = { merchant: null, payroll: null };
+        this._tokenCache = { merchant: null, payout: null };
     }
 
     private GetAccessToken(key: string): string {
         try {
             return this._tokenCache[key];
         } catch (e) {
-            throw new Exceptions.Generic(null,"There is no token for the specified key : " + e.message);
+            throw new Exceptions.Generic(null,"There is no token for the specified key : " + e.message, null, e.apiCode);
         }
     }
 
@@ -255,7 +257,7 @@ export class Client {
             });
         } catch (e)
         {
-            throw new Exceptions.InvoiceCreation("failed to deserialize BitPay server response (Invoice) : " + e.message);
+            throw new Exceptions.InvoiceCreation("failed to deserialize BitPay server response (Invoice) : " + e.message, e.apiCode);
         }
     }
 
@@ -270,7 +272,7 @@ export class Client {
             });
         } catch (e)
         {
-            throw new Exceptions.InvoiceCreation("failed to deserialize BitPay server response (Invoice) : " + e.message);
+            throw new Exceptions.InvoiceCreation("failed to deserialize BitPay server response (Invoice) : " + e.message, e.apiCode);
         }
     }
 
@@ -292,7 +294,7 @@ export class Client {
             });
         } catch (e)
         {
-            throw new Exceptions.InvoiceQuery("failed to deserialize BitPay server response (Invoice) : " + e.message);
+            throw new Exceptions.InvoiceQuery("failed to deserialize BitPay server response (Invoice) : " + e.message, e.apiCode);
         }
     }
 
@@ -310,7 +312,7 @@ export class Client {
         try {
             invoice = await this.GetInvoice(invoiceId);
         } catch (e) {
-            throw new Exceptions.InvoiceQuery("Invoice with ID: " + invoiceId + " Not Found : " + e.message);
+            throw new Exceptions.InvoiceQuery("Invoice with ID: " + invoiceId + " Not Found : " + e.message, e.apiCode);
         }
 
         const params = {
@@ -324,7 +326,7 @@ export class Client {
                 return invoiceData.toLowerCase() == "success";
             });
         } catch (e) {
-            throw new Exceptions.InvoiceQuery("failed to deserialize BitPay server response (InvoiceQuery) : " + e.message);
+            throw new Exceptions.InvoiceQuery("failed to deserialize BitPay server response (InvoiceQuery) : " + e.message, e.apiCode);
         }
     }
 
@@ -351,7 +353,7 @@ export class Client {
                 return <Boolean>JSON.parse(refundData);
             });
         } catch (e) {
-            throw new Exceptions.RefundCreation("failed to deserialize BitPay server response (Refund) : " + e.message);
+            throw new Exceptions.RefundCreation("failed to deserialize BitPay server response (Refund) : " + e.message, e.apiCode);
         }
     }
 
@@ -373,7 +375,7 @@ export class Client {
                 return <RefundInterface>JSON.parse(refundData);
             });
         } catch (e) {
-            throw new Exceptions.RefundQuery("failed to deserialize BitPay server response (Refund) : " + e.message);
+            throw new Exceptions.RefundQuery("failed to deserialize BitPay server response (Refund) : " + e.message, e.apiCode);
         }
     }
 
@@ -394,7 +396,7 @@ export class Client {
                 return <RefundInterface[]>JSON.parse(refundData);
             });
         } catch (e) {
-            throw new Exceptions.RefundQuery("failed to deserialize BitPay server response (Refund) : " + e.message);
+            throw new Exceptions.RefundQuery("failed to deserialize BitPay server response (Refund) : " + e.message, e.apiCode);
         }
     }
 
@@ -418,7 +420,7 @@ export class Client {
                 return refundData.toLowerCase() == "success";
             });
         } catch (e) {
-            throw new Exceptions.RefundCreation("failed to deserialize BitPay server response (Refund) : " + e.message);
+            throw new Exceptions.RefundCreation("failed to deserialize BitPay server response (Refund) : " + e.message, e.apiCode);
         }
     }
 
@@ -438,7 +440,7 @@ export class Client {
                 return <BillInterface>JSON.parse(billData);
             });
         } catch (e) {
-            throw new Exceptions.BillCreation("failed to deserialize BitPay server response (Bill) : " + e.message);
+            throw new Exceptions.BillCreation("failed to deserialize BitPay server response (Bill) : " + e.message, e.apiCode);
         }
     }
 
@@ -464,7 +466,7 @@ export class Client {
                 return <BillInterface[]>JSON.parse(billData);
             });
         } catch (e) {
-            throw new Exceptions.BillQuery("failed to deserialize BitPay server response (Bill) : " + e.message);
+            throw new Exceptions.BillQuery("failed to deserialize BitPay server response (Bill) : " + e.message, e.apiCode);
         }
     }
 
@@ -486,7 +488,7 @@ export class Client {
                 return <BillInterface>JSON.parse(billData);
             });
         } catch (e) {
-            throw new Exceptions.BillQuery("failed to deserialize BitPay server response (Bill) : " + e.message);
+            throw new Exceptions.BillQuery("failed to deserialize BitPay server response (Bill) : " + e.message, e.apiCode);
         }
     }
 
@@ -505,7 +507,7 @@ export class Client {
                 return <BillInterface>JSON.parse(billData);
             });
         } catch (e) {
-            throw new Exceptions.BillUpdate("failed to deserialize BitPay server response (Bill) : " + e.message);
+            throw new Exceptions.BillUpdate("failed to deserialize BitPay server response (Bill) : " + e.message, e.apiCode);
         }
     }
 
@@ -527,7 +529,7 @@ export class Client {
                 return (<string>JSON.parse(billData) == "Success");
             });
         } catch (e) {
-            throw new Exceptions.BillDelivery("failed to deserialize BitPay server response (Bill) : " + e.message);
+            throw new Exceptions.BillDelivery("failed to deserialize BitPay server response (Bill) : " + e.message, e.apiCode);
         }
     }
 
@@ -555,7 +557,7 @@ export class Client {
             });
         } catch (e)
         {
-            throw new Exceptions.LedgerQuery("failed to deserialize BitPay server response (Ledger) : " + e.message);
+            throw new Exceptions.LedgerQuery("failed to deserialize BitPay server response (Ledger) : " + e.message, e.apiCode);
         }
     }
 
@@ -576,7 +578,7 @@ export class Client {
             });
         } catch (e)
         {
-            throw new Exceptions.LedgerQuery("failed to deserialize BitPay server response (Ledger) : " + e.message);
+            throw new Exceptions.LedgerQuery("failed to deserialize BitPay server response (Ledger) : " + e.message, e.apiCode);
         }
     }
 
@@ -586,18 +588,18 @@ export class Client {
      * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
      * @return array A list of BitPay PayoutRecipients objects..
      * @throws BitPayException BitPayException class
-     * @throws PayoutCreationException PayoutCreationException class
+     * @throws PayoutRecipientCreationException PayoutRecipientCreationException class
      */
     public async SubmitPayoutRecipients(recipients: PayoutRecipients): Promise<PayoutRecipientInterface[]> {
-        recipients.token = this.GetAccessToken(Facade.Payroll);
-        recipients.guid = this.GetGuid();
+        recipients.token = this.GetAccessToken(Facade.Payout);
+        //recipients.guid = this.GetGuid();
 
         try {
             return await this._RESTcli.post("recipients", recipients).then(recipientsData => {
                 return <PayoutRecipientInterface[]>JSON.parse(recipientsData);
             });
         } catch (e) {
-            throw new Exceptions.PayoutCreation("failed to deserialize BitPay server response (PayoutRecipients) : " + e.message);
+            throw new Exceptions.PayoutRecipientCreation("failed to deserialize BitPay server response (PayoutRecipients) : " + e.message, e.apiCode);
         }
     }
 
@@ -607,13 +609,14 @@ export class Client {
      * @param status String|null The recipient status you want to query on.
      * @param limit  int|null Maximum results that the query will return (useful for paging results).
      *               result).
+     * @param offset number The offset to filter the Payout Recipients.
      * @return array     A list of BitPayRecipient objects.
      * @throws BitPayException BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
      */
-    public async GetPayoutRecipients(status: string, limit: number): Promise<PayoutRecipientInterface[]> {
+    public async GetPayoutRecipients(status: string, limit: number, offset: number): Promise<PayoutRecipientInterface[]> {
         const params = {
-            'token': this.GetAccessToken(Facade.Payroll)
+            'token': this.GetAccessToken(Facade.Payout)
         };
 
         if (status) {
@@ -622,13 +625,16 @@ export class Client {
         if (limit) {
             params["limit"] = limit
         }
+        if (offset) {
+            params["offset"] = offset
+        }
 
         try {
             return await this._RESTcli.get("recipients", params).then(recipientsData => {
                 return <PayoutRecipientInterface[]>JSON.parse(recipientsData);
             });
         } catch (e) {
-            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutRecipients) : " + e.message);
+            throw new Exceptions.PayoutRecipientQuery("failed to deserialize BitPay server response (PayoutRecipients) : " + e.message, e.apiCode);
         }
     }
 
@@ -638,11 +644,11 @@ export class Client {
      * @param recipientId String The id of the recipient to retrieve.
      * @return PayoutRecipient A BitPay PayoutRecipient object.
      * @throws BitPayException BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
      */
     public async GetPayoutRecipient(recipientId: string): Promise<PayoutRecipientInterface> {
         const params = {
-            'token': this.GetAccessToken(Facade.Payroll)
+            'token': this.GetAccessToken(Facade.Payout)
         };
 
         try {
@@ -650,7 +656,7 @@ export class Client {
                 return <PayoutRecipientInterface>JSON.parse(recipientData);
             });
         } catch (e) {
-            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message);
+            throw new Exceptions.PayoutRecipientQuery("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message, e.apiCode);
         }
     }
 
@@ -662,11 +668,11 @@ export class Client {
      * @param notificationURL String The new notificationURL for the recipient.
      * @return PayoutRecipient A BitPay PayoutRecipient object.
      * @throws BitPayException BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws PayoutRecipientUpdateException PayoutRecipientUpdateException class
      */
     public async UpdatePayoutRecipient(recipientId: string, label: string, notificationURL: string): Promise<PayoutRecipientInterface> {
         const params = {
-            'token': this.GetAccessToken(Facade.Payroll)
+            'token': this.GetAccessToken(Facade.Payout)
         };
 
         if (label) {
@@ -681,7 +687,7 @@ export class Client {
                 return <PayoutRecipientInterface>JSON.parse(recipientData);
             });
         } catch (e) {
-            throw new Exceptions.PayoutUpdate("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message);
+            throw new Exceptions.PayoutRecipientUpdate("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message, e.apiCode);
         }
     }
 
@@ -690,11 +696,11 @@ export class Client {
      *
      * @param recipientId The Payout Recipient to be deleted.
      * @return True if the recipient was successfully deleted, false otherwise.
-     * @throws PayoutDeleteException PayoutDeleteException class
+     * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException class
      */
     public async DeletePayoutRecipient(recipientId: string): Promise<Boolean> {
         const params = {
-            'token': this.GetAccessToken(Facade.Payroll)
+            'token': this.GetAccessToken(Facade.Payout)
         };
 
         try {
@@ -702,7 +708,7 @@ export class Client {
                 return <Boolean>JSON.parse(recipientData);
             });
         } catch (e) {
-            throw new Exceptions.PayoutDelete("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message);
+            throw new Exceptions.PayoutRecipientCancellation("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message, e.apiCode);
         }
     }
 
@@ -712,11 +718,11 @@ export class Client {
      * @param recipientId String The id of the recipient.
      * @return True if the webhook was successfully requested, false otherwise.
      * @throws BitPayException BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws PayoutRecipientNotificationException PayoutRecipientNotificationException class
      */
     public async GetPayoutRecipientWebHook(recipientId: string): Promise<Boolean> {
         const params = {
-            'token': this.GetAccessToken(Facade.Payroll)
+            'token': this.GetAccessToken(Facade.Payout)
         };
 
         try {
@@ -724,7 +730,143 @@ export class Client {
                 return <Boolean>JSON.parse(recipientData);
             });
         } catch (e) {
-            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message);
+            throw new Exceptions.PayoutRecipientNotification("failed to deserialize BitPay server response (PayoutRecipient) : " + e.message, e.apiCode);
+        }
+    }
+
+    /**
+     * Submit a BitPay Payout.
+     *
+     * @param payout A Payout object with request parameters defined.
+     * @return A BitPay generated Payout object.
+     * @throws BitPayException         BitPayException class
+     * @throws PayoutCreationException PayoutCreationException class
+     */
+     public async SubmitPayout(payout: Payout): Promise<PayoutInterface> {
+
+        let currencyInfo = await this.GetCurrencyInfo(payout.currency);
+        let precision = !currencyInfo ? 2 : parseInt(currencyInfo["precision"]);
+
+        payout.amount = parseFloat(payout.amount.toFixed(precision));
+
+        payout.token = this.GetAccessToken(Facade.Payout);
+
+        try {
+            return await this._RESTcli.post("payouts", payout).then(PayoutData => {
+                return <PayoutInterface>JSON.parse(PayoutData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutCreation("failed to deserialize BitPay server response (Payout) : " + e.message, e.apiCode);
+        }
+    }
+
+    /**
+     * Retrieve a collection of BitPay payouts.
+     *
+     * @param startDate string The startDate to filter the Payout.
+     * @param endDate string The endDate to filter the Payout.
+     * @param status string The status to filter the Payout.
+     * @param reference string The reference to filter the Payout.
+     * @param limit number Maximum results that the query will return (useful for paging results).
+     * @param offset number The offset to filter the Payout.
+     * @return A BitPay Payout objects.
+     * @throws BitPayException      BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+     public async GetPayouts(startDate: string, endDate: string, status: string, reference: string, limit: number, offset: number): Promise<PayoutInterface[]> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payout)
+        };
+
+        if (startDate) {
+            params["startDate"] = startDate
+        }
+        if (endDate) {
+            params["endDate"] = endDate
+        }
+        if (status) {
+            params["status"] = status
+        }
+        if (reference) {
+            params["reference"] = reference
+        }
+        if (limit) {
+            params["limit"] = limit
+        }
+        if (offset) {
+            params["offset"] = offset
+        }
+
+        try {
+            return await this._RESTcli.get("payouts", params).then(payoutData => {
+                return <PayoutInterface[]>JSON.parse(payoutData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (Payout) : " + e.message, e.apiCode);
+        }
+    }
+
+    /**
+     * Retrieve a BitPay payout by payout id using.  The client must have been previously authorized for the payout facade.
+     *
+     * @param payoutId The id of the batch to retrieve.
+     * @return A BitPay PayoutBatch object.
+     * @throws BitPayException      BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+     public async GetPayout(payoutId: string): Promise<PayoutInterface> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payout)
+        };
+
+        try {
+            return await this._RESTcli.get("payouts/" + payoutId, params).then(payoutData => {
+                return <PayoutInterface>JSON.parse(payoutData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (Payout) : " + e.message, e.apiCode);
+        }
+    }
+
+    /**
+     * Cancel a BitPay Payout.
+     *
+     * @param payoutId string The id of the payout to cancel.
+     * @return Payout A BitPay generated Payout object.
+     * @throws PayoutDeleteException BitPayException class
+     */
+     public async CancelPayout(payoutId: string): Promise<Boolean> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payout)
+        };
+
+        try {
+            return await this._RESTcli.delete("payouts/" + payoutId, params).then(responseData => {
+                return <Boolean>JSON.parse(responseData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutDelete("failed to deserialize BitPay server response (PayoutObject) : " + e.message, e.apiCode);
+        }
+    }
+
+    /**
+     * Notify BitPay Payout.
+     *
+     * @param  payoutId string The id of the Payout to notify.
+     * @return True if the notification was successfully sent, false otherwise.
+     * @throws PayoutNotificationException BitPayException class
+     */
+     public async RequestPayoutNotification(payoutId: string): Promise<Boolean> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payout)
+        };
+
+        try {
+            return await this._RESTcli.post("payouts/" + payoutId + "/notifications", params).then(responseData => {
+                return <Boolean>JSON.parse(responseData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutNotification("failed to deserialize BitPay server response (PayoutObject) : " + e.message, e.apiCode);
         }
     }
 
@@ -734,7 +876,7 @@ export class Client {
      * @param batch A PayoutBatch object with request parameters defined.
      * @return A BitPay generated PayoutBatch object.
      * @throws BitPayException         BitPayException class
-     * @throws PayoutCreationException PayoutCreationException class
+     * @throws PayoutBatchCreationException PayoutBatchCreationException class
      */
     public async SubmitPayoutBatch(batch: PayoutBatch): Promise<PayoutBatchInterface> {
 
@@ -749,93 +891,122 @@ export class Client {
 
         batch.amount = parseFloat(amount.toFixed(precision));
 
-
-        batch.token = this.GetAccessToken(Facade.Payroll);
-        batch.guid = this.GetGuid();
+        batch.token = this.GetAccessToken(Facade.Payout);
 
         try {
-            return await this._RESTcli.post("payouts", batch).then(PayoutBatchData => {
+            return await this._RESTcli.post("payoutBatches", batch).then(PayoutBatchData => {
                 return <PayoutBatchInterface>JSON.parse(PayoutBatchData);
             });
         } catch (e) {
-            throw new Exceptions.PayoutCreation("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
+            throw new Exceptions.PayoutBatchCreation("failed to deserialize BitPay server response (PayoutBatch) : " + e.message, e.apiCode);
+        }
+    }
+
+    /**
+     * Retrieve a BitPay payout batch by batch id using.  The client must have been previously authorized for the payout facade.
+     *
+     * @param batchId The id of the batch to retrieve.
+     * @return A BitPay PayoutBatch object.
+     * @throws BitPayException      BitPayException class
+     * @throws PayoutBatchQueryException PayoutBatchQueryException class
+     */
+     public async GetPayoutBatch(payoutBatchId: string): Promise<PayoutBatchInterface> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payout)
+        };
+
+        try {
+            return await this._RESTcli.get("payoutBatches/" + payoutBatchId, params).then(payoutBatchData => {
+                return <PayoutBatchInterface>JSON.parse(payoutBatchData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutBatchQuery("failed to deserialize BitPay server response (PayoutBatch) : " + e.message, e.apiCode);
         }
     }
 
     /**
      * Retrieve a collection of BitPay payout batches.
      *
-     * @param status The status to filter the Payout Batches.
+     * @param startDate string The startDate to filter the Payout Batches.
+     * @param endDate string The endDate to filter the Payout Batches.
+     * @param status string The status to filter the Payout Batches.
+     * @param limit number Maximum results that the query will return (useful for paging results).
+     * @param offset number The offset to filter the Payout Batches.
      * @return A list of BitPay PayoutBatch objects.
      * @throws BitPayException      BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws PayoutBatchQueryException PayoutBatchQueryException class
      */
-    public async GetPayoutBatches(status: string): Promise<PayoutBatchInterface[]> {
+    public async GetPayoutBatches(startDate: string, endDate: string, status: string, limit: number, offset: number): Promise<PayoutBatchInterface[]> {
         const params = {
-            'token': this.GetAccessToken(Facade.Payroll)
+            'token': this.GetAccessToken(Facade.Payout)
         };
 
+        if (startDate) {
+            params["startDate"] = startDate
+        }
+        if (endDate) {
+            params["endDate"] = endDate
+        }
         if (status) {
             params["status"] = status
         }
+        if (limit) {
+            params["limit"] = limit
+        }
+        if (offset) {
+            params["offset"] = offset
+        }
 
         try {
-            return await this._RESTcli.get("payouts", params).then(payoutBatchData => {
+            return await this._RESTcli.get("payoutBatches", params).then(payoutBatchData => {
                 return <PayoutBatchInterface[]>JSON.parse(payoutBatchData);
             });
         } catch (e) {
-            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
-        }
-    }
-
-    /**
-     * Retrieve a BitPay payout batch by batch id using.  The client must have been previously authorized for the payroll facade.
-     *
-     * @param batchId The id of the batch to retrieve.
-     * @return A BitPay PayoutBatch object.
-     * @throws BitPayException      BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
-     */
-    public async GetPayoutBatch(batchId: string): Promise<PayoutBatchInterface> {
-        const params = {
-            'token': this.GetAccessToken(Facade.Payroll)
-        };
-
-        try {
-            return await this._RESTcli.get("payouts/" + batchId, params).then(payoutBatchData => {
-                return <PayoutBatchInterface>JSON.parse(payoutBatchData);
-            });
-        } catch (e) {
-            throw new Exceptions.PayoutQuery("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
+            throw new Exceptions.PayoutBatchQuery("failed to deserialize BitPay server response (PayoutBatch) : " + e.message, e.apiCode);
         }
     }
 
     /**
      * Cancel a BitPay Payout batch.
      *
-     * @param batchId The id of the batch to cancel.
+     * @param payoutBatchId The id of the batch to cancel.
      * @return A BitPay generated PayoutBatch object.
-     * @throws PayoutCancellationException PayoutCancellationException class
+     * @throws BitPayException      BitPayException class
+     * @throws PayoutBatchCancellationException PayoutBatchCancellationException class
      */
-    public async CancelPayoutBatch(batchId: string): Promise<PayoutBatchInterface> {
-        let batch: PayoutBatchInterface;
-
-        try {
-            batch = await this.GetPayoutBatch(batchId);
-        } catch (e) {
-            throw new Exceptions.PayoutQuery("Payout Batch with ID: " + batchId + " Not Found : " + e.message);
-        }
-
+    public async CancelPayoutBatch(payoutBatchId: string): Promise<Boolean> {
         const params = {
-            'token': batch.token
+            'token': this.GetAccessToken(Facade.Payout)
         };
 
         try {
-            return await this._RESTcli.delete("payouts/" + batchId, params).then(payoutBatchData => {
-                return <PayoutBatchInterface>JSON.parse(payoutBatchData);
+            return await this._RESTcli.delete("payoutBatches/" + payoutBatchId, params).then(responseData => {
+                return <Boolean>JSON.parse(responseData);
             });
         } catch (e) {
-            throw new Exceptions.PayoutCancellation("failed to deserialize BitPay server response (PayoutBatch) : " + e.message);
+            throw new Exceptions.PayoutBatchCancellation("failed to deserialize BitPay server response (PayoutBatch) : " + e.message, e.apiCode);
+        }
+    }
+
+    /**
+     * Notify BitPay Payout Batch.
+     *
+     * @param  payoutBatchId string The id of the Payout to notify.
+     * @return True if the notification was successfully sent, false otherwise.
+     * @throws BitPayException      BitPayException class
+     * @throws PayoutBatchNotificationException PayoutBatchNotificationException class
+     */
+     public async RequestPayoutBatchNotification(payoutBatchId: string): Promise<Boolean> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Payout)
+        };
+
+        try {
+            return await this._RESTcli.post("payoutBatches/" + payoutBatchId + "/notifications", params).then(responseData => {
+                return <Boolean>JSON.parse(responseData);
+            });
+        } catch (e) {
+            throw new Exceptions.PayoutBatchNotification("failed to deserialize BitPay server response (PayoutObject) : " + e.message, e.apiCode);
         }
     }
 
@@ -872,7 +1043,7 @@ export class Client {
             });
         } catch (e)
         {
-            throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message);
+            throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message, e.apiCode);
         }
     }
 
@@ -894,7 +1065,7 @@ export class Client {
             });
         } catch (e)
         {
-            throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message);
+            throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message, e.apiCode);
         }
     }
 
@@ -916,7 +1087,7 @@ export class Client {
             });
         } catch (e)
         {
-            throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message);
+            throw new Exceptions.SettlementQuery("failed to deserialize BitPay server response (Settlement) : " + e.message, e.apiCode);
         }
     }
 
@@ -935,7 +1106,7 @@ export class Client {
                 return <SubscriptionInterface>JSON.parse(subscriptionsData);
             });
         } catch (e) {
-            throw new Exceptions.SubscriptionCreation("failed to deserialize BitPay server response (Subscription) : " + e.message);
+            throw new Exceptions.SubscriptionCreation("failed to deserialize BitPay server response (Subscription) : " + e.message, e.apiCode);
         }
     }
 
@@ -956,7 +1127,7 @@ export class Client {
                 return <SubscriptionInterface>JSON.parse(subscriptionData);
             });
         } catch (e) {
-            throw new Exceptions.SubscriptionQuery("failed to deserialize BitPay server response (Subscription) : " + e.message);
+            throw new Exceptions.SubscriptionQuery("failed to deserialize BitPay server response (Subscription) : " + e.message, e.apiCode);
         }
     }
 
@@ -981,7 +1152,7 @@ export class Client {
                 return <SubscriptionInterface[]>JSON.parse(subscriptionsData);
             });
         } catch (e) {
-            throw new Exceptions.SubscriptionQuery("failed to deserialize BitPay server response (Subscriptions) : " + e.message);
+            throw new Exceptions.SubscriptionQuery("failed to deserialize BitPay server response (Subscriptions) : " + e.message, e.apiCode);
         }
     }
 
@@ -999,7 +1170,7 @@ export class Client {
         try {
             subscriptionObj = await this.GetSubscription(subscriptionId);
         } catch (e) {
-            throw new Exceptions.PayoutQuery("Subscription with ID: " + subscriptionId + " Not Found : " + e.message);
+            throw new Exceptions.PayoutQuery("Subscription with ID: " + subscriptionId + " Not Found : " + e.message, e.apiCode);
         }
 
         subscription.token = subscriptionObj.token;
@@ -1009,7 +1180,7 @@ export class Client {
                 return <SubscriptionInterface>JSON.parse(subscriptionData);
             });
         } catch (e) {
-            throw new Exceptions.SubscriptionUpdate("failed to deserialize BitPay server response (Subscription) : " + e.message);
+            throw new Exceptions.SubscriptionUpdate("failed to deserialize BitPay server response (Subscription) : " + e.message, e.apiCode);
         }
     }
 }

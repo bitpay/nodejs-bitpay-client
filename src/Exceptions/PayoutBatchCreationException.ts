@@ -1,15 +1,15 @@
-import InvoiceException from "./InvoiceException";
+import PayoutBatchException from "./PayoutBatchException";
 
-export class InvoiceCreationException implements InvoiceException {
+export class PayoutBatchCreationException implements PayoutBatchException {
 
-    public readonly message: string = "Failed to create invoice";
-    public readonly name: string = "BITPAY-INVOICE-CREATE";
-    public readonly code: number = 102;
+    public readonly message: string = "Failed to create payout batch";
+    public readonly name: string = "BITPAY-PAYOUT-BATCH-SUBMIT";
+    public readonly code: number = 202;
     public readonly stack: string;
     public readonly apiCode: string = "000000";
 
     /**
-     * Construct the InvoiceCreationException.
+     * Construct the PayoutBatchCreationException.
      *
      * @param message string [optional] The Exception message to throw.
      * @param apiCode string [optional] The API Exception code to throw.
@@ -20,4 +20,4 @@ export class InvoiceCreationException implements InvoiceException {
     }
 }
 
-export default InvoiceCreationException;
+export default PayoutBatchCreationException;

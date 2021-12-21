@@ -36,6 +36,18 @@ import {PayoutQueryException as PayoutQuery} from './PayoutQueryException';
 import {PayoutCancellationException as PayoutCancellation} from './PayoutCancellationException';
 import {PayoutUpdateException as PayoutUpdate} from './PayoutUpdateException';
 import {PayoutDeleteException as PayoutDelete} from './PayoutDeleteException';
+import {PayoutNotificationException as PayoutNotification} from './PayoutNotificationException';
+import {PayoutBatchException as PayoutBatchGeneric} from './PayoutBatchException';
+import {PayoutBatchCreationException as PayoutBatchCreation} from './PayoutBatchCreationException';
+import {PayoutBatchQueryException as PayoutBatchQuery} from './PayoutBatchQueryException';
+import {PayoutBatchCancellationException as PayoutBatchCancellation} from './PayoutBatchCancellationException';
+import {PayoutBatchNotificationException as PayoutBatchNotification} from './PayoutBatchNotificationException';
+import {PayoutRecipientException as PayoutRecipientGeneric} from './PayoutRecipientException';
+import {PayoutRecipientCreationException as PayoutRecipientCreation} from './PayoutRecipientCreationException';
+import {PayoutRecipientQueryException as PayoutRecipientQuery} from './PayoutRecipientQueryException';
+import {PayoutRecipientCancellationException as PayoutRecipientCancellation} from './PayoutRecipientCancellationException';
+import {PayoutRecipientUpdateException as PayoutRecipientUpdate} from './PayoutRecipientUpdateException';
+import {PayoutRecipientNotificationException as PayoutRecipientNotification} from './PayoutRecipientNotificationException';
 import {SettlementException as SettlementGeneric} from './SettlementException';
 import {SettlementQueryException as SettlementQuery} from './SettlementQueryException';
 import {SubscriptionException as SubscriptionGeneric} from './SubscriptionException';
@@ -67,6 +79,18 @@ export {
     PayoutCancellation,
     PayoutUpdate,
     PayoutDelete,
+    PayoutNotification,
+    PayoutBatchGeneric,
+    PayoutBatchCreation,
+    PayoutBatchQuery,
+    PayoutBatchCancellation,
+    PayoutBatchNotification,
+    PayoutRecipientGeneric,
+    PayoutRecipientCreation,
+    PayoutRecipientQuery,
+    PayoutRecipientCancellation,
+    PayoutRecipientUpdate,
+    PayoutRecipientNotification,
     SettlementGeneric,
     SettlementQuery,
     SubscriptionGeneric,
