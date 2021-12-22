@@ -39,21 +39,28 @@ export class Client {
     public _currenciesInfo: [];
     private _keyUtils = new KeyUtils();
 
+    constructor(configFilePath: string);
     constructor(
-        configFilePath: string,
+        configFilePath: null | undefined,
         environment: string,
         privateKey: string,
-        tokens: Tokens,
+        tokens: Tokens
+    );
+    constructor(
+        configFilePath: string | null | undefined,
+        environment?: string,
+        privateKey?: string,
+        tokens?: Tokens,
     ) {
         try {
-            // constructor with config file
-            if(arguments.length > 1) {
+            // constructor with parameters
+            if(configFilePath == null) {
                 this._env = environment;
                 this.BuildConfig(privateKey, tokens);
                 this.initKeys();
                 this.init();
             }
-            // constructor with parameters
+            // constructor with config file
             else {
                 this.BuildConfigFromFile(configFilePath);
                 this.initKeys();

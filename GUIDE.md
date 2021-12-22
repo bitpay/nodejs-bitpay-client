@@ -117,7 +117,7 @@ The pairing code is then entered into the BitPay merchant dashboard for the desi
 ### Create an invoice
 
 ```node
-let invoiceData = new Models.Invoice(50, Currencies.USD);
+let invoiceData = new Models.Invoice(50, Currency.USD);
 
 const result = await client.CreateInvoice(invoiceData);
 
@@ -139,7 +139,7 @@ You can retrieve BitPay's [BBB exchange rates](https://bitpay.com/exchange-rates
 ```node
 let rates = client.GetRates();
 
-let rate = rates.client(Currencies.USD);
+let rate = rates.client(Currency.USD);
 
 rates.update(); // It will refresh the current Rates object
 ```
