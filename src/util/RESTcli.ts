@@ -1,7 +1,6 @@
 import {Env, KeyUtils} from "../index";
 import * as qs from "querystring";
-import * as rp from 'request-promise';
-import * as _ from 'underscore';
+import * as rp from 'request-promise-native';
 import * as elliptic from "elliptic";
 import BitPayException from "../Exceptions/BitPayException";
 
@@ -61,7 +60,7 @@ export class RESTcli {
             _options.body = JSON.parse(JSON.stringify(formData));
 
             if (signatureRequired) {
-                _.extend(_options.headers, this.getSignedHeaders(_fullURL, _formData));
+                Object.assign(_options.headers, this.getSignedHeaders(_fullURL, _formData));
             }
 
             return await rp.post(_options).then((resp: any) => resp).then(resp => {
@@ -86,7 +85,7 @@ export class RESTcli {
             _options.qs = parameters;
 
             if (signatureRequired) {
-                _.extend(_options.headers, this.getSignedHeaders(_fullURL, _query));
+                Object.assign(_options.headers, this.getSignedHeaders(_fullURL, _query));
             }
 
             return await rp.get(_options).then((resp: any) => resp).then(resp => {
@@ -105,7 +104,7 @@ export class RESTcli {
             const _fullURL = this._baseUrl + uri;
             const _options = JSON.parse(JSON.stringify(this._commonOptions));
             const _query = '?' + qs.stringify(parameters);
-            _.extend(_options.headers, this.getSignedHeaders(_fullURL, _query));
+            Object.assign(_options.headers, this.getSignedHeaders(_fullURL, _query));
 
             _options.uri = _fullURL;
             _options.qs = parameters;
@@ -126,7 +125,7 @@ export class RESTcli {
             const _fullURL = this._baseUrl + uri;
             const _formData = JSON.stringify(formData);
             const _options = JSON.parse(JSON.stringify(this._commonOptions));
-            _.extend(_options.headers, this.getSignedHeaders(_fullURL, _formData));
+            Object.assign(_options.headers, this.getSignedHeaders(_fullURL, _formData));
 
             _options.uri = _fullURL;
             _options.body = formData;

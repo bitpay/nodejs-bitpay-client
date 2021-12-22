@@ -3,14 +3,17 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
-    "target": "es5",
+    "target": "es2019",
     "outDir": "./dist",
     "sourceMap": true,
     "strictNullChecks": false,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false,
+    "forceConsistentCasingInFileNames": true,
   },
   "lib": [
-    "es5",
+    "es2019",
     "node"
   ],
   "include": [
