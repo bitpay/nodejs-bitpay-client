@@ -63,22 +63,7 @@ export class PayoutBatch implements PayoutBatchInterface {
      */
     public constructor(currency: string, instructions: PayoutInstruction[], ledgerCurrency: string) {
         this.currency = currency;
-        //this.effectiveDate = effectiveDate;
         this.instructions = instructions;
         this.ledgerCurrency = ledgerCurrency;
-        // this.computeAndSetAmount()
     }
-
-    // computeAndSetAmount() {
-    //     let currencyInfo = Client.GetCurrencyInfo("USD");
-    //     let precision = !currencyInfo ? 2 : parseInt(currencyInfo["precision"]);
-    //
-    //     let amount = 0.0;
-    //
-    //     this.instructions.forEach(instruction => {
-    //         amount += instruction.amount;
-    //     });
-    //
-    //     this.amount = parseFloat(amount.toFixed(precision));
-    // }
 }
