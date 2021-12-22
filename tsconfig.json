@@ -17,8 +17,7 @@
     "node"
   ],
   "include": [
-    "src/**/*.ts",
-    "setup/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "src/**/*.spec.ts"
