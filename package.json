@@ -6,9 +6,7 @@
   "typings": "dist/index",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "setup/*.js",
-    "setup/*.d.ts"
+    "dist/**/*.d.ts"
   ],
   "scripts": {
     "build": "rimraf dist && tsc -p ./tsconfig.json",
