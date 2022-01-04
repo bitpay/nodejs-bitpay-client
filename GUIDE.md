@@ -138,7 +138,6 @@ Meanwhile a new pairing code is generated, the BitPaySetup utility will ask you 
 
 The pairing code is then entered into the BitPay merchant dashboard for the desired merchant.  Your interactive authentication at https://bitpay.com/login provides the authentication needed to create finalize the client-server pairing request.
 
-
 # Copyright
 
 Copyright (c) 2019 BitPay

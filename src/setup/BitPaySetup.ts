@@ -1,6 +1,6 @@
 const fs = require('fs');
 const request = require('request');
-const BitPaySDK = require('../src/index');
+const BitPaySDK = require('../index');
 const readline = require('readline');
 
 let privateKeyPath = __dirname+'/../secure/private_key';
