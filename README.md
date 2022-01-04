@@ -20,6 +20,10 @@ To get up and running with our NodeJS library quickly, follow [The GUIDE](https:
 
 To contribute to this project, please fork and submit a pull request.
 
+## Supported Environments
+
+The BitPay NodeJS client supports Node.js 12 and higher.
+
 ## License
 
 MIT License

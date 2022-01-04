@@ -6,9 +6,7 @@
   "typings": "dist/index",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "setup/*.js",
-    "setup/*.d.ts"
+    "dist/**/*.d.ts"
   ],
   "scripts": {
     "build": "rimraf dist && tsc -p ./tsconfig.json",
@@ -42,18 +40,16 @@
     "bs58": "^4.0.1",
     "elliptic": "^6.5.4",
     "request": "^2.85.0",
-    "request-promise": "^4.2.6",
-    "underscore": "^1.13.2"
+    "request-promise-native": "^1.0.0"
   },
   "devDependencies": {
     "@types/bs58": "^4.0.0",
     "@types/elliptic": "^6.4.14",
     "@types/jest": "^24.0.13",
-    "@types/node": "^11.15.54",
+    "@types/node": "^12",
     "@types/puppeteer": "^1.20.8",
     "@types/request": "^2.48.7",
-    "@types/request-promise": "^4.1.48",
-    "@types/underscore": "^1.11.4",
+    "@types/request-promise-native": "^1.0.18",
     "jest": "^24.9.0",
     "prettier": "^1.17.1",
     "puppeteer": "^1.16.0",
