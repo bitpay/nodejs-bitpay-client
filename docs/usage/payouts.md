@@ -594,4 +594,4 @@ Webhook for completed payout request
 
 
 
-### [Back to guide index](../GUIDE.md)
+### [Back to guide index](../../GUIDE.md)

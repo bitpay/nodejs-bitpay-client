@@ -6,7 +6,7 @@ Rates are exchange rates, representing the number of fiat currency units equival
 
 `GET /rates/:basecurrency`
 
-### Facade `PUBLIC`
+Facades `PUBLIC`
 
 ### HTTP Request
 
@@ -22,6 +22,8 @@ Headers
 | --- | --- | :---: |
 | `X-Accept-Version` | Must be set to `2.0.0` for requests to the BitPay API. | Mandatory |
 | `Content-Type` | must be set to `application/json` for requests to the BitPay API. | Mandatory |
+
+An example code of get rates
 
 ```js
 const result = await client.GetRates();
@@ -253,4 +255,4 @@ Body
 }
 ```
 
-### [Back to guide index](../GUIDE.md)
+### [Back to guide index](../../GUIDE.md)

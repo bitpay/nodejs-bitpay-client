@@ -692,4 +692,4 @@ Webhook for funded payout batch request
 
 
 
-### [Back to guide index](../GUIDE.md)
+### [Back to guide index](../../GUIDE.md)
