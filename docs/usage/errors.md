@@ -30,11 +30,11 @@ HTTP Response
 
 | Code | Description | Type
 | ------ | ------ | ------ |
-| 00xxxx | generic, unmapped error | `string` |
-| 01xxxx | POST error | `string` |
-| 02xxxx | GET error | `string` |
-| 03xxxx | PUT error | `string` |
-| 04xxxx | DELETE error | `string` |
+| `00xxxx` | generic, unmapped error | `string` |
+| `01xxxx` | POST error | `string` |
+| `02xxxx` | GET error | `string` |
+| `03xxxx` | PUT error | `string` |
+| `04xxxx` | DELETE error | `string` |
 
 
 ## Resource and Error - Last four digits
@@ -82,4 +82,4 @@ These errors are mapped to the refund resource
 | `xx0208` | Fees are greater than refund amount | `string` |
 
 
-### [Back to guide index](../GUIDE.md)
+### [Back to guide index](../../GUIDE.md)

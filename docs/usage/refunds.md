@@ -431,4 +431,4 @@ Response body fields
 | `collapsed` | UI hint for BitPay invoice, generally not relevant to customer integrations | `boolean` |
 
 
-### [Back to guide index](../GUIDE.md)
+### [Back to guide index](../../GUIDE.md)

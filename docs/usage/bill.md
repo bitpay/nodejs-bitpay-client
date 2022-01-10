@@ -41,6 +41,8 @@ Body
 | &rarr; `quantity` | Bill identifier, specified by merchant | `number` | Mandatory |
 | `token` | The API token can be retrieved from the dashboard (limited to pos facade) | `string` | Mandatory |
 
+An example code of the create bill
+
 ```js
 let basicBillUsd;
 
@@ -122,6 +124,8 @@ Headers
 | `X-Accept-Version` | Must be set to `2.0.0` for requests to the BitPay API. | Mandatory |
 | `Content-Type` | must be set to `application/json` for requests to the BitPay API. | Mandatory |
 
+To get the generated bill details, pass the Bill Id with URL parameter
+
 ```js
 retrievedBill = await client.GetBill(basicBillUsd.id);
 ```
@@ -190,6 +194,8 @@ Body
 | --- | --- | :---: | :---: |
 | `token` | The resource token for the billId you want to deliver via email. You need to retrieve this token from the bill object itself. | `string` | Mandatory |
 
+To deliver the generated bill, pass the Bill Id with URL parameters
+
 ```js
 deliveredBill = await client.DeliverBill(basicBillUsd.id, basicBillUsd.token);
 ```
@@ -207,4 +213,4 @@ Body
 }
 ```
 
-### [Back to guide index](../GUIDE.md)
+### [Back to guide index](../../GUIDE.md)
