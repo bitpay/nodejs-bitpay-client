@@ -1,4 +1,4 @@
-export interface Tokens {
-    merchant: string | null;
-    payout: string | null;
+export class Tokens {
+    static merchant = null;
+    static payout = null;
 }
