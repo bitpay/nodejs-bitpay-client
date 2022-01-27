@@ -1,5 +1,5 @@
 const fs = require('fs');
-const request = require('request');
+const axios = require('axios').default
 const BitPaySDK = require('../index');
 const readline = require('readline');
 
@@ -208,11 +208,21 @@ let requestTokens = async (option) => {
                 json: true
             };
 
-            request(options, function (error, response, body) {
-                let jsonResponse = JSON.parse(JSON.stringify(body.data[0]));
-                merchantToken = jsonResponse['token'];
-                merchantPairCode = jsonResponse['pairingCode'];
-            });
+            axios({
+                method: options.method,
+                url: options.url,
+                headers: options.headers,
+                data: {
+                    id: options.body.id,
+                    facade: options.body.facade
+                }
+            }).then((response) => {
+                const data = response.data.data[0]
+                merchantToken = data.token
+                merchantPairCode = data.pairingCode
+            }).catch((e) => {
+                console.log(e.message)
+            })
             await sleep(2000);
         }
         
@@ -228,11 +238,21 @@ let requestTokens = async (option) => {
                 json: true
             };
 
-            request(options, function (error, response, body) {
-                let jsonResponse = JSON.parse(JSON.stringify(body.data[0]));
-                payoutToken = jsonResponse['token'];
-                payoutPairCode = jsonResponse['pairingCode'];
-            });
+            axios({
+                method: options.method,
+                url: options.url,
+                headers: options.headers,
+                data: {
+                    id: options.body.id,
+                    facade: options.body.facade
+                }
+            }).then((response) => {
+                const data = response.data.data[0]
+                payoutToken = data.token
+                payoutPairCode = data.pairingCode
+            }).catch((e) => {
+                console.log(e.message)
+            })
             await sleep(2000);
         }
 
