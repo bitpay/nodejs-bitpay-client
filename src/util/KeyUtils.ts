@@ -12,7 +12,7 @@ export class KeyUtils {
     }
 
     public load_keypair(
-        buf: Buffer|string,
+        buf: Buffer | string,
     ): elliptic.ec.KeyPair {
         return ec.keyFromPrivate(buf);
     }

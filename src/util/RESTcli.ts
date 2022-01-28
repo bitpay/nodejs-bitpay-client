@@ -1,8 +1,9 @@
 import {Env, KeyUtils} from "../index";
 import * as qs from "querystring";
-const axios = require('axios').default
 import * as elliptic from "elliptic";
 import BitPayException from "../Exceptions/BitPayException";
+
+const axios = require('axios').default;
 
 export class RESTcli {
     public _ecKey: elliptic.ec.KeyPair;
@@ -18,34 +19,7 @@ export class RESTcli {
         this.init();
     }
 
-    private init() {
-        try {
-            this._identity = this._keyUtils.getPublicKeyFromPrivateKey(this._ecKey);
-
-            this._commonOptions = {
-                headers: {
-                    'x-accept-version': Env.BitpayApiVersion,
-                    'x-bitpay-plugin-info': Env.BitpayPluginInfo,
-                    'x-bitpay-api-frame': Env.BitpayApiFrame,
-                    'x-bitpay-api-frame-version': Env.BitpayApiFrameVersion,
-                    'Content-Type': 'application/json'
-                },
-                json: true
-            };
-        } catch (e) {
-            throw new BitPayException(null,"RESTcli init failed : " + e.message);
-        }
-    }
-
-    private getSignedHeaders(uri: string, formData: string) {
-
-        return{
-            'x-identity': this._identity,
-            'x-signature': this._keyUtils.sign(uri + formData, this._ecKey),
-        };
-    }
-
-    public async post (
+    public async post(
         uri: string,
         formData: any = {},
         signatureRequired: boolean = true,
@@ -58,7 +32,7 @@ export class RESTcli {
 
             _options.uri = _fullURL;
             _options.body = JSON.parse(JSON.stringify(formData));
-            
+
             if (signatureRequired) {
                 Object.assign(_options.headers, this.getSignedHeaders(_fullURL, _formData));
             }
@@ -73,11 +47,11 @@ export class RESTcli {
             })
 
         } catch (e) {
-            throw new BitPayException(null,"RESTcli POST failed: " + JSON.stringify(e.response.data));
+            throw new BitPayException(null, "RESTcli POST failed: " + JSON.stringify(e.response.data));
         }
     }
 
-    public async get (
+    public async get(
         uri: string,
         parameters: any = {},
         signatureRequired: boolean = true,
@@ -105,11 +79,11 @@ export class RESTcli {
             })
 
         } catch (e) {
-            throw new BitPayException(null,"RESTcli GET failed : " + JSON.stringify(e.response.data));
+            throw new BitPayException(null, "RESTcli GET failed : " + JSON.stringify(e.response.data));
         }
     }
 
-    public async delete (
+    public async delete(
         uri: string,
         parameters: any = {},
     ): Promise<string> {
@@ -137,7 +111,7 @@ export class RESTcli {
         }
     }
 
-    public async update (
+    public async update(
         uri: string,
         formData: any = {},
     ): Promise<string> {
@@ -174,7 +148,7 @@ export class RESTcli {
             let responsObj = JSON.parse(JSON.stringify(response));
 
             if (responsObj.hasOwnProperty("status")) {
-                if(responsObj["status"] === 'error'){
+                if (responsObj["status"] === 'error') {
                     throw new BitPayException(null, "Error: " + responsObj["error"], null, responsObj["code"]);
                 }
             }
@@ -183,7 +157,7 @@ export class RESTcli {
                 throw new BitPayException(null, "Error: " + responsObj["error"]);
             } else if (responsObj.hasOwnProperty("errors")) {
                 let message = '';
-                responsObj["errors"].forEach(function(error){
+                responsObj["errors"].forEach(function (error) {
                     message += "\n" + error.toString();
                 });
                 throw new BitPayException(null, "Errors: " + message);
@@ -201,5 +175,32 @@ export class RESTcli {
         } catch (e) {
             throw new BitPayException(null, "failed to retrieve HTTP response body : " + e.message);
         }
+    }
+
+    private init() {
+        try {
+            this._identity = this._keyUtils.getPublicKeyFromPrivateKey(this._ecKey);
+
+            this._commonOptions = {
+                headers: {
+                    'x-accept-version': Env.BitpayApiVersion,
+                    'x-bitpay-plugin-info': Env.BitpayPluginInfo,
+                    'x-bitpay-api-frame': Env.BitpayApiFrame,
+                    'x-bitpay-api-frame-version': Env.BitpayApiFrameVersion,
+                    'Content-Type': 'application/json'
+                },
+                json: true
+            };
+        } catch (e) {
+            throw new BitPayException(null, "RESTcli init failed : " + e.message);
+        }
+    }
+
+    private getSignedHeaders(uri: string, formData: string) {
+
+        return {
+            'x-identity': this._identity,
+            'x-signature': this._keyUtils.sign(uri + formData, this._ecKey),
+        };
     }
 }
