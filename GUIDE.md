@@ -40,11 +40,11 @@ Each client paired with the BitPay server requires a ECDSA key.  This key provid
 
 The private key should be stored in the client environment such that it cannot be compromised.  If your private key is compromised you should revoke the compromised client identity from the BitPay server and re-pair your client, see the [API tokens](https://bitpay.com/api-tokens) for more information.
 
-**Here is how to generate the configuration file and private key required to load the SDK:**
+**Here is how to generate the configuration file and private key:**
 
 * Using the [BitPaySetup Script](https://github.com/bitpay/nodejs-bitpay-client/blob/master/src/setup/BitPaySetup.ts) helps to generate the private key, as well as a environment file formatted in JSON which contains all configuration requirements, that should be stored in the client local file system. It is not recommended to transmit the private key over any public or unsecure networks.
 
-####Commands to run setup scipt when using BitPay as NPM package:
+**Commands to run setup scipt when using BitPay as NPM package:**
 
 You need to navigate to
 
@@ -61,7 +61,7 @@ or you can enter the following command
 
 
 
-####Commands to run setup script when using BitPay as a SDK:
+**Commands to run setup script when using BitPay as a SDK:**
 
 First run the following command to generate the dist folder
 
