@@ -44,7 +44,7 @@ The private key should be stored in the client environment such that it cannot b
 
 * Using the [BitPaySetup Script](https://github.com/bitpay/nodejs-bitpay-client/blob/master/src/setup/BitPaySetup.ts) helps to generate the private key, as well as a environment file formatted in JSON which contains all configuration requirements, that should be stored in the client local file system. It is not recommended to transmit the private key over any public or unsecure networks.
 
-**Commands to run setup scipt when using BitPay as NPM package:**
+**1. Commands to run setup scipt when using BitPay as NPM package:**
 
 You need to navigate to
 
@@ -61,7 +61,7 @@ or you can enter the following command
 
 
 
-**Commands to run setup script when using BitPay as a SDK:**
+**2. Commands to run setup script when using BitPay as a SDK:**
 
 First run the following command to generate the dist folder
 
