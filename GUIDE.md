@@ -8,7 +8,7 @@ It also implements BitPay's remote client authentication and authorization strat
 - [Handling your client private key](GUIDE.md#handling-your-client-private-key)
 - [Usage](GUIDE.md#usage)
   - [Getting Started](GUIDE.md#getting-started)
-  - - [Initializing your BitPay client](GUIDE.md#initializing-your-bitPayclient)
+  - - [Initializing your BitPay client](GUIDE.md#initializing-your-bitPay-client)
   - - [Pair your client with BitPay](GUIDE.md#pair-your-client-with-bitpay)
   - - [Invoice](docs/usage/invoice.md)
   - - [Bill](docs/usage/bill.md)
