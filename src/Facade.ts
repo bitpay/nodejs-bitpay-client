@@ -1,4 +1,4 @@
 export class Facade {
-    static Merchant = "merchant";
-    static Payout = "payout";
+  static Merchant = "merchant";
+  static Payout = "payout";
 }
