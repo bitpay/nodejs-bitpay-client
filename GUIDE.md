@@ -60,6 +60,7 @@ or you can enter the following command
 
 
 
+
 Commands to run setup script when using BitPay as a SDK:
 
 First run the following command to generate the dist folder
