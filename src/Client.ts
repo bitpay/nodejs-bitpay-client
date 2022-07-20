@@ -283,10 +283,11 @@ export class Client {
         }
     }
 
-    public async PayInvoice(invoiceId: string, completeValue: boolean = true): Promise<InvoiceInterface> {
+    public async PayInvoice(invoiceId: string, status: string, complete: boolean = true): Promise<InvoiceInterface> {
         let params = {
             token: this.GetAccessToken(Facade.Merchant),
-            status: "confirmed",
+            status,
+            complete
         };
         try {
             return await this._RESTcli.update(`invoices/pay/${invoiceId}`, params).then(invoiceData => {

@@ -62,7 +62,7 @@ describe('BitPaySDK.Client', () => {
 
         it('should pay invoice', async () => {
             invoice = await client.CreateInvoice(invoiceData);
-            paidInvoice = await client.PayInvoice(invoice.id);
+            paidInvoice = await client.PayInvoice(invoice.id, "confirmed");
             console.log(paidInvoice);
 
             expect(paidInvoice).toBeDefined();
