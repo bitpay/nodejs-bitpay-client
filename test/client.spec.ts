@@ -51,12 +51,21 @@ describe('BitPaySDK.Client', () => {
         let retrievedInvoice;
         let retrievedInvoices;
         let webhookRequested;
+        let paidInvoice;
 
         it('should create invoice', async () => {
             invoice = await client.CreateInvoice(invoiceData);
             console.log(invoice);
 
             expect(invoice).toBeDefined();
+        });
+
+        it('should pay invoice', async () => {
+            invoice = await client.CreateInvoice(invoiceData);
+            paidInvoice = await client.PayInvoice(invoice.id);
+            console.log(paidInvoice);
+
+            expect(paidInvoice).toBeDefined();
         });
 
         it('should retrieve invoice', async () => {

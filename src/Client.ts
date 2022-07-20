@@ -283,6 +283,20 @@ export class Client {
         }
     }
 
+    public async PayInvoice(invoiceId: string, completeValue: boolean = true): Promise<InvoiceInterface> {
+        let params = {
+            token: this.GetAccessToken(Facade.Merchant),
+            status: "confirmed",
+        };
+        try {
+            return await this._RESTcli.update(`invoices/pay/${invoiceId}`, params).then(invoiceData => {
+                return <InvoiceInterface>JSON.parse(invoiceData);
+            });
+        } catch (e) {
+            throw new Exceptions.InvoicePaymentException(`failed to deserialize BitPay server response (Invoice) : ${e.message} & ${e.apiCode}`)
+        }
+    }
+
     public async GetInvoices(dateStart: string, dateEnd: string, status: string = null, orderId: string = null, limit: number = null, offset: number = null): Promise<InvoiceInterface[]> {
         let params = {};
 

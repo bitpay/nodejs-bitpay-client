@@ -16,6 +16,7 @@
 import {BitPayException as Generic} from './BitPayException';
 import {InvoiceException as InvoiceGeneric} from './InvoiceException';
 import {InvoiceCreationException as InvoiceCreation} from './InvoiceCreationException';
+import {InvoicePaymentException as InvoicePaymentException} from './InvoicePaymentException';
 import {InvoiceQueryException as InvoiceQuery} from './InvoiceQueryException';
 import {RateException as RateGeneric} from './RateException';
 import {RateQueryException as RateQuery} from './RateQueryException';
@@ -96,5 +97,6 @@ export {
     SubscriptionGeneric,
     SubscriptionCreation,
     SubscriptionQuery,
-    SubscriptionUpdate
+    SubscriptionUpdate,
+    InvoicePaymentException
 };
