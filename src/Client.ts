@@ -436,16 +436,14 @@ export class Client {
      * @return True if the refund was successfully canceled, false otherwise.
      * @throws RefundCancellationException RefundCancellationException class
      */
-    public async CancelRefund(invoice: Invoice, refund: Refund): Promise<Boolean> {
+    public async CancelRefund(refund: Refund): Promise<RefundInterface> {
         const params = {
-            'token': refund.token
+            'token': this.GetAccessToken(Facade.Merchant)
         };
 
         try {
-            return await this._RESTcli.delete("invoices/" + invoice.id + "/refunds/" + refund.id, params).then(refundData => {
-                const regex = /"/gi;
-                refundData = refundData.replace(regex, '');
-                return refundData.toLowerCase() == "success";
+            return await this._RESTcli.delete("refunds/" + refund.id, params).then(refundData => {
+                return <RefundInterface>JSON.parse(refundData);
             });
         } catch (e) {
             throw new Exceptions.RefundCreation("failed to deserialize BitPay server response (Refund) : " + e.message, e.apiCode);
