@@ -21,7 +21,7 @@ Body
 
 | Name | Description | Type | Presence |
 | --- | --- | :---: | :---: |
-| `invoiceId` | the id of the invoice to refund | `string` | Mandatory |
+| `invoice` | the invoice to refund | `Invoice` | Mandatory |
 | `amount` | Amount to be refunded in the `currency` indicated | `number` | Mandatory |
 | `currency` | reference currency used for the refund, usually the same as the currency used to create the invoice. | `string` | Mandatory |
 | `preview` | whether to create the refund request as a preview (which will not be acted on until status is updated) | `boolean` | Default: `false` |
@@ -40,7 +40,7 @@ let firstPaidInvoice;
 firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
 firstPaidInvoice = firstPaidInvoice.shift();
 
-createdRefund = await client.CreateRefund(firstPaidInvoice, refundEmail, firstPaidInvoice.price, firstPaidInvoice.currency);
+createdRefund = await client.CreateRefund(firstPaidInvoice, firstPaidInvoice.price, firstPaidInvoice.currency);
 ```
 
 Response Body Fields
