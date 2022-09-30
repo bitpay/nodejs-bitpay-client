@@ -104,7 +104,6 @@ URL Parameters
 
 | Parameter | Description | Type | Presence |
 | --- | --- | :---: | :---: |
-| `refundId` | The id of the refund request | `string` | Mandatory |
 | `?token=` | When fetching an existing refund request via the `merchant` facade, pass the API token as a URL parameter. | `string` | Mandatory |
 
 Headers
@@ -121,7 +120,7 @@ To get the existing refund request, pass the Refund Id with URL parameter
 ```js
 let retrievedRefund;
 
-retrievedRefund = await client.GetRefund(createdRefund.id);
+retrievedRefund = await client.GetRefund(createdRefund);
 ```
 
 Response Body Fields
@@ -229,60 +228,6 @@ HTTP Response
 ]
 ```
 
-## Update refund request
-
-`PUT /refunds/:refundId`
-
-Facades `MERCHANT`
-
-### HTTP Request
-
-URL Parameters
-
-| Parameter | Description | Type | Presence |
-| --- | --- | :---: | :---: |
-| `refundId` | The id of the refund request | `string` | Mandatory |
-| `?token=` | When fetching an existing refund request via the `merchant` facade, pass the API token as a URL parameter. | `string` | Mandatory |
-
-Headers
-
-| Fields | Description | Presence |
-| --- | --- | :---: |
-| `X-Accept-Version` | Must be set to `2.0.0` for requests to the BitPay API. | Mandatory |
-| `Content-Type` | must be set to `application/json` for requests to the BitPay API. | Mandatory |
-| `X-Identity` | the hexadecimal public key generated from the client private key. This header is required when using tokens with higher privileges (`merchant` facade). When using standard `pos` facade token directly from the [BitPay dashboard](https://test.bitpay.com/dashboard/merchant/api-tokens) (with `"Require Authentication"` disabled), this header is not needed. | Mandatory |
-| `X-Signature` | header is the ECDSA signature of the full request URL concatenated with the request body, signed with your private key. This header is required when using tokens with higher privileges (`merchant` facade). When using standard `pos` facade token directly from the [BitPay dashboard](https://test.bitpay.com/dashboard/merchant/api-tokens) (with `"Require Authentication"` disabled), this header is not needed. | Mandatory |
-
-To update the status of refund request
-
-```js
-updateRefund = await client.UpdateRefund(firstPaidInvoice.id, 'created');
-```
-
-Response body fields
-
-| Name | Description | Type |
-| --- | --- | :---: |
-| `status` | set to `created` in order to confirm the refund request and initiate the flow to send it to shopper | `string` |
-
-Success will return the updated refund request
-
-HTTP Response
-
-```json
-{
-    "id": "TPxL75VtRRuoNexUaNQ8da",
-    "invoice": "8g6B3UsQ9QWvjqFrrYBssm",
-    "status": "created",
-    "amount": 1,
-    "currency": "USD",
-    "refundFee": 0.09,
-    "immediate": false,
-    "buyerPaysRefundFee": false,
-    "requestDate": "2021-12-21T14:42:58.000Z"
-}
-```
-
 ## Cancel refund request
 
 `GET /refunds/:refundId`
@@ -295,7 +240,6 @@ URL Parameters
 
 | Parameter | Description | Type | Presence |
 | --- | --- | :---: | :---: |
-| `refundId` | The id of the refund request | `string` | Mandatory |
 | `?token=` | When fetching an existing refund request via the `merchant` facade, pass the API token as a URL parameter. | `string` | Mandatory |
 
 Headers
@@ -316,7 +260,7 @@ firstPaidInvoice = firstPaidInvoice.shift();
 retrievedRefund = await client.GetRefunds(firstPaidInvoice);
 firstRefund = retrievedRefund.shift();
 
-canceledRefund = await client.CancelRefund(firstPaidInvoice, firstRefund);
+canceledRefund = await client.CancelRefund(firstRefund);
 ```
 Response body fields same as `POST /refunds`
 
