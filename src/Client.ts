@@ -1,5 +1,5 @@
 import * as elliptic from 'elliptic';
-import {BitPayExceptions as Exceptions, Config, Facade, KeyUtils, RESTcli, Tokens} from './index';
+import {BitPayExceptions as Exceptions, Config, Currency, Facade, KeyUtils, RESTcli, Tokens} from './index';
 import {
     Bill,
     BillInterface,
@@ -340,26 +340,31 @@ export class Client {
     /**
      * Create a refund for a BitPay invoice.
      *
-     * @param invoice     A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
-     * @param refundEmail The email of the buyer to which the refund email will be sent
-     * @param amount      The amount of money to refund. If zero then a request for 100% of the invoice value is created.
-     * @param currency    The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
+     * @param invoice            A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
+     * @param amount             The amount of money to refund. If zero then a request for 100% of the invoice value is created.
+     * @param currency           The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
+     * @param preview            Whether to create the refund request as a preview (which will not be acted on until status is updated) - parameter defaults to false if not passed.
+     * @param immediate          Whether funds should be removed from merchant ledger immediately on submission or at time of processing - parameter defaults to false if not passed.
+     * @param buyerPaysRefundFee Whether the buyer should pay the refund fee rather than the merchant - parameter defaults to false if not passed.
      * @return True if the refund was successfully canceled, false otherwise.
      * @throws RefundCreationException RefundCreationException class
      */
-    public async CreateRefund(invoice: Invoice, refundEmail: string, amount: number, currency: string): Promise<Boolean> {
-        let refund = new Refund();
-        refund.token = invoice.token;
-        refund.guid = this.GetGuid();
-        refund.amount = amount;
-        refund.refundEmail = refundEmail;
-        refund.currency = currency;
-
+    public async CreateRefund(invoice: Invoice, amount: number, currency: string, preview: boolean = false, immediate: boolean = false, buyerPaysRefundFee: boolean = false): Promise<Boolean> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Merchant),
+            'invoiceId': invoice.id,
+            'amount': amount,
+            'currency': currency,
+            'preview': preview,
+            'immediate': immediate,
+            'buyerPaysRefundFee': buyerPaysRefundFee
+        }
         try {
-            return await this._RESTcli.post("invoices/" + invoice.id + "/refunds", refund).then(refundData => {
-                return <Boolean>JSON.parse(refundData);
+            return await this._RESTcli.post("refunds/", params).then(refundData => {
+                return JSON.parse(refundData);
             });
-        } catch (e) {
+        }
+        catch (e) {
             throw new Exceptions.RefundCreation("failed to deserialize BitPay server response (Refund) : " + e.message, e.apiCode);
         }
     }
