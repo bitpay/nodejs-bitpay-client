@@ -305,6 +305,22 @@ export class Client {
         }
     }
 
+    public async PayInvoice(invoiceId: string, status: string = "confirmed"): Promise<InvoiceInterface> {
+        const params = {
+            'token': this.GetAccessToken(Facade.Merchant),
+            'status': status
+        };
+
+        try {
+            return await this._RESTcli.update("invoices/pay/" + invoiceId, params).then(invoiceData => {
+                return <InvoiceInterface>JSON.parse(invoiceData);
+            });
+        } catch (e)
+        {
+            throw new Exceptions.InvoiceGeneric("failed to deserialize BitPay server response (Invoice) : " + e.message, e.apiCode);
+        }
+    }
+
     /**
      * Request a BitPay Invoice Webhook.
      *
@@ -372,18 +388,17 @@ export class Client {
     /**
      * Retrieve a previously made refund request on a BitPay invoice.
      *
-     * @param invoice  The BitPay invoice having the associated refund.
      * @param refundId The refund id for the refund to be updated with new status.
      * @return A BitPay invoice object with the associated Refund object updated.
      * @throws RefundQueryException RefundQueryException class
      */
-    public async GetRefund(invoice: Invoice, refundId: string): Promise<RefundInterface> {
+    public async GetRefund(refundId: string): Promise<RefundInterface> {
         const params = {
             'token': this.GetAccessToken(Facade.Merchant)
         };
 
         try {
-            return await this._RESTcli.get("invoices/" + invoice.id + "/refunds/" + refundId, params).then(refundData => {
+            return await this._RESTcli.get("refunds/" + refundId, params).then(refundData => {
                 return <RefundInterface>JSON.parse(refundData);
             });
         } catch (e) {
@@ -400,11 +415,12 @@ export class Client {
      */
     public async GetRefunds(invoice: Invoice): Promise<RefundInterface[]> {
         const params = {
-            'token': invoice.token
+            'token': this.GetAccessToken(Facade.Merchant),
+            'invoiceId': invoice.id
         };
 
         try {
-            return await this._RESTcli.get("invoices/" + invoice.id + "/refunds", params).then(refundData => {
+            return await this._RESTcli.get("refunds/", params).then(refundData => {
                 return <RefundInterface[]>JSON.parse(refundData);
             });
         } catch (e) {
