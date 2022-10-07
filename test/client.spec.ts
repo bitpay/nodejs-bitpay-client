@@ -111,7 +111,7 @@ describe('BitPaySDK.Client', () => {
         it('should create refund request', async () => {
             firstPaidInvoice = await client.GetInvoices(dateStart, dateEnd, InvoiceStatus.Complete, null, 1);
             firstPaidInvoice = firstPaidInvoice.shift();
-            createdRefund = await client.CreateRefund(firstPaidInvoice, refundEmail, firstPaidInvoice.price, firstPaidInvoice.currency);
+            createdRefund = await client.CreateRefund(firstPaidInvoice, firstPaidInvoice.price, firstPaidInvoice.currency);
 
             expect(createdRefund).toBeDefined();
         });
