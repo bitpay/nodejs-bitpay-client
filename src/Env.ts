@@ -3,7 +3,7 @@ export const Prod: string = "PROD";
 export const TestUrl: string = "https://test.bitpay.com/";
 export const ProdUrl: string = "https://bitpay.com/";
 export const BitpayApiVersion: string = "2.0.0";
-export const BitpayPluginInfo: string = "BitPay_NodeJs_Client_v3.0.2202";
+export const BitpayPluginInfo: string = "BitPay_NodeJs_Client_v4.0.0";
 export const BitpayApiFrame: string = "std";
 export const BitpayApiFrameVersion: string = "1.0.0";
 

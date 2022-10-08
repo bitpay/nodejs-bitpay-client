@@ -25,7 +25,7 @@ const fs = require('fs');
 
 /**
  * @author Antonio Buedo
- * @version 3.0.2202
+ * @version 4.0.0
  * See bitpay.com/api for more information.
  * date 01.02.2022
  */
