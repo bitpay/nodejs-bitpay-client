@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "currency": "EUR",
+      "balance": 0
+    },
+    {
+      "currency": "USD",
+      "balance": 2389.82
+    },
+    {
+      "currency": "BTC",
+      "balance": 0.000287
+    }
+  ]
+}

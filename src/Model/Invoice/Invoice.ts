@@ -37,6 +37,8 @@ export interface InvoiceInterface {
     paymentCurrencies: string[] | [];
     acceptanceWindow: number | null;
     autoRedirect: boolean | null;
+    forcedBuyerSelectedWallet: string | null;
+    forcedBuyerSelectedTransactionCurrency: string | null;
 
     // Buyer data
     //
@@ -79,6 +81,9 @@ export interface InvoiceInterface {
     underpaidAmount: number | null;
     overpaidAmount: number | null;
     paymentCodes: Array<[string, Array<[string, number]>]> | null;
+    isCancelled: boolean | null;
+
+    setCurrency(_currency: string): void
 }
 
 export class Invoice implements InvoiceInterface {
@@ -110,6 +115,8 @@ export class Invoice implements InvoiceInterface {
     paymentCurrencies: string[] | [];
     acceptanceWindow: number | null;
     autoRedirect: boolean | null;
+    forcedBuyerSelectedWallet: string | null;
+    forcedBuyerSelectedTransactionCurrency: string | null;
 
     // Buyer data
     //
@@ -152,6 +159,7 @@ export class Invoice implements InvoiceInterface {
     underpaidAmount: number | null;
     overpaidAmount: number | null;
     paymentCodes: Array<[string, Array<[string, number]>]> | null;
+    isCancelled: boolean | null;
 
     /**
      * Constructor, create a minimal request Invoice object.

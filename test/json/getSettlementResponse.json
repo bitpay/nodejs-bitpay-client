@@ -1,0 +1,34 @@
+
+{
+  "facade": "merchant/settlement",
+  "data": {
+    "id": "RPWTabW8urd3xWv2To989v",
+    "accountId": "YJCgTf3jrXHkUVzLQ7y4eg",
+    "status": "processing",
+    "currency": "EUR",
+    "payoutInfo": {
+      "label": "Corporate account",
+      "bankCountry": "Netherlands",
+      "name": "Test Organization",
+      "bank": "Test",
+      "swift": "RABONL2U",
+      "account": "NL85ABNA0000000000"
+    },
+    "dateCreated": "2021-05-11T09:05:00.176Z",
+    "dateExecuted": "2021-05-11T11:52:29.681Z",
+    "openingDate": "2021-05-10T09:00:00.000Z",
+    "closingDate": "2021-05-11T09:00:00.000Z",
+    "openingBalance": 23.27,
+    "ledgerEntriesSum": 20.82,
+    "withholdings": [
+      {
+        "amount": 8.21,
+        "code": "W005",
+        "description": "Pending Refunds"
+      }
+    ],
+    "withholdingsSum": 8.21,
+    "totalAmount": 35.88,
+    "token": "2GrR6GDeYxUFYM9sDKViy6nFFTy4Rjvm1SYdLBjK46jkeJdgUTRccRfhtwkhNcuZky"
+  }
+}

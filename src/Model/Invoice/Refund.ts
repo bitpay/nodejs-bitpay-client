@@ -23,6 +23,7 @@ export interface RefundInterface {
     refundFee: number;
     immediate: boolean
     buyerPaysRefundFee: boolean;
+    preview: boolean;
     params : RefundParams;
 }
 
@@ -50,6 +51,7 @@ export class Refund implements RefundInterface {
     refundFee: number;
     immediate: boolean
     buyerPaysRefundFee: boolean;
+    preview: boolean;
 
     public constructor() {
 

@@ -1,0 +1,1 @@
+{"guid": "ee26b5e0-9185-493e-bc12-e846d5fcf07c","recipients":[{"email":"alice@email.com","label":"Alice","notificationURL":"https://someurl.com"},{"email":"bob@email.com","label":"Bob","notificationURL":"https://someurl.com"}],"token":"somePayoutToken"}

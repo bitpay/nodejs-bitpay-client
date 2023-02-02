@@ -1,0 +1,11 @@
+{
+  "facade": "payout/recipient",
+  "data": {
+    "email": "john.smith@email.com",
+    "label": "John Smith",
+    "status": "invited",
+    "id": "JA4cEtmBxCp5cybtnh1rds",
+    "shopperId": null,
+    "token": "2LVBntm7z92rnuVjVX5ZVaDoUEaoY4LxhZMMzPAMGyXcejgPXVmZ4Ae3oGaCGBFKQf"
+  }
+}

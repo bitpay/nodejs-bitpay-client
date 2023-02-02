@@ -1,0 +1,37 @@
+{
+  "number": "bill1234-ABCD",
+  "currency": "USD",
+  "email": "john@doe.com",
+  "items": [
+    {
+      "description": "Test Item 1",
+      "price": 6,
+      "quantity": 1
+    },
+    {
+      "description": "Test Item 2",
+      "price": 4,
+      "quantity": 1
+    },
+    {
+      "description": "Test Item 3",
+      "price": 5,
+      "quantity": 1
+    }
+  ],
+  "name": "John Doe",
+  "address1": "2630 Hegal Place",
+  "address2": "Apt 42",
+  "city": "Alexandria",
+  "state": "VA",
+  "zip": "23242",
+  "country": "US",
+  "phone": "555-123-456",
+  "dueDate": "2021-5-31",
+  "passProcessingFee": true,
+  "token": "someMerchantToken",
+  "cc": [
+    "jane@doe.com"
+  ],
+  "status": "draft"
+}

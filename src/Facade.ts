@@ -1,4 +1,5 @@
-export class Facade {
-    static Merchant = "merchant";
-    static Payout = "payout";
+export enum Facade {
+    Merchant = "merchant",
+    Payout = "payout",
+    Pos = "pos"
 }

@@ -7,6 +7,7 @@ export interface PayoutRecipientInterface {
     id: string | null;
     shopperId: string | null;
     token: string | null;
+    guid: string | null;
 }
 
 export class PayoutRecipient implements PayoutRecipientInterface {
@@ -17,7 +18,9 @@ export class PayoutRecipient implements PayoutRecipientInterface {
     shopperId: string | null;
     status: string | null;
     token: string | null;
+    guid: string | null;
 
+    public constructor(email: string | null, label: string | null, notificationURL: string | null);
     /**
      * Constructor, create a minimal Recipient object.
      *

@@ -1,0 +1,48 @@
+{
+  "facade": "merchant/bill",
+  "data": {
+    "url": "https://bitpay.com/bill?id=3Zpmji8bRKxWJo2NJbWX5H&resource=bills",
+    "number": "bill1234-EFGH",
+    "createdDate": "2021-05-21T09:51:04.126Z",
+    "dueDate": "2021-05-31T00:00:00.000Z",
+    "currency": "USD",
+    "name": "John Doe",
+    "address1": "2630 Hegal Place",
+    "address2": "Apt 42",
+    "city": "Alexandria",
+    "state": "VA",
+    "zip": "23242",
+    "country": "US",
+    "email": "john@doe.com",
+    "status": "draft",
+    "cc": [
+      "jane@doe.com"
+    ],
+    "phone": "555-123-456",
+    "passProcessingFee": true,
+    "emailBill": true,
+    "id": "3Zpmji8bRKxWJo2NJbWX5H",
+    "merchant": "7HyKWn3d4xdhAMQYAEVxVq",
+    "items": [
+      {
+        "id": "8vXbhqWDL1A9F66ZwJAiyJ",
+        "description": "Test Item 1",
+        "price": 6,
+        "quantity": 1
+      },
+      {
+        "id": "WmgAaPiyuY9L6vBX7KvF2R",
+        "description": "Test Item 2",
+        "price": 4,
+        "quantity": 1
+      },
+      {
+        "id": "89xhSLYPnLDBczsQHCvJ2D",
+        "description": "Test Item 3",
+        "price": 5,
+        "quantity": 1
+      }
+    ],
+    "token": "7dnoyMe27VDKY1WNrCTqgK5RWbEi4XkvBSUTTwET6XnNYfWKYdrnSyg7myn7oc3vms"
+  }
+}

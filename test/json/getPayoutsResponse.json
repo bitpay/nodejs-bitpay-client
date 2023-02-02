@@ -1,0 +1,55 @@
+{
+  "facade": "payout/payout",
+  "data": [
+    {
+      "id": "JMwv8wQCXANoU2ZZQ9a9GH",
+      "recipientId": "LDxRZCGq174SF8AnQpdBPB",
+      "shopperId": "7qohDf2zZnQK5Qanj8oyC2",
+      "amount": 10,
+      "currency": "USD",
+      "ledgerCurrency": "GBP",
+      "exchangeRates": {
+        "BTC": {
+          "USD": 39390.47,
+          "GBP": 27883.962246420004
+        }
+      },
+      "email": "john@doe.com",
+      "reference": "payout_20210527",
+      "label": "John Doe",
+      "notificationURL": "https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx",
+      "notificationEmail": "merchant@email.com",
+      "effectiveDate": "2021-05-27T09:00:00.000Z",
+      "requestDate": "2021-05-27T10:47:37.834Z",
+      "status": "complete",
+      "transactions": [
+        {
+          "txid": "db53d7e2bf3385a31257ce09396202d9c2823370a5ca186db315c45e24594057",
+          "amount": 0.000254,
+          "date": "2021-05-27T11:04:23.155Z"
+        }
+      ],
+      "token": "9pVLfvdjt59q1JiY2JEsf2uzeeEpSqDwwfRAzuFr9CcrxZX25rTnP6HdRhsMBGLArz"
+    },
+    {
+      "id": "KMXZeQigXG6T5abzCJmTcH",
+      "recipientId": "LDxRZCGq174SF8AnQpdBPB",
+      "shopperId": "7qohDf2zZnQK5Qanj8oyC2",
+      "amount": 10,
+      "currency": "USD",
+      "ledgerCurrency": "GBP",
+      "email": "jane@doe.com",
+      "reference": "payout_20210528",
+      "label": "Jane Doe",
+      "notificationURL": "https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx",
+      "notificationEmail": "merchant@email.com",
+      "effectiveDate": "2021-05-28T09:00:00.000Z",
+      "requestDate": "2021-05-28T10:23:43.765Z",
+      "status": "cancelled",
+      "transactions": [],
+      "token": "9pVLfvdjt59q1JiY2JEsf2hr5FsjimfY4qRLFi85tMiXSCkJ9mQ2oSQqYKVangKaro"
+    }
+  ],
+  "status": "success",
+  "message": null
+}

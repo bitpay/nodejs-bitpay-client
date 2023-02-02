@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "id": "WoE46gSLkJQS48RJEiNw3L",
+      "invoice": "Hpqc63wvE1ZjzeeH4kEycF",
+      "reference": "Test refund",
+      "status": "canceled",
+      "amount": 5,
+      "transactionCurrency": "BTC",
+      "transactionAmount": 0.000297,
+      "transactionRefundFee": 0.000001,
+      "currency": "USD",
+      "lastRefundNotification": "2021-08-28T22:49:33.368Z",
+      "refundFee": 0.02,
+      "immediate": false,
+      "buyerPaysRefundFee": false,
+      "requestDate": "2021-08-28T22:49:33.000Z"
+    },
+    {
+      "id": "WoE46gSLkJQS48RJEiNw3L",
+      "invoice": "Hpqc63wvE1ZjzeeH4kEycF",
+      "reference": "Test refund 2",
+      "status": "created",
+      "amount": 10,
+      "transactionCurrency": "BTC",
+      "transactionAmount": 0.000594,
+      "transactionRefundFee": 0.000002,
+      "currency": "USD",
+      "lastRefundNotification": "2021-08-29T20:45:35.368Z",
+      "refundFee": 0.04,
+      "immediate": false,
+      "buyerPaysRefundFee": false,
+      "requestDate": "2021-08-29T20:45:34.000Z"
+    }
+  ]
+}

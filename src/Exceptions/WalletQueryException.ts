@@ -1,15 +1,15 @@
-import PayoutBatchException from "./PayoutBatchException";
+import SubscriptionException from "./SubscriptionException";
 
-export class PayoutBatchCreationException implements PayoutBatchException {
+export class WalletQueryException implements SubscriptionException {
 
-    public readonly message: string = "Failed to create payout batch";
-    public readonly name: string = "BITPAY-PAYOUT-BATCH-SUBMIT";
-    public readonly code: number = 202;
+    public readonly message: string = "Failed to retrieve subscription";
+    public readonly name: string = "BITPAY-SUBSCRIPTION-GET";
+    public readonly code: number = 173;
     public readonly stack: string;
     public readonly apiCode: string = "000000";
 
     /**
-     * Construct the PayoutBatchCreationException.
+     * Construct the SubscriptionQueryException.
      *
      * @param message string [optional] The Exception message to throw.
      * @param apiCode string [optional] The API Exception code to throw.
@@ -20,4 +20,4 @@ export class PayoutBatchCreationException implements PayoutBatchException {
     }
 }
 
-export default PayoutBatchCreationException;
+export default WalletQueryException;

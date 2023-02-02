@@ -17,6 +17,7 @@ import {BitPayException as Generic} from './BitPayException';
 import {InvoiceException as InvoiceGeneric} from './InvoiceException';
 import {InvoiceCreationException as InvoiceCreation} from './InvoiceCreationException';
 import {InvoiceQueryException as InvoiceQuery} from './InvoiceQueryException';
+import {InvoiceUpdateException as InvoiceUpdate} from './InvoiceUpdateException';
 import {RateException as RateGeneric} from './RateException';
 import {RateQueryException as RateQuery} from './RateQueryException';
 import {RefundException as RefundGeneric} from './RefundException';
@@ -37,11 +38,6 @@ import {PayoutCancellationException as PayoutCancellation} from './PayoutCancell
 import {PayoutUpdateException as PayoutUpdate} from './PayoutUpdateException';
 import {PayoutDeleteException as PayoutDelete} from './PayoutDeleteException';
 import {PayoutNotificationException as PayoutNotification} from './PayoutNotificationException';
-import {PayoutBatchException as PayoutBatchGeneric} from './PayoutBatchException';
-import {PayoutBatchCreationException as PayoutBatchCreation} from './PayoutBatchCreationException';
-import {PayoutBatchQueryException as PayoutBatchQuery} from './PayoutBatchQueryException';
-import {PayoutBatchCancellationException as PayoutBatchCancellation} from './PayoutBatchCancellationException';
-import {PayoutBatchNotificationException as PayoutBatchNotification} from './PayoutBatchNotificationException';
 import {PayoutRecipientException as PayoutRecipientGeneric} from './PayoutRecipientException';
 import {PayoutRecipientCreationException as PayoutRecipientCreation} from './PayoutRecipientCreationException';
 import {PayoutRecipientQueryException as PayoutRecipientQuery} from './PayoutRecipientQueryException';
@@ -54,12 +50,14 @@ import {SubscriptionException as SubscriptionGeneric} from './SubscriptionExcept
 import {SubscriptionCreationException as SubscriptionCreation} from './SubscriptionCreationException';
 import {SubscriptionQueryException as SubscriptionQuery} from './SubscriptionQueryException';
 import {SubscriptionUpdateException as SubscriptionUpdate} from './SubscriptionUpdateException';
+import {WalletQueryException as WalletQuery} from './WalletQueryException';
 
 export {
     Generic,
     InvoiceGeneric,
     InvoiceCreation,
     InvoiceQuery,
+    InvoiceUpdate,
     RateGeneric,
     RateQuery,
     RefundGeneric,
@@ -80,11 +78,6 @@ export {
     PayoutUpdate,
     PayoutDelete,
     PayoutNotification,
-    PayoutBatchGeneric,
-    PayoutBatchCreation,
-    PayoutBatchQuery,
-    PayoutBatchCancellation,
-    PayoutBatchNotification,
     PayoutRecipientGeneric,
     PayoutRecipientCreation,
     PayoutRecipientQuery,
@@ -96,5 +89,6 @@ export {
     SubscriptionGeneric,
     SubscriptionCreation,
     SubscriptionQuery,
-    SubscriptionUpdate
+    SubscriptionUpdate,
+    WalletQuery
 };

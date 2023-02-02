@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "code": "040107",
+  "data": null,
+  "error": "Invalid invoice state for cancel"
+}
