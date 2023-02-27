@@ -14,7 +14,7 @@
     "format": "npm run prettier -- --write",
     "format:ci": "npm run prettier -- --check",
     "lint": "tslint -p tsconfig.json -c tslint.json",
-    "prepare": "npm run build",
+    "prepare": "npm run build && husky install",
     "prettier": "prettier 'src/**/*.ts' 'tests/**/*.spec.ts' --single-quote --trailing-comma all",
     "test": "npm run format:ci && npm run lint && npm run coverage",
     "unit": "jest --config=jest.json --runInBand"
@@ -48,6 +48,7 @@
     "@types/jest": "^24.0.13",
     "@types/node": "^12.20.42",
     "@types/puppeteer": "^1.20.8",
+    "husky": "^8.0.3",
     "jest": "^24.9.0",
     "prettier": "^1.17.1",
     "puppeteer": "^1.16.0",
