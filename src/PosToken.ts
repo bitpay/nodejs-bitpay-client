@@ -1,12 +1,11 @@
 export class PosToken {
+  private readonly value: string;
 
-    private readonly value: string;
+  constructor(value: string) {
+    this.value = value;
+  }
 
-    constructor(value: string) {
-        this.value = value;
-    }
-
-    public getValue(): string {
-        return this.value;
-    }
+  public getValue(): string {
+    return this.value;
+  }
 }

@@ -3,23 +3,22 @@
  *
  * @see <a href="https://bitpay.com/api/#rest-api-resources-wallets">Wallets</a>
  */
-import {CurrenciesInterface} from "./Currencies";
+import { CurrenciesInterface } from './Currencies';
 
 export interface WalletInterface {
-    key: string | null;
-    displayName: string | null;
-    avatar: string | null;
-    payPro: boolean | null;
-    currencies: CurrenciesInterface[] | null;
-    image: string | null;
+  key: string | null;
+  displayName: string | null;
+  avatar: string | null;
+  payPro: boolean | null;
+  currencies: CurrenciesInterface[] | null;
+  image: string | null;
 }
 
-
 export class Wallet implements WalletInterface {
-    key: string | null;
-    displayName: string | null;
-    avatar: string | null;
-    payPro: boolean | null;
-    currencies: CurrenciesInterface[] | null;
-    image: string | null;
+  key: string | null;
+  displayName: string | null;
+  avatar: string | null;
+  payPro: boolean | null;
+  currencies: CurrenciesInterface[] | null;
+  image: string | null;
 }

@@ -1,13 +1,12 @@
 export class PrivateKey {
+  private readonly value: string;
 
-    private readonly value: string;
+  constructor(value: string) {
+    value = value.replace('"', '');
+    this.value = value;
+  }
 
-    constructor(value: string) {
-        value = value.replace("\"", "");
-        this.value = value;
-    }
-
-    public getValue(): string {
-        return this.value;
-    }
+  public getValue(): string {
+    return this.value;
+  }
 }

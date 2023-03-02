@@ -14,6 +14,7 @@ import {DefaultBodyType, PathParams, rest, RestRequest} from 'msw'
 import {setupServer} from "msw/node";
 import { TokenContainer } from "../src/TokenContainer";
 import {GuidGenerator} from "../src/util/GuidGenerator";
+import {PosToken} from "../src/PosToken";
 
 const _ = require('lodash');
 const BitPaySDK = require('../src/index');
@@ -50,7 +51,7 @@ describe('BitPaySDK.Client', () => {
 
         const hexPrivate = "2f72ed3291b536aa43d750829875f5a742a0f1095b8ad529944cbc0bd498693f";
         const ecKey = keyUtils.load_keypair(hexPrivate)
-        const bpc = new BitPayClient("http://localhost/", ecKey, "someIdentity");
+        const bpc = new BitPayClient(host + '/', ecKey, "someIdentity");
         const tokenContainer = new TokenContainer();
         tokenContainer.addMerchant(merchantToken)
         tokenContainer.addPayout(payoutToken);
@@ -102,6 +103,34 @@ describe('BitPaySDK.Client', () => {
             throw new Error("Missing/wrong token");
         }
     }
+
+    describe('Init application', () => {
+
+        it('should create POS client', async () => {
+            const posTokenValue = "posToken";
+            const client = Client.createPosClient(new PosToken(posTokenValue))
+
+            expect(client.getToken(Facade.Pos)).toBe(posTokenValue);
+        });
+
+        it('should create client by private key', async () => {
+            const tokenContainer = new TokenContainer();
+            const token = "anotherMerchantToken";
+            tokenContainer.addMerchant(token);
+
+            const client = Client.createClientByPrivateKey(
+                "9ee267c293e74c12bf4035746834ad4f5690d546d7d10e15c92fc83043552186",
+                tokenContainer
+            )
+
+            expect(client.getToken(Facade.Merchant)).toBe(token);
+        });
+
+        it('should create client by config file', async () => {
+            const client = Client.createClientByConfig(__dirname + '/BitPayUnit.config.json')
+            expect(client.getToken(Facade.Pos)).toBe("somePosToken");
+        });
+    })
 
     describe('Bill', () => {
 
@@ -332,7 +361,7 @@ describe('BitPaySDK.Client', () => {
                 })
             )
 
-            const results = await client.getInvoice("G3viJEJgE8Jk2oekSdgT2A", null, null);
+            const results = await client.getInvoice("G3viJEJgE8Jk2oekSdgT2A");
             expect(results.id).toBe("G3viJEJgE8Jk2oekSdgT2A");
             expect(results.url).toBe("https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A");
         });
@@ -347,7 +376,7 @@ describe('BitPaySDK.Client', () => {
                 })
             )
 
-            const results = await client.getInvoiceByGuid("payment1234", null, null);
+            const results = await client.getInvoiceByGuid("payment1234");
             expect(results.id).toBe("G3viJEJgE8Jk2oekSdgT2A");
         });
 
