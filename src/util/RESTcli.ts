@@ -101,6 +101,9 @@ export class RESTcli {
                 data: _options.body,
                 params: _options.qs
             }).then((resp: any) => resp.data).then((resp) => {
+                if (resp.data === undefined) {
+                    return this.responseToJsonString(resp);
+                }
                 return this.responseToJsonString(resp.data)
             })
 
