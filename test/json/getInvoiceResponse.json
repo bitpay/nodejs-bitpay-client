@@ -1,0 +1,428 @@
+{
+  "facade": "merchant/invoice",
+  "data": {
+    "url": "https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A",
+    "posData": "\"{ \"ref\" : 711454, \"item\" : \"test_item\" }\"",
+    "status": "confirmed",
+    "price": 20,
+    "currency": "USD",
+    "orderId": "20210511_fghij",
+    "invoiceTime": 1620733980748,
+    "expirationTime": 1620734880748,
+    "currentTime": 1620734253073,
+    "guid": "payment1234",
+    "id": "G3viJEJgE8Jk2oekSdgT2A",
+    "lowFeeDetected": false,
+    "amountPaid": 739100,
+    "displayAmountPaid": "0.007391",
+    "exceptionStatus": false,
+    "targetConfirmations": 6,
+    "transactions": [
+      {
+        "amount": 739100,
+        "confirmations": 1,
+        "receivedTime": "2021-05-11T11:54:32.978Z",
+        "txid": "0638edcce08856726135e4f464e603706bc12313fd9a9cd046a177e4ffce98dd",
+        "exRates": {
+          "BCH": 1,
+          "USD": 1355.2800000000002,
+          "BTC": 0.02446472581430398,
+          "EUR": 1112.66,
+          "ETH": 0.33972366494876377,
+          "GUSD": 1355.2800000000002,
+          "PAX": 1355.2800000000002,
+          "BUSD": 1355.2800000000002,
+          "USDC": 1355.2800000000002,
+          "XRP": 948.9227925474189,
+          "DOGE": 2725.466119299674,
+          "DAI": 1353.985589776174,
+          "WBTC": 0.024436520994387978
+        },
+        "outputIndex": 0
+      }
+    ],
+    "transactionSpeed": "medium",
+    "buyer": {
+      "email": "john@doe.com"
+    },
+    "redirectURL": "https://merchantwebsite.com/shop/return",
+    "autoRedirect": false,
+    "closeURL": "https://merchantwebsite.com/shop/cancel",
+    "refundAddresses": [],
+    "refundAddressRequestPending": false,
+    "buyerProvidedEmail": "john@doe.com",
+    "buyerProvidedInfo": {
+      "emailAddress": "john@doe.com",
+      "sms": "+12223334444",
+      "smsVerified": true,
+      "selectedWallet": "bitpay",
+      "selectedTransactionCurrency": "BCH",
+      "emailAddress": "john@doe.com"
+    },
+    "paymentSubtotals": {
+      "BTC": 18000,
+      "BCH": 739100,
+      "ETH": 2505000000000000,
+      "GUSD": 1000,
+      "PAX": 10000000000000000000,
+      "BUSD": 10000000000000000000,
+      "USDC": 10000000,
+      "XRP": 7015685,
+      "DOGE": 1998865000,
+      "DAI": 9990000000000000000,
+      "WBTC": 18000
+    },
+    "paymentTotals": {
+      "BTC": 29600,
+      "BCH": 739100,
+      "ETH": 2505000000000000,
+      "GUSD": 1000,
+      "PAX": 10000000000000000000,
+      "BUSD": 10000000000000000000,
+      "USDC": 10000000,
+      "XRP": 7015685,
+      "DOGE": 1998865000,
+      "DAI": 9990000000000000000,
+      "WBTC": 18000
+    },
+    "paymentDisplayTotals": {
+      "BTC": "0.000296",
+      "BCH": "0.007391",
+      "ETH": "0.002505",
+      "GUSD": "10.00",
+      "PAX": "10.00",
+      "BUSD": "10.00",
+      "USDC": "10.00",
+      "XRP": "7.015685",
+      "DOGE": "19.988650",
+      "DAI": "9.99",
+      "WBTC": "0.000180"
+    },
+    "paymentDisplaySubTotals": {
+      "BTC": "0.000180",
+      "BCH": "0.007391",
+      "ETH": "0.002505",
+      "GUSD": "10.00",
+      "PAX": "10.00",
+      "BUSD": "10.00",
+      "USDC": "10.00",
+      "XRP": "7.015685",
+      "DOGE": "19.988650",
+      "DAI": "9.99",
+      "WBTC": "0.000180"
+    },
+    "exchangeRates": {
+      "BTC": {
+        "USD": 55413.609335,
+        "EUR": 45540.39841,
+        "BCH": 40.84109737914668,
+        "ETH": 13.870219975470258,
+        "GUSD": 55413.609335,
+        "PAX": 55413.609335,
+        "BUSD": 55413.609335,
+        "USDC": 55413.609335,
+        "XRP": 38758.09372049268,
+        "DOGE": 110606.00665668662,
+        "DAI": 55359.96552840298,
+        "WBTC": 0.9981333606461704
+      },
+      "BCH": {
+        "USD": 1352.90925,
+        "EUR": 1111.2150000000001,
+        "BTC": 0.02440102556111244,
+        "ETH": 0.33863791096704754,
+        "GUSD": 1352.90925,
+        "PAX": 1352.90925,
+        "BUSD": 1352.90925,
+        "USDC": 1352.90925,
+        "XRP": 946.2690507998013,
+        "DOGE": 2700.4176646706587,
+        "DAI": 1351.599550036015,
+        "WBTC": 0.024369173431532262
+      },
+      "ETH": {
+        "USD": 3992.672665000001,
+        "EUR": 3278.9696950000002,
+        "BTC": 0.0720117094001833,
+        "BCH": 2.9426910658087726,
+        "GUSD": 3992.672665000001,
+        "PAX": 3992.672665000001,
+        "BUSD": 3992.672665000001,
+        "USDC": 3992.672665000001,
+        "XRP": 2792.6060619837313,
+        "DOGE": 7969.406516966069,
+        "DAI": 3988.807510522304,
+        "WBTC": 0.07191770817497412
+      },
+      "GUSD": {
+        "USD": 1,
+        "EUR": 0.821674,
+        "BTC": 0.000018035966241721267,
+        "BCH": 0.0007370228698196506,
+        "ETH": 0.0002503034929852446,
+        "PAX": 1,
+        "BUSD": 1,
+        "USDC": 1,
+        "XRP": 0.6994327600316144,
+        "DOGE": 1.9960079840319362,
+        "DAI": 0.9990319380520276,
+        "WBTC": 0.000018012422807762058
+      },
+      "PAX": {
+        "USD": 1,
+        "EUR": 0.821674,
+        "BTC": 0.000018035966241721267,
+        "BCH": 0.0007370228698196506,
+        "ETH": 0.0002503034929852446,
+        "GUSD": 1,
+        "BUSD": 1,
+        "USDC": 1,
+        "XRP": 0.6994327600316144,
+        "DOGE": 1.9960079840319362,
+        "DAI": 0.9990319380520276,
+        "WBTC": 0.000018012422807762058
+      },
+      "BUSD": {
+        "USD": 1,
+        "EUR": 0.821674,
+        "BTC": 0.000018035966241721267,
+        "BCH": 0.0007370228698196506,
+        "ETH": 0.0002503034929852446,
+        "GUSD": 1,
+        "PAX": 1,
+        "USDC": 1,
+        "XRP": 0.6994327600316144,
+        "DOGE": 1.9960079840319362,
+        "DAI": 0.9990319380520276,
+        "WBTC": 0.000018012422807762058
+      },
+      "USDC": {
+        "USD": 1,
+        "EUR": 0.821674,
+        "BTC": 0.000018035966241721267,
+        "BCH": 0.0007370228698196506,
+        "ETH": 0.0002503034929852446,
+        "GUSD": 1,
+        "PAX": 1,
+        "BUSD": 1,
+        "XRP": 0.6994327600316144,
+        "DOGE": 1.9960079840319362,
+        "DAI": 0.9990319380520276,
+        "WBTC": 0.000018012422807762058
+      },
+      "XRP": {
+        "USD": 1.4253776249999999,
+        "EUR": 1.17088545,
+        "BTC": 0.00002570806272620483,
+        "BCH": 0.0010505359077542177,
+        "ETH": 0.0003567769983605121,
+        "GUSD": 1.4253776249999999,
+        "PAX": 1.4253776249999999,
+        "BUSD": 1.4253776249999999,
+        "USDC": 1.4253776249999999,
+        "DOGE": 2.845065119760479,
+        "DAI": 1.423997771159746,
+        "WBTC": 0.00002567450444222371
+      },
+      "DOGE": {
+        "USD": 0.5002839,
+        "EUR": 0.4110702732486,
+        "BTC": 0.000009023103531676658,
+        "BCH": 0.0003687206757025671,
+        "ETH": 0.00012522280765428083,
+        "GUSD": 0.5002839,
+        "PAX": 0.5002839,
+        "BUSD": 0.5002839,
+        "USDC": 0.5002839,
+        "XRP": 0.3499149489763802,
+        "DAI": 0.49979959419322684,
+        "WBTC": 0.000009011325130716152
+      },
+      "DAI": {
+        "USD": 1.000968,
+        "EUR": 0.822469380432,
+        "BTC": 0.000018053425057043255,
+        "BCH": 0.0007377363079576361,
+        "ETH": 0.00025054578676645436,
+        "GUSD": 1.000968,
+        "PAX": 1.000968,
+        "BUSD": 1.000968,
+        "USDC": 1.000968,
+        "XRP": 0.7001098109433249,
+        "DOGE": 1.9979401197604791,
+        "WBTC": 0.000018029858833039973
+      },
+      "WBTC": {
+        "USD": 55466.58,
+        "EUR": 45575.44665492,
+        "BTC": 1.000393364423732,
+        "BCH": 40.88013797068123,
+        "ETH": 13.883478717945511,
+        "GUSD": 55466.58,
+        "PAX": 55466.58,
+        "BUSD": 55466.58,
+        "USDC": 55466.58,
+        "XRP": 38795.14313891434,
+        "DOGE": 110711.73652694612,
+        "DAI": 55412.88491451783
+      }
+    },
+    "minerFees": {
+      "BTC": {
+        "satoshisPerByte": 1,
+        "totalFee": 100,
+        "fiatAmount": 0.02
+      },
+      "BCH": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "ETH": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "GUSD": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "PAX": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "BUSD": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "USDC": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "XRP": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "DOGE": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "DAI": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "WBTC": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      }
+    },
+    "shopper": {
+      "user": "FeFc5a7hUwmrEnYwVPmrkp"
+    },
+    "jsonPayProRequired": false,
+    "merchantName": "Test Merchant",
+    "bitpayIdRequired": true,
+    "isCancelled": false,
+    "itemizedDetails": [
+      {
+        "amount": 5,
+        "description": "Item 1",
+        "isFee": false
+      },
+      {
+        "amount": 15,
+        "description": "Item 2",
+        "isFee": false
+      }
+    ],
+    "transactionCurrency": "BCH",
+    "supportedTransactionCurrencies": {
+      "BTC": {
+        "enabled": true
+      },
+      "BCH": {
+        "enabled": true
+      },
+      "ETH": {
+        "enabled": true
+      },
+      "GUSD": {
+        "enabled": true
+      },
+      "PAX": {
+        "enabled": true
+      },
+      "BUSD": {
+        "enabled": true
+      },
+      "USDC": {
+        "enabled": true
+      },
+      "XRP": {
+        "enabled": true
+      },
+      "DOGE": {
+        "enabled": true
+      },
+      "DAI": {
+        "enabled": true
+      },
+      "WBTC": {
+        "enabled": true
+      }
+    },
+    "paymentCodes": {
+      "BTC": {
+        "BIP72b": "bitcoin:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A",
+        "BIP73": "https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "BCH": {
+        "BIP72b": "bitcoincash:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A",
+        "BIP73": "https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "ETH": {
+        "EIP681": "ethereum:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "GUSD": {
+        "EIP681b": "ethereum:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "PAX": {
+        "EIP681b": "ethereum:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "BUSD": {
+        "EIP681b": "ethereum:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "USDC": {
+        "EIP681b": "ethereum:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "XRP": {
+        "BIP72b": "ripple:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A",
+        "BIP73": "https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A",
+        "RIP681": "https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "DOGE": {
+        "BIP72b": "dogecoin:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A",
+        "BIP73": "https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "DAI": {
+        "EIP681b": "ethereum:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      },
+      "WBTC": {
+        "EIP681b": "ethereum:?r=https://bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A"
+      }
+    },
+    "universalCodes": {
+      "paymentString": "https://link.bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A",
+      "verificationLink": "https://link.bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A?t=hv"
+    },
+    "token": "Svbfdow1xXc6chtQB3GVKqyRVhyLMqn3nhMhyTtf9T9vTCDKrVfdoA7n94nZUECZf"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "facade": "payout/recipient",
+  "data": {
+    "email": "bob@email.com",
+    "label": "Bob123",
+    "status": "invited",
+    "id": "X3icwc4tE8KJ5hEPNPpDXW",
+    "shopperId": null,
+    "token": "2LVBntm7z92rnuVjVX5ZVaDoUEaoY4LxhZMMzPAMGyXrrBAB9vRY3BVxGLbAa6uEx7"
+  }
+}

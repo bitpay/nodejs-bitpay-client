@@ -1,8 +1,6 @@
 export class Config {
-    public environment: string | null;
-    public envConfig: {};
+  public environment: string | null;
+  public envConfig: {};
 
-    public constructor() {
-    }
+  public constructor() {}
 }
-

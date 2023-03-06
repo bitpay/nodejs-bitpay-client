@@ -31,9 +31,9 @@ const result = await client.GetRates();
 let rate = await client.GetRate(Currency::USD); //Always use the included Currency model to avoid typos
 
 let Rates = new BitPaySDK.Models.Rates(await client.GetRates(), client);
-await Rates.Update();
+await Rates.update();
 
-let newRates = await Rates.GetRates();
+let newRates = await Rates.getRates();
 ```
 
 HTTP Response

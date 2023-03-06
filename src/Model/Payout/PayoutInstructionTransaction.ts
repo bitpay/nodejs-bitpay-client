@@ -1,16 +1,14 @@
 export interface PayoutInstructionTransactionInterface {
-    txid: string | null;
-    amount: number | null;
-    date: number | null;
+  txid: string | null;
+  amount: number | null;
+  date: number | null;
 }
 
-export class PayoutInstructionTransaction implements PayoutInstructionTransactionInterface {
+export class PayoutInstructionTransaction
+  implements PayoutInstructionTransactionInterface {
+  txid: string | null;
+  amount: number | null;
+  date: number | null;
 
-    txid: string | null;
-    amount: number | null;
-    date: number | null;
-
-    public constructor() {
-
-    }
+  public constructor() {}
 }

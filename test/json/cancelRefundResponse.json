@@ -1,0 +1,18 @@
+{
+  "data": {
+    "id": "WoE46gSLkJQS48RJEiNw3L",
+    "invoice": "Hpqc63wvE1ZjzeeH4kEycF",
+    "reference": "Test refund",
+    "status": "cancelled",
+    "amount": 10,
+    "transactionCurrency": "BTC",
+    "transactionAmount": 0.000594,
+    "transactionRefundFee": 0.000002,
+    "currency": "USD",
+    "lastRefundNotification": "2021-08-29T20:45:35.368Z",
+    "refundFee": 0.04,
+    "immediate": false,
+    "buyerPaysRefundFee": false,
+    "requestDate": "2021-08-29T20:45:34.000Z"
+  }
+}

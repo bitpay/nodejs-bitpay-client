@@ -1,3 +1,3 @@
 export interface Shopper {
-    user: string;
+  user: string;
 }

@@ -1,0 +1,62 @@
+{
+  "data": [
+    {
+      "code": "BTC",
+      "symbol": "฿",
+      "precision": 6,
+      "name": "Bitcoin",
+      "plural": "Bitcoin",
+      "alts": "btc",
+      "minimum": 0.000006,
+      "sanctioned": false,
+      "decimals": 8,
+      "chain": "BTC"
+    },
+    {
+      "code": "XRP",
+      "symbol": "Ʀ",
+      "precision": 6,
+      "name": "Ripple",
+      "plural": "Ripple",
+      "alts": "xrp",
+      "minimum": 0.000006,
+      "sanctioned": false,
+      "decimals": 6,
+      "chain": "XRP"
+    },
+    {
+      "code": "EUR",
+      "symbol": "€",
+      "precision": 2,
+      "name": "Eurozone Euro",
+      "plural": "Eurozone Euros",
+      "alts": "eur",
+      "minimum": 0.01,
+      "sanctioned": false,
+      "decimals": 2
+    },
+    {
+      "code": "USD",
+      "symbol": "$",
+      "precision": 2,
+      "name": "US Dollar",
+      "plural": "US Dollars",
+      "alts": "usd bucks",
+      "minimum": 0.01,
+      "sanctioned": false,
+      "decimals": 2
+    },
+    {
+      "code": "USDC",
+      "symbol": "$",
+      "precision": 2,
+      "name": "Circle USD Coin",
+      "plural": "Circle USD Coin",
+      "alts": "",
+      "minimum": 0.01,
+      "sanctioned": false,
+      "decimals": 6,
+      "chain": "ETH"
+    }
+  ]
+}
