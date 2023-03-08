@@ -1,6 +1,6 @@
 {
   "name": "bitpay-sdk",
-  "version": "4.0.0",
+  "version": "5.0.0-dev",
   "description": "Complete version of the NodeJS library for the new cryptographically secure BitPay API",
   "main": "dist/index",
   "typings": "dist/index",
