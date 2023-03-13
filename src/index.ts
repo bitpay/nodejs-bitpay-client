@@ -20,6 +20,7 @@ import { Client } from './Client';
 import { Config } from './Config';
 import { Currency } from './Currency';
 import { Facade } from './Facade';
+import { PosToken } from './PosToken';
 import * as Env from './Env';
 import * as Invoice from './Model/Invoice/Invoice';
 import * as InvoiceStatus from './Model/Invoice/InvoiceStatus';

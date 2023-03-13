@@ -111,10 +111,10 @@ export class Client {
    * @param environment
    */
   public static createPosClient(
-    posToken: PosToken,
+    posToken: string,
     environment?: Environment,
   ): Client {
-    return new Client(null, null, null, null, posToken, environment);
+    return new Client(null, null, null, null, new PosToken(posToken), environment);
   }
 
   /**
