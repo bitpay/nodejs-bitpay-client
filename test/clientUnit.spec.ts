@@ -108,7 +108,7 @@ describe('BitPaySDK.Client', () => {
 
         it('should create POS client', async () => {
             const posTokenValue = "posToken";
-            const client = Client.createPosClient(new PosToken(posTokenValue))
+            const client = Client.createPosClient(posTokenValue)
 
             expect(client.getToken(Facade.Pos)).toBe(posTokenValue);
         });
