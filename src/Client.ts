@@ -282,7 +282,23 @@ export class Client {
             throw new Exceptions.InvoiceCreation("failed to deserialize BitPay server response (Invoice) : " + e.message, e.apiCode);
         }
     }
+    
+    public async CancelInvoice(invoiceId: string, forceCancel = false, facade: string = Facade.Merchant, signRequest: boolean = true): Promise<InvoiceInterface> {
+        const params = {
+            'token': this.GetAccessToken(facade),
+            'forceCancel': forceCancel
+        };
 
+        try {
+            return await this._RESTcli.delete("invoices/" + invoiceId, params, signRequest).then(invoiceData => {
+                return <InvoiceInterface>JSON.parse(invoiceData);
+            });
+        } catch (e)
+        {
+            throw new Exceptions.InvoiceCreation("failed to deserialize BitPay server response (Invoice) : " + e.message, e.apiCode);
+        }
+    }
+    
     public async GetInvoices(dateStart: string, dateEnd: string, status: string = null, orderId: string = null, limit: number = null, offset: number = null): Promise<InvoiceInterface[]> {
         let params = {};
 
