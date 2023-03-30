@@ -16,6 +16,7 @@
 import {BitPayException as Generic} from './BitPayException';
 import {InvoiceException as InvoiceGeneric} from './InvoiceException';
 import {InvoiceCreationException as InvoiceCreation} from './InvoiceCreationException';
+import {InvoiceCancellationException as InvoiceCancellation} from './InvoiceCancellationException';
 import {InvoiceQueryException as InvoiceQuery} from './InvoiceQueryException';
 import {RateException as RateGeneric} from './RateException';
 import {RateQueryException as RateQuery} from './RateQueryException';
@@ -59,6 +60,7 @@ export {
     Generic,
     InvoiceGeneric,
     InvoiceCreation,
+    InvoiceCancellation,
     InvoiceQuery,
     RateGeneric,
     RateQuery,
