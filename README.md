@@ -9,7 +9,7 @@ Full implementation of the BitPay Payment Gateway. This library implements BitPa
 
 ## Getting Started
 
-To get up and running with our NodeJS library quickly, follow [The GUIDE](https://github.com/bitpay/nodejs-bitpay-client/blob/master/GUIDE.md)
+To get up and running with our NodeJS library quickly, follow [the guide](https://bitpay.readme.io/reference/node-full-sdk-getting-started)
 
 ## Support
 

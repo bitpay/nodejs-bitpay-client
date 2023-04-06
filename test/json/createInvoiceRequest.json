@@ -11,6 +11,11 @@
     "postalCode": "20000",
     "region": "District of Columbia"
   },
+  "buyerProvidedInfo": {
+    "emailAddress": "john@doe.com",
+    "selectedWallet": "bitpay",
+    "selectedTransactionCurrency": "BTC"
+  },
   "currency": "USD",
   "extendedNotifications": true,
   "forcedBuyerSelectedTransactionCurrency": null,

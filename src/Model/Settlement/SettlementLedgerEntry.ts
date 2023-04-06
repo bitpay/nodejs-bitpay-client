@@ -6,7 +6,6 @@ export interface SettlementLedgerEntryInterface {
   amount: number | null;
   timestamp: number | null;
   description: string | null;
-  reference: string | null;
   invoiceData: InvoiceData | null;
 }
 
@@ -16,7 +15,6 @@ export class SettlementLedgerEntry implements SettlementLedgerEntryInterface {
   amount: number | null;
   timestamp: number | null;
   description: string | null;
-  reference: string | null;
   invoiceData: InvoiceData | null;
 
   public constructor() {}

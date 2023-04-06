@@ -14,7 +14,7 @@ import {DefaultBodyType, PathParams, rest, RestRequest} from 'msw'
 import {setupServer} from "msw/node";
 import { TokenContainer } from "../src/TokenContainer";
 import {GuidGenerator} from "../src/util/GuidGenerator";
-import {PosToken} from "../src/PosToken";
+import {InvoiceBuyerProvidedInfo} from "../src/Model/Invoice/InvoiceBuyerProvidedInfo";
 
 const _ = require('lodash');
 const BitPaySDK = require('../src/index');
@@ -329,6 +329,11 @@ describe('BitPaySDK.Client', () => {
             buyerData.email = "buyer@buyeremaildomain.com";
             buyerData.notify = true;
             invoice.buyer = buyerData;
+            const buyerProvidedInfo = new InvoiceBuyerProvidedInfo();
+            buyerProvidedInfo.emailAddress = "john@doe.com";
+            buyerProvidedInfo.selectedWallet = "bitpay";
+            buyerProvidedInfo.selectedTransactionCurrency = "BTC";
+            invoice.buyerProvidedInfo = buyerProvidedInfo;
 
             return invoice;
         }
@@ -346,9 +351,11 @@ describe('BitPaySDK.Client', () => {
                 })
             )
 
-            const results = await client.createInvoice(getInvoiceExample(), Facade.Merchant, true);
-            expect(results.id).toBe("G3viJEJgE8Jk2oekSdgT2A");
-            expect(results.url).toBe("https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A");
+            const result = await client.createInvoice(getInvoiceExample(), Facade.Merchant, true);
+            expect(result.id).toBe("G3viJEJgE8Jk2oekSdgT2A");
+            expect(result.url).toBe("https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A");
+            expect(result.buyerProvidedInfo.emailAddress).toBe("john@doe.com");
+            expect(result.universalCodes.paymentString).toBe("https://link.bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A");
         });
 
         it('should get invoice', async () => {

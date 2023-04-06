@@ -6,9 +6,7 @@ export interface InvoiceDataInterface {
   price: number;
   currency: string | null;
   transactionCurrency: string | null;
-  overPaidAmount: number;
   payoutPercentage: number;
-  btcPrice: number;
   refundInfo: RefundInfo;
 }
 
@@ -18,9 +16,7 @@ export class InvoiceData implements InvoiceDataInterface {
   price: number;
   currency: string | null;
   transactionCurrency: string | null;
-  overPaidAmount: number;
   payoutPercentage: number;
-  btcPrice: number;
   refundInfo: RefundInfo;
 
   public constructor() {}

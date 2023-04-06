@@ -6,8 +6,9 @@ export interface PayoutInterface {
   amount: number | null;
   currency: string | null;
   effectiveDate: string | null;
+  dateExecuted: string | null;
   ledgerCurrency: string | null;
-
+  accountId: string | null;
   reference: string | null;
   notificationEmail: string | null;
   notificationURL: string | null;
@@ -19,9 +20,11 @@ export interface PayoutInterface {
 
   id: string | null;
   status: string | null;
+  groupId: string | null;
   requestDate: number | null;
   exchangeRates: string | null;
   transactions: PayoutTransaction[];
+  code: number | null
 }
 
 export class Payout implements PayoutInterface {
@@ -30,8 +33,9 @@ export class Payout implements PayoutInterface {
   amount: number | null;
   currency: string | null;
   effectiveDate: string | null;
+  dateExecuted: string | null;
   ledgerCurrency: string | null;
-
+  accountId: string | null;
   reference: string | null;
   notificationEmail: string | null;
   notificationURL: string | null;
@@ -43,9 +47,11 @@ export class Payout implements PayoutInterface {
 
   id: string | null;
   status: string | null;
+  groupId: string | null;
   requestDate: number | null;
   exchangeRates: string | null;
   transactions: PayoutTransaction[];
+  code: number | null;
 
   /**
    * Constructor, create a request Payout object.
