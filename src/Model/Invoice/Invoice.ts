@@ -56,7 +56,7 @@ export interface InvoiceInterface {
   refundAddresses: any | null;
   refundAddressRequestPending: boolean | null;
   buyerProvidedEmail: string | null;
-  buyerProvidedInfo: InvoiceBuyerProvidedInfo;
+  buyerProvidedInfo: InvoiceBuyerProvidedInfo | null;
   supportedTransactionCurrencies: SupportedTransactionCurrencies | null;
   minerFees: MinerFees | null;
   shopper: Shopper | null;
@@ -132,7 +132,7 @@ export class Invoice implements InvoiceInterface {
   refundAddresses: any | null;
   refundAddressRequestPending: boolean | null;
   buyerProvidedEmail: string | null;
-  buyerProvidedInfo: InvoiceBuyerProvidedInfo;
+  buyerProvidedInfo: InvoiceBuyerProvidedInfo | null;
   supportedTransactionCurrencies: SupportedTransactionCurrencies | null;
   minerFees: MinerFees | null;
   shopper: Shopper | null;

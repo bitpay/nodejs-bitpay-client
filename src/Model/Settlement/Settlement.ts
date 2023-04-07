@@ -14,8 +14,8 @@ export interface SettlementInterface {
   closingDate: number;
   openingBalance: number;
   ledgerEntriesSum: number;
-  withholdings: WithHoldings[];
-  withholdingsSum: number;
+  withholdings: WithHoldings[] | null;
+  withholdingsSum: number | null;
   totalAmount: number;
   ledgerEntries: SettlementLedgerEntry[];
   token: string | null;
@@ -33,8 +33,8 @@ export class Settlement implements SettlementInterface {
   closingDate: number;
   openingBalance: number;
   ledgerEntriesSum: number;
-  withholdings: WithHoldings[];
-  withholdingsSum: number;
+  withholdings: WithHoldings[] | null;
+  withholdingsSum: number | null;
   totalAmount: number;
   ledgerEntries: SettlementLedgerEntry[];
   token: string | null;
