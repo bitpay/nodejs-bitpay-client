@@ -11,13 +11,18 @@
     "postalCode": "20000",
     "region": "District of Columbia"
   },
+  "buyerProvidedInfo": {
+    "emailAddress": "john@doe.com",
+    "selectedWallet": "bitpay",
+    "selectedTransactionCurrency": "BTC"
+  },
   "currency": "USD",
   "extendedNotifications": true,
   "forcedBuyerSelectedTransactionCurrency": null,
   "forcedBuyerSelectedWallet": "bitpay",
   "fullNotifications": true,
   "itemDesc": "Example",
-  "notificationEmail": "m.warzybok@sumoheavy.com",
+  "notificationEmail": "notification@email.com",
   "notificationURL": "https://notification.url/aaa",
   "orderId": "ee26b5e0-9185-493e-bc12-e846d5fcf07c",
   "price": 10.0,

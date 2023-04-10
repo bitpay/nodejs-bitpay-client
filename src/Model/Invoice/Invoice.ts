@@ -7,6 +7,7 @@ import { MinerFees } from './MinerFees';
 import { Shopper } from './Shopper';
 import { RefundInfo } from './RefundInfo';
 import { SupportedTransactionCurrencies } from './SupportedTransactionCurrencies';
+import {InvoiceUniversalCodes} from "./InvoiceUniversalCodes";
 
 export interface InvoiceInterface {
   // API fields
@@ -55,7 +56,7 @@ export interface InvoiceInterface {
   refundAddresses: any | null;
   refundAddressRequestPending: boolean | null;
   buyerProvidedEmail: string | null;
-  invoiceBuyerProvidedInfo: InvoiceBuyerProvidedInfo;
+  buyerProvidedInfo: InvoiceBuyerProvidedInfo | null;
   supportedTransactionCurrencies: SupportedTransactionCurrencies | null;
   minerFees: MinerFees | null;
   shopper: Shopper | null;
@@ -72,10 +73,13 @@ export interface InvoiceInterface {
   paymentDisplaySubTotals: Array<[string, number]> | null;
   nonPayProPaymentReceived: boolean | null;
   jsonPayProRequired: boolean | null;
+  merchantName: string | null;
+  bitpayIdRequired: boolean | null;
   underpaidAmount: number | null;
   overpaidAmount: number | null;
   paymentCodes: Array<[string, Array<[string, number]>]> | null;
   isCancelled: boolean | null;
+  universalCodes: InvoiceUniversalCodes | null;
 
   setCurrency(_currency: string): void;
 }
@@ -128,7 +132,7 @@ export class Invoice implements InvoiceInterface {
   refundAddresses: any | null;
   refundAddressRequestPending: boolean | null;
   buyerProvidedEmail: string | null;
-  invoiceBuyerProvidedInfo: InvoiceBuyerProvidedInfo;
+  buyerProvidedInfo: InvoiceBuyerProvidedInfo | null;
   supportedTransactionCurrencies: SupportedTransactionCurrencies | null;
   minerFees: MinerFees | null;
   shopper: Shopper | null;
@@ -145,10 +149,13 @@ export class Invoice implements InvoiceInterface {
   paymentDisplaySubTotals: Array<[string, number]> | null;
   nonPayProPaymentReceived: boolean | null;
   jsonPayProRequired: boolean | null;
+  merchantName: string | null;
+  bitpayIdRequired: boolean | null;
   underpaidAmount: number | null;
   overpaidAmount: number | null;
   paymentCodes: Array<[string, Array<[string, number]>]> | null;
   isCancelled: boolean | null;
+  universalCodes: InvoiceUniversalCodes | null;
 
   /**
    * Constructor, create a minimal request Invoice object.

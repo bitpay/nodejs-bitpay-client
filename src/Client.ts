@@ -1,7 +1,6 @@
 import { ec } from 'elliptic';
 import {
   BitPayExceptions as Exceptions,
-  Config,
   Env,
   Facade,
   KeyUtils,
@@ -184,7 +183,7 @@ export class Client {
    * @param signRequest Signed request.
    */
   public async createInvoice(
-    invoice: Invoice,
+    invoice: InvoiceInterface,
     facade?: Facade,
     signRequest?: boolean,
   ): Promise<InvoiceInterface> {
@@ -772,9 +771,7 @@ export class Client {
    * @param currencyCode String Currency code for which the info will be retrieved.
    * @return CurrencyInterface Currency info.
    */
-  public async getCurrencyInfo(
-    currencyCode: string,
-  ): Promise<CurrencyInterface> {
+  public async getCurrencyInfo(currencyCode: string,): Promise<CurrencyInterface> {
     return this.getCurrencyClient().getCurrencyInfo(currencyCode);
   }
 

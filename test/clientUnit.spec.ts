@@ -1,20 +1,23 @@
 import {Client, Facade} from "../src";
 import {Buyer} from "../src/Model/Invoice/Buyer";
 import {
-    PayoutRecipient,
-    Payout,
+    Bill,
+    BillInterface,
     Invoice,
-    BillInterface, PayoutRecipients, RateInterface, Rates
+    Payout,
+    PayoutRecipient,
+    PayoutRecipients,
+    RateInterface,
+    Rates
 } from "../src/Model";
 import {Refund} from "../src/Model/Invoice/Refund";
-import {Bill} from "../src/Model";
 import {Item} from "../src/Model/Bill/Item";
 import {BitPayClient} from "../src/Client/BitPayClient";
 import {DefaultBodyType, PathParams, rest, RestRequest} from 'msw'
 import {setupServer} from "msw/node";
-import { TokenContainer } from "../src/TokenContainer";
+import {TokenContainer} from "../src/TokenContainer";
 import {GuidGenerator} from "../src/util/GuidGenerator";
-import {PosToken} from "../src/PosToken";
+import {InvoiceBuyerProvidedInfo} from "../src/Model/Invoice/InvoiceBuyerProvidedInfo";
 
 const _ = require('lodash');
 const BitPaySDK = require('../src/index');
@@ -72,7 +75,7 @@ describe('BitPaySDK.Client', () => {
 
     function validateRequest(jsonRequest: string, requestExpectedBody) {
         if (!_.isEqual(requestExpectedBody, jsonRequest)) {
-            throw new Error("Incorrect request body");
+            throw new Error("Incorrect request body.");
         }
     }
 
@@ -314,7 +317,7 @@ describe('BitPaySDK.Client', () => {
             invoice.transactionSpeed = "medium";
             invoice.notificationURL = "https://notification.url/aaa";
             invoice.itemDesc = "Example";
-            invoice.notificationEmail = "m.warzybok@sumoheavy.com";
+            invoice.notificationEmail = "notification@email.com";
             invoice.autoRedirect = true;
             invoice.forcedBuyerSelectedWallet = "bitpay";
             invoice.forcedBuyerSelectedTransactionCurrency = null;
@@ -329,6 +332,11 @@ describe('BitPaySDK.Client', () => {
             buyerData.email = "buyer@buyeremaildomain.com";
             buyerData.notify = true;
             invoice.buyer = buyerData;
+            invoice.buyerProvidedInfo = <InvoiceBuyerProvidedInfo>{
+                emailAddress: "john@doe.com",
+                selectedWallet: "bitpay",
+                selectedTransactionCurrency: "BTC"
+            };
 
             return invoice;
         }
@@ -346,9 +354,11 @@ describe('BitPaySDK.Client', () => {
                 })
             )
 
-            const results = await client.createInvoice(getInvoiceExample(), Facade.Merchant, true);
-            expect(results.id).toBe("G3viJEJgE8Jk2oekSdgT2A");
-            expect(results.url).toBe("https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A");
+            const result = await client.createInvoice(getInvoiceExample(), Facade.Merchant, true);
+            expect(result.id).toBe("G3viJEJgE8Jk2oekSdgT2A");
+            expect(result.url).toBe("https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A");
+            expect(result.buyerProvidedInfo.emailAddress).toBe("john@doe.com");
+            expect(result.universalCodes.paymentString).toBe("https://link.bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A");
         });
 
         it('should get invoice', async () => {
@@ -362,6 +372,7 @@ describe('BitPaySDK.Client', () => {
             )
 
             const results = await client.getInvoice("G3viJEJgE8Jk2oekSdgT2A");
+
             expect(results.id).toBe("G3viJEJgE8Jk2oekSdgT2A");
             expect(results.url).toBe("https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A");
         });
@@ -800,9 +811,7 @@ describe('BitPaySDK.Client', () => {
                 })
             )
 
-            const refund = new Refund();
-            refund.invoice = 'Hpqc63wvE1ZjzeeH4kEycF';
-            refund.amount = 10.0;
+            const refund = new Refund(10.0, 'Hpqc63wvE1ZjzeeH4kEycF', 'someToken');
 
             const result = await client.createRefund(refund);
             expect(result.guid).toBe('ee26b5e0-9185-493e-bc12-e846d5fcf07c');

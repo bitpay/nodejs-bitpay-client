@@ -12,6 +12,8 @@ export interface CurrenciesInterface {
   payPro: boolean | null;
   qr: CurrencyQrInterface | null;
   image: string | null;
+  withdrawalFee: string | null;
+  walletConnect: boolean | null;
 }
 
 export class Currencies implements CurrenciesInterface {
@@ -21,4 +23,6 @@ export class Currencies implements CurrenciesInterface {
   payPro: boolean | null;
   qr: CurrencyQrInterface | null;
   image: string | null;
+  withdrawalFee: string | null;
+  walletConnect: boolean | null;
 }

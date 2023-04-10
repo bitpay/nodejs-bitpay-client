@@ -7,7 +7,7 @@ export interface RefundInterface {
   currency: string;
   token: string;
   id: string;
-  requestDate: Date;
+  requestDate: string;
   status: string;
   invoice: string;
   supportRequest: string;
@@ -18,7 +18,7 @@ export interface RefundInterface {
   transactionCurrency: string;
   transactionAmount: number;
   transactionRefundFee: number;
-  lastRefundNotification: Date;
+  lastRefundNotification: string;
   notificationURL: string;
   refundFee: number;
   immediate: boolean;
@@ -34,7 +34,7 @@ export class Refund implements RefundInterface {
   id: string;
   params: RefundParams;
   refundEmail: string;
-  requestDate: Date;
+  requestDate: string;
   status: string;
   token: string;
   invoice: string;
@@ -46,12 +46,16 @@ export class Refund implements RefundInterface {
   transactionCurrency: string;
   transactionAmount: number;
   transactionRefundFee: number;
-  lastRefundNotification: Date;
+  lastRefundNotification: string;
   notificationURL: string;
   refundFee: number;
   immediate: boolean;
   buyerPaysRefundFee: boolean;
   preview: boolean;
 
-  public constructor() {}
+  public constructor(amount: number, invoiceId: string, token: string) {
+    this.amount = amount;
+    this.invoice = invoiceId;
+    this.token = token;
+  }
 }
