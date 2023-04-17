@@ -53,9 +53,8 @@ export class Refund implements RefundInterface {
   buyerPaysRefundFee: boolean;
   preview: boolean;
 
-  public constructor(amount: number, invoiceId: string, token: string) {
+  public constructor(amount: number, invoiceId: string) {
     this.amount = amount;
     this.invoice = invoiceId;
-    this.token = token;
   }
 }

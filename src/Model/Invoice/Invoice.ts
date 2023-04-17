@@ -7,7 +7,7 @@ import { MinerFees } from './MinerFees';
 import { Shopper } from './Shopper';
 import { RefundInfo } from './RefundInfo';
 import { SupportedTransactionCurrencies } from './SupportedTransactionCurrencies';
-import {InvoiceUniversalCodes} from "./InvoiceUniversalCodes";
+import { InvoiceUniversalCodes } from './InvoiceUniversalCodes';
 
 export interface InvoiceInterface {
   // API fields
