@@ -23,7 +23,7 @@ jobs:
       - run: npm run build --if-present
       - run: npm run unit
 
-  unit:
+  integration:
     runs-on: ubuntu-latest
 
     strategy:
