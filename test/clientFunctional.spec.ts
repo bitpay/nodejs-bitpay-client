@@ -201,7 +201,7 @@ describe('BitPaySDK.Client', () => {
             invoiceId = invoice.id;
             await client.payInvoice(invoiceId, "complete");
 
-            const refundToCreateRequest: RefundInterface = new Refund(10.0, invoiceId);
+            const refundToCreateRequest: RefundInterface = new Refund(10.0, invoiceId, 'token');
             const refund: RefundInterface = await client.createRefund(refundToCreateRequest);
             refundId = refund.id;
             refundGuid = refund.guid;
@@ -238,7 +238,7 @@ describe('BitPaySDK.Client', () => {
         });
 
         it("should cancel refund by guid", async() => {
-            const refundToCreateRequest: RefundInterface = new Refund( 10.0, invoiceId);
+            const refundToCreateRequest: RefundInterface = new Refund( 10.0, invoiceId, 'token');
             const refund: RefundInterface = await client.createRefund(refundToCreateRequest);
 
             const result: RefundInterface = await client.cancelRefundByGuid(refund.guid);
