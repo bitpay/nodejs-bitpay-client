@@ -24,7 +24,7 @@ export interface PayoutInterface {
   requestDate: number | null;
   exchangeRates: string | null;
   transactions: PayoutTransaction[];
-  code: number | null
+  code: number | null;
 }
 
 export class Payout implements PayoutInterface {

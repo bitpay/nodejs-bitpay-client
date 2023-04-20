@@ -811,7 +811,7 @@ describe('BitPaySDK.Client', () => {
                 })
             )
 
-            const refund = new Refund(10.0, 'Hpqc63wvE1ZjzeeH4kEycF', 'someToken');
+            const refund = new Refund(10.0, 'Hpqc63wvE1ZjzeeH4kEycF', 'token');
 
             const result = await client.createRefund(refund);
             expect(result.guid).toBe('ee26b5e0-9185-493e-bc12-e846d5fcf07c');

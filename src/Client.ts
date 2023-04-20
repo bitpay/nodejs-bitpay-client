@@ -1,10 +1,5 @@
 import { ec } from 'elliptic';
-import {
-  BitPayExceptions as Exceptions,
-  Env,
-  Facade,
-  KeyUtils,
-} from './index';
+import { BitPayExceptions as Exceptions, Env, Facade, KeyUtils } from './index';
 import {
   BillInterface,
   Invoice,
@@ -113,7 +108,14 @@ export class Client {
     posToken: string,
     environment?: Environment,
   ): Client {
-    return new Client(null, null, null, null, new PosToken(posToken), environment);
+    return new Client(
+      null,
+      null,
+      null,
+      null,
+      new PosToken(posToken),
+      environment,
+    );
   }
 
   /**
@@ -771,7 +773,9 @@ export class Client {
    * @param currencyCode String Currency code for which the info will be retrieved.
    * @return CurrencyInterface Currency info.
    */
-  public async getCurrencyInfo(currencyCode: string,): Promise<CurrencyInterface> {
+  public async getCurrencyInfo(
+    currencyCode: string,
+  ): Promise<CurrencyInterface> {
     return this.getCurrencyClient().getCurrencyInfo(currencyCode);
   }
 
