@@ -20,11 +20,7 @@ export class PayoutRecipient implements PayoutRecipientInterface {
   token: string | null;
   guid: string | null;
 
-  public constructor(
-    email: string | null,
-    label: string | null,
-    notificationURL: string | null,
-  );
+  public constructor(email: string | null, label: string | null, notificationURL: string | null);
   /**
    * Constructor, create a minimal Recipient object.
    *

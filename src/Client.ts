@@ -2,7 +2,6 @@ import { ec } from 'elliptic';
 import { BitPayExceptions as Exceptions, Env, Facade, KeyUtils } from './index';
 import {
   BillInterface,
-  Invoice,
   InvoiceInterface,
   LedgerEntryInterface,
   LedgerInterface,
@@ -10,7 +9,7 @@ import {
   PayoutRecipientInterface,
   PayoutRecipients,
   RateInterface,
-  Rates,
+  Rates
 } from './Model';
 import { BitPayClient } from './Client/BitPayClient';
 import { TokenContainer } from './TokenContainer';
@@ -36,7 +35,7 @@ import { PosToken } from './PosToken';
 import { PrivateKey } from './PrivateKey';
 import { CurrencyInterface } from './Model/Currency/Currency';
 
-const fs = require('fs');
+import * as fs from 'fs';
 
 export class Client {
   private bitPayClient: BitPayClient;
@@ -52,7 +51,7 @@ export class Client {
     posToken: PosToken | null,
     environment?: Environment,
     bitPayClient?: BitPayClient, // using for tests
-    guidGenerator?: GuidGenerator, // using for tests
+    guidGenerator?: GuidGenerator // using for tests
   ) {
     if (configFilePath !== null) {
       this.initByConfigFilePath(configFilePath);
@@ -77,21 +76,13 @@ export class Client {
       const ecKey = this.getEcKeyByPrivateKey(privateKey);
       this.guidGenerator = new GuidGenerator();
       this.tokenContainer = tokenContainer;
-      this.bitPayClient = new BitPayClient(
-        Client.getBaseUrl(environment),
-        ecKey,
-        this.getIdentity(ecKey),
-      );
+      this.bitPayClient = new BitPayClient(Client.getBaseUrl(environment), ecKey, this.getIdentity(ecKey));
       return;
     }
 
     this.tokenContainer = tokenContainer;
     this.guidGenerator = new GuidGenerator();
-    this.bitPayClient = new BitPayClient(
-      Client.getBaseUrl(environment),
-      null,
-      null,
-    );
+    this.bitPayClient = new BitPayClient(Client.getBaseUrl(environment), null, null);
 
     if (posToken !== null) {
       this.tokenContainer.addPos(posToken.getValue());
@@ -104,18 +95,8 @@ export class Client {
    * @param posToken
    * @param environment
    */
-  public static createPosClient(
-    posToken: string,
-    environment?: Environment,
-  ): Client {
-    return new Client(
-      null,
-      null,
-      null,
-      null,
-      new PosToken(posToken),
-      environment,
-    );
+  public static createPosClient(posToken: string, environment?: Environment): Client {
+    return new Client(null, null, null, null, new PosToken(posToken), environment);
   }
 
   /**
@@ -136,16 +117,9 @@ export class Client {
   public static createClientByPrivateKey(
     privateKey: string,
     tokenContainer: TokenContainer,
-    environment?: Environment,
+    environment?: Environment
   ) {
-    return new Client(
-      null,
-      new PrivateKey(privateKey),
-      tokenContainer,
-      null,
-      null,
-      environment,
-    );
+    return new Client(null, new PrivateKey(privateKey), tokenContainer, null, null, environment);
   }
 
   public getToken(facade: Facade) {
@@ -160,10 +134,7 @@ export class Client {
    * @param currency the fiat currency for which you want to fetch the baseCurrency rates
    * @return A Rate object populated with the BitPay exchange rate table.
    */
-  public async getRate(
-    baseCurrency: string,
-    currency: string,
-  ): Promise<RateInterface> {
+  public async getRate(baseCurrency: string, currency: string): Promise<RateInterface> {
     return this.createRateClient().getRate(baseCurrency, currency);
   }
 
@@ -187,7 +158,7 @@ export class Client {
   public async createInvoice(
     invoice: InvoiceInterface,
     facade?: Facade,
-    signRequest?: boolean,
+    signRequest?: boolean
   ): Promise<InvoiceInterface> {
     if (facade === undefined) {
       facade = this.getFacadeBasedOnTokenContainer();
@@ -197,9 +168,7 @@ export class Client {
       signRequest = Client.isSignRequest(facade);
     }
 
-    invoice.token = invoice.token
-      ? invoice.token
-      : this.guidGenerator.execute();
+    invoice.token = invoice.token ? invoice.token : this.guidGenerator.execute();
 
     return this.createInvoiceClient().create(invoice, facade, signRequest);
   }
@@ -211,11 +180,7 @@ export class Client {
    * @param facade Facade for request.
    * @param signRequest Signed request.
    */
-  public async getInvoice(
-    invoiceId: string,
-    facade?: Facade,
-    signRequest?: boolean,
-  ): Promise<InvoiceInterface> {
+  public async getInvoice(invoiceId: string, facade?: Facade, signRequest?: boolean): Promise<InvoiceInterface> {
     if (facade === undefined) {
       facade = this.getFacadeBasedOnTokenContainer();
     }
@@ -235,11 +200,7 @@ export class Client {
    * @param facade Facade for request.
    * @param signRequest Signed request.
    */
-  public async getInvoiceByGuid(
-    guid: string,
-    facade?: Facade,
-    signRequest?: boolean,
-  ): Promise<InvoiceInterface> {
+  public async getInvoiceByGuid(guid: string, facade?: Facade, signRequest?: boolean): Promise<InvoiceInterface> {
     if (facade === undefined) {
       facade = this.getFacadeBasedOnTokenContainer();
     }
@@ -262,7 +223,14 @@ export class Client {
    * limit     Maximum results that the query will return (useful for paging results).
    * offset    Number of results to offset (ex. skip 10 will give you results starting with the 11th.
    */
-  public async getInvoices(params: {}): Promise<InvoiceInterface[]> {
+  public async getInvoices(params: {
+    dateStart: string | null;
+    dateEnd: string | null;
+    status: string | null;
+    orderId: string | null;
+    limit: number | null;
+    offset: number | null;
+  }): Promise<InvoiceInterface[]> {
     return this.createInvoiceClient().getInvoices(params);
   }
 
@@ -271,9 +239,7 @@ export class Client {
    *
    * @param invoiceId the id of the invoice for which you want to fetch an event token.
    */
-  public async getInvoiceEventToken(
-    invoiceId: string,
-  ): Promise<InvoiceEventTokenInterface> {
+  public async getInvoiceEventToken(invoiceId: string): Promise<InvoiceEventTokenInterface> {
     return this.createInvoiceClient().getInvoiceEventToken(invoiceId);
   }
 
@@ -284,10 +250,7 @@ export class Client {
    * @param status    The status of the invoice to be updated, can be "confirmed" or "complete".
    * @return A BitPay generated Invoice object.
    */
-  public async payInvoice(
-    invoiceId: string,
-    status: string,
-  ): Promise<InvoiceInterface> {
+  public async payInvoice(invoiceId: string, status: string): Promise<InvoiceInterface> {
     return this.createInvoiceClient().pay(invoiceId, status);
   }
 
@@ -301,10 +264,7 @@ export class Client {
    * autoVerify Skip the user verification on sandbox ONLY.
    * @return A BitPay generated Invoice object.
    */
-  public async updateInvoice(
-    invoiceId: string,
-    params: [],
-  ): Promise<InvoiceInterface> {
+  public async updateInvoice(invoiceId: string, params: []): Promise<InvoiceInterface> {
     return this.createInvoiceClient().update(invoiceId, params);
   }
 
@@ -315,10 +275,7 @@ export class Client {
    * @param forceCancel Force cancel.
    * @return A BitPay generated Invoice object.
    */
-  public async cancelInvoice(
-    invoiceId: string,
-    forceCancel: boolean = true,
-  ): Promise<InvoiceInterface> {
+  public async cancelInvoice(invoiceId: string, forceCancel = true): Promise<InvoiceInterface> {
     return this.createInvoiceClient().cancel(invoiceId, forceCancel);
   }
 
@@ -331,10 +288,7 @@ export class Client {
    * @param forceCancel If 'true' it will cancel the invoice even if no contact information is present.
    * @return Invoice Invoice
    */
-  public async cancelInvoiceByGuid(
-    guid: string,
-    forceCancel: boolean = true,
-  ): Promise<InvoiceInterface> {
+  public async cancelInvoiceByGuid(guid: string, forceCancel = true): Promise<InvoiceInterface> {
     return this.createInvoiceClient().cancelByGuid(guid, forceCancel);
   }
 
@@ -344,12 +298,8 @@ export class Client {
    * @param invoiceId The id of the invoice for which you want the last webhook to be resent.
    * @return Boolean status of request
    */
-  public async requestInvoiceWebhookToBeResent(
-    invoiceId: string,
-  ): Promise<Boolean> {
-    return this.createInvoiceClient().requestInvoiceWebhookToBeResent(
-      invoiceId,
-    );
+  public async requestInvoiceWebhookToBeResent(invoiceId: string): Promise<boolean> {
+    return this.createInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId);
   }
 
   /**
@@ -405,10 +355,7 @@ export class Client {
    * @param status   The new status for the refund to be updated.
    * @return A BitPay generated Refund object.
    */
-  public async updateRefund(
-    refundId: string,
-    status: string,
-  ): Promise<RefundInterface> {
+  public async updateRefund(refundId: string, status: string): Promise<RefundInterface> {
     return this.createRefundClient().update(refundId, status);
   }
 
@@ -419,10 +366,7 @@ export class Client {
    * @param status   The new status for the refund to be updated.
    * @return A BitPay generated Refund object.
    */
-  public async updateRefundByGuid(
-    guid: string,
-    status: string,
-  ): Promise<RefundInterface> {
+  public async updateRefundByGuid(guid: string, status: string): Promise<RefundInterface> {
     return this.createRefundClient().updateByGuid(guid, status);
   }
 
@@ -432,7 +376,7 @@ export class Client {
    * @param refundId A BitPay refund ID.
    * @return An updated Refund Object
    */
-  public async sendRefundNotification(refundId: string): Promise<Boolean> {
+  public async sendRefundNotification(refundId: string): Promise<boolean> {
     return this.createRefundClient().sendRefundNotification(refundId);
   }
 
@@ -462,9 +406,7 @@ export class Client {
    * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
    * @return array A list of BitPay PayoutRecipients objects.
    */
-  public async submitPayoutRecipients(
-    recipients: PayoutRecipients,
-  ): Promise<PayoutRecipientInterface[]> {
+  public async submitPayoutRecipients(recipients: PayoutRecipients): Promise<PayoutRecipientInterface[]> {
     return this.createPayoutRecipientClient().submit(recipients);
   }
 
@@ -477,9 +419,7 @@ export class Client {
    * offset int Offset for paging.
    * @return array A list of BitPayRecipient objects.
    */
-  public async getPayoutRecipients(
-    params = {},
-  ): Promise<PayoutRecipientInterface[]> {
+  public async getPayoutRecipients(params = {}): Promise<PayoutRecipientInterface[]> {
     return this.createPayoutRecipientClient().getByFilters(params);
   }
 
@@ -490,9 +430,7 @@ export class Client {
    * @param recipientId String The id of the recipient to retrieve.
    * @return PayoutRecipient A BitPay PayoutRecipient object.
    */
-  public async getPayoutRecipient(
-    recipientId: string,
-  ): Promise<PayoutRecipientInterface> {
+  public async getPayoutRecipient(recipientId: string): Promise<PayoutRecipientInterface> {
     return this.createPayoutRecipientClient().get(recipientId);
   }
 
@@ -506,7 +444,7 @@ export class Client {
    */
   public async updatePayoutRecipient(
     recipientId: string,
-    recipient: PayoutRecipientInterface,
+    recipient: PayoutRecipientInterface
   ): Promise<PayoutRecipientInterface> {
     return this.createPayoutRecipientClient().update(recipientId, recipient);
   }
@@ -517,7 +455,7 @@ export class Client {
    * @param recipientId String The id of the recipient to cancel.
    * @return Boolean True if the delete operation was successful, false otherwise.
    */
-  public async deletePayoutRecipient(recipientId: string): Promise<Boolean> {
+  public async deletePayoutRecipient(recipientId: string): Promise<boolean> {
     return this.createPayoutRecipientClient().delete(recipientId);
   }
 
@@ -527,9 +465,7 @@ export class Client {
    * @param recipientId String A BitPay recipient ID.
    * @return Boolean True if the notification was successfully sent, false otherwise.
    */
-  public async requestPayoutRecipientNotification(
-    recipientId: string,
-  ): Promise<Boolean> {
+  public async requestPayoutRecipientNotification(recipientId: string): Promise<boolean> {
     return this.createPayoutRecipientClient().requestNotification(recipientId);
   }
 
@@ -578,7 +514,7 @@ export class Client {
    * @param payoutId String The id of the payout to notify..
    * @return Boolean True if the notification was successfully sent, false otherwise.
    */
-  public async requestPayoutNotification(payoutId: string): Promise<Boolean> {
+  public async requestPayoutNotification(payoutId: string): Promise<boolean> {
     return this.createPayoutClient().requestNotification(payoutId);
   }
 
@@ -588,7 +524,7 @@ export class Client {
    * @param payoutId String The id of the payout to cancel.
    * @return Boolean True if the refund was successfully canceled, false otherwise.
    */
-  public async cancelPayout(payoutId: string): Promise<Boolean> {
+  public async cancelPayout(payoutId: string): Promise<boolean> {
     return this.createPayoutClient().cancel(payoutId);
   }
 
@@ -612,11 +548,11 @@ export class Client {
   public async getLedgerEntries(
     currency: string,
     dateStart: Date | null,
-    dateEnd: Date | null,
+    dateEnd: Date | null
   ): Promise<LedgerEntryInterface[]> {
     const params = ParamsRemover.removeNullValuesFromObject({
       startDate: Client.getDateAsString(dateStart),
-      endDate: Client.getDateAsString(dateEnd),
+      endDate: Client.getDateAsString(dateEnd)
     });
 
     return this.createLedgerClient().getEntries(currency, params);
@@ -630,11 +566,7 @@ export class Client {
    * @param signRequest Signed request.
    * @return BillInterface A BitPay generated Bill object.
    */
-  public async createBill(
-    bill: BillInterface,
-    facade?: Facade,
-    signRequest?: boolean,
-  ): Promise<BillInterface> {
+  public async createBill(bill: BillInterface, facade?: Facade, signRequest?: boolean): Promise<BillInterface> {
     if (facade === undefined) {
       facade = this.getFacadeBasedOnTokenContainer();
     }
@@ -654,11 +586,7 @@ export class Client {
    * @param signRequest Signed request.
    * @return BillInterface A BitPay Bill object.
    */
-  public async getBill(
-    billId: string,
-    facade?: Facade,
-    signRequest?: boolean,
-  ): Promise<BillInterface> {
+  public async getBill(billId: string, facade?: Facade, signRequest?: boolean): Promise<BillInterface> {
     if (facade === undefined) {
       facade = this.getFacadeBasedOnTokenContainer();
     }
@@ -687,10 +615,7 @@ export class Client {
    * @param billId The Id of the Bill to udpate.
    * @return BillInterface An updated Bill object.
    */
-  public async updateBill(
-    bill: BillInterface,
-    billId: string,
-  ): Promise<BillInterface> {
+  public async updateBill(bill: BillInterface, billId: string): Promise<BillInterface> {
     return this.createBillClient().update(bill, billId);
   }
 
@@ -701,10 +626,7 @@ export class Client {
    * @param billToken The token of the requested bill.
    * @return Boolean A response status returned from the API.
    */
-  public async deliverBill(
-    billId: string,
-    billToken: string,
-  ): Promise<Boolean> {
+  public async deliverBill(billId: string, billToken: string): Promise<boolean> {
     const facade = this.getFacadeBasedOnTokenContainer();
     const signRequest = Client.isSignRequest(facade);
 
@@ -726,9 +648,7 @@ export class Client {
    * @param settlementId Settlement Id.
    * @return SettlementInterface A BitPay Settlement object.
    */
-  public async getSettlement(
-    settlementId: string,
-  ): Promise<SettlementInterface> {
+  public async getSettlement(settlementId: string): Promise<SettlementInterface> {
     return this.createSettlementClient().get(settlementId);
   }
 
@@ -757,14 +677,8 @@ export class Client {
    * @param token Settlement token.
    * @return SettlementInterface A detailed BitPay Settlement object.
    */
-  public async getSettlementReconciliationReport(
-    settlementId: string,
-    token: string,
-  ): Promise<SettlementInterface> {
-    return this.createSettlementClient().getReconciliationReport(
-      settlementId,
-      token,
-    );
+  public async getSettlementReconciliationReport(settlementId: string, token: string): Promise<SettlementInterface> {
+    return this.createSettlementClient().getReconciliationReport(settlementId, token);
   }
 
   /**
@@ -773,9 +687,7 @@ export class Client {
    * @param currencyCode String Currency code for which the info will be retrieved.
    * @return CurrencyInterface Currency info.
    */
-  public async getCurrencyInfo(
-    currencyCode: string,
-  ): Promise<CurrencyInterface> {
+  public async getCurrencyInfo(currencyCode: string): Promise<CurrencyInterface> {
     return this.getCurrencyClient().getCurrencyInfo(currencyCode);
   }
 
@@ -785,31 +697,19 @@ export class Client {
       return this.keyUtils.load_keypair(fs.readFileSync(value).toString());
     }
 
-    return this.keyUtils.load_keypair(
-      Buffer.from(value)
-        .toString()
-        .trim(),
-    );
+    return this.keyUtils.load_keypair(Buffer.from(value).toString().trim());
   }
 
-  private getEcKeyByConfig(envConfig: Object) {
-    const privateKeyPath = envConfig['PrivateKeyPath']
-      .toString()
-      .replace('"', '');
+  private getEcKeyByConfig(envConfig: object) {
+    const privateKeyPath = envConfig['PrivateKeyPath'].toString().replace('"', '');
     const keyHex = envConfig['PrivateKey'].toString().replace('"', '');
 
     if (fs.existsSync(privateKeyPath)) {
-      return this.keyUtils.load_keypair(
-        fs.readFileSync(privateKeyPath).toString(),
-      );
+      return this.keyUtils.load_keypair(fs.readFileSync(privateKeyPath).toString());
     }
 
     if (keyHex) {
-      return this.keyUtils.load_keypair(
-        Buffer.from(keyHex)
-          .toString()
-          .trim(),
-      );
+      return this.keyUtils.load_keypair(Buffer.from(keyHex).toString().trim());
     }
 
     throw new BitPayException(null, 'Missing ECKey');
@@ -832,35 +732,19 @@ export class Client {
   }
 
   private createInvoiceClient() {
-    return new InvoiceClient(
-      this.bitPayClient,
-      this.tokenContainer,
-      this.guidGenerator,
-    );
+    return new InvoiceClient(this.bitPayClient, this.tokenContainer, this.guidGenerator);
   }
 
   private createRefundClient() {
-    return new RefundClient(
-      this.bitPayClient,
-      this.tokenContainer,
-      this.guidGenerator,
-    );
+    return new RefundClient(this.bitPayClient, this.tokenContainer, this.guidGenerator);
   }
 
   private createPayoutRecipientClient() {
-    return new PayoutRecipientClient(
-      this.bitPayClient,
-      this.tokenContainer,
-      this.guidGenerator,
-    );
+    return new PayoutRecipientClient(this.bitPayClient, this.tokenContainer, this.guidGenerator);
   }
 
   private createPayoutClient() {
-    return new PayoutClient(
-      this.bitPayClient,
-      this.tokenContainer,
-      this.guidGenerator,
-    );
+    return new PayoutClient(this.bitPayClient, this.tokenContainer, this.guidGenerator);
   }
 
   private createLedgerClient() {
@@ -887,9 +771,7 @@ export class Client {
     return Facade.Pos;
   }
 
-  private static isSignRequest(
-    facade: Facade.Merchant | Facade.Payout | Facade.Pos,
-  ): boolean {
+  private static isSignRequest(facade: Facade.Merchant | Facade.Payout | Facade.Pos): boolean {
     return facade !== Facade.Pos;
   }
 
@@ -903,35 +785,20 @@ export class Client {
     }
 
     try {
-      const configObj = JSON.parse(fs.readFileSync(configFilePath))[
-        'BitPayConfiguration'
-      ];
+      const configObj = JSON.parse(fs.readFileSync(configFilePath, 'utf-8'))['BitPayConfiguration'];
       const environment = configObj['Environment'];
       const envConfig = configObj['EnvConfig'][environment];
       const tokens = envConfig['ApiTokens'];
       this.tokenContainer = new TokenContainer(tokens);
       const ecKey = this.getEcKeyByConfig(envConfig);
-      this.bitPayClient = new BitPayClient(
-        Client.getBaseUrl(environment),
-        ecKey,
-        this.getIdentity(ecKey),
-      );
+      this.bitPayClient = new BitPayClient(Client.getBaseUrl(environment), ecKey, this.getIdentity(ecKey));
       this.guidGenerator = new GuidGenerator();
     } catch (e) {
-      throw new Exceptions.Generic(
-        null,
-        'Error when reading configuration file',
-        null,
-        e.apiCode,
-      );
+      throw new Exceptions.Generic(null, 'Error when reading configuration file', null, e.apiCode);
     }
   }
 
-  private initForTests(
-    bitPayClient: BitPayClient,
-    guidGenerator: GuidGenerator,
-    tokenContainer: TokenContainer,
-  ) {
+  private initForTests(bitPayClient: BitPayClient, guidGenerator: GuidGenerator, tokenContainer: TokenContainer) {
     this.bitPayClient = bitPayClient;
     this.guidGenerator = guidGenerator;
     this.tokenContainer = tokenContainer;

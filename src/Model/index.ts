@@ -19,19 +19,10 @@ import { Bill, BillInterface } from './Bill/Bill';
 import { Item as BillItem } from './Bill/Item';
 import { LedgerInterface } from './Ledger/Ledger';
 import { LedgerEntryInterface } from './Ledger/LedgerEntry';
-import {
-  PayoutRecipient,
-  PayoutRecipientInterface,
-} from './Payout/PayoutRecipient';
-import {
-  PayoutRecipients,
-  PayoutRecipientsInterface,
-} from './Payout/PayoutRecipients';
+import { PayoutRecipient, PayoutRecipientInterface } from './Payout/PayoutRecipient';
+import { PayoutRecipients, PayoutRecipientsInterface } from './Payout/PayoutRecipients';
 import { Payout, PayoutInterface } from './Payout/Payout';
-import {
-  PayoutInstruction,
-  PayoutInstructionInterface,
-} from './Payout/PayoutInstruction';
+import { PayoutInstruction, PayoutInstructionInterface } from './Payout/PayoutInstruction';
 import { BillData } from './Subscription/BillData';
 import { Item as SubscriptionItem } from './Subscription/Item';
 
@@ -54,5 +45,5 @@ export {
   PayoutInstruction,
   PayoutInstructionInterface,
   BillData,
-  SubscriptionItem,
+  SubscriptionItem
 };

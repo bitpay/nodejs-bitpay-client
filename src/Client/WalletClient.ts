@@ -11,16 +11,12 @@ export class WalletClient {
 
   public async getSupportedWallets(): Promise<WalletInterface[]> {
     try {
-      const result = await this.bitPayClient.get(
-        'supportedwallets',
-        null,
-        false,
-      );
+      const result = await this.bitPayClient.get('supportedwallets', null, false);
       return <WalletInterface[]>JSON.parse(result);
     } catch (e) {
       throw new Exceptions.WalletQuery(
         'failed to deserialize BitPay server response (Wallet) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }

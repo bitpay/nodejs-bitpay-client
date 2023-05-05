@@ -20,7 +20,7 @@ export interface InvoiceInterface {
   // Optional fields
 
   price: number | null;
-  posData: any | null;
+  posData: string | null;
   notificationURL: string | null;
   transactionSpeed: string | null;
   fullNotifications: boolean | null;
@@ -53,7 +53,7 @@ export interface InvoiceInterface {
   exceptionStatus: string | null;
   targetConfirmations: number | null;
   transactions: InvoiceTransaction | null;
-  refundAddresses: any | null;
+  refundAddresses: unknown | null;
   refundAddressRequestPending: boolean | null;
   buyerProvidedEmail: string | null;
   buyerProvidedInfo: InvoiceBuyerProvidedInfo | null;
@@ -129,7 +129,7 @@ export class Invoice implements InvoiceInterface {
   exceptionStatus: string | null;
   targetConfirmations: number | null;
   transactions: InvoiceTransaction | null;
-  refundAddresses: any | null;
+  refundAddresses: unknown | null;
   refundAddressRequestPending: boolean | null;
   buyerProvidedEmail: string | null;
   buyerProvidedInfo: InvoiceBuyerProvidedInfo | null;
@@ -170,11 +170,7 @@ export class Invoice implements InvoiceInterface {
 
   setCurrency(_currency: string) {
     if (!Currency.isValid(_currency))
-      throw new BitPayException(
-        null,
-        'Error: currency code must be a type of Model.Currency',
-        null,
-      );
+      throw new BitPayException(null, 'Error: currency code must be a type of Model.Currency', null);
 
     this.currency = _currency;
   }

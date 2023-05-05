@@ -57,12 +57,7 @@ export class Bill implements BillInterface {
    * @param email    The email address of the receiver for this bill.
    * @param items    The list of itens to add to this bill.
    */
-  public constructor(
-    number: string,
-    currency: string,
-    email: string,
-    items: Item[],
-  ) {
+  public constructor(number: string, currency: string, email: string, items: Item[]) {
     this.number = number;
     this.setCurrency(currency);
     this.email = email;
@@ -71,11 +66,7 @@ export class Bill implements BillInterface {
 
   setCurrency(_currency: string) {
     if (!Currency.isValid(_currency))
-      throw new BitPayException(
-        null,
-        'Error: currency code must be a type of Model.Currency',
-        null,
-      );
+      throw new BitPayException(null, 'Error: currency code must be a type of Model.Currency', null);
 
     this.currency = _currency;
   }

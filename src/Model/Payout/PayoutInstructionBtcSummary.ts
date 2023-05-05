@@ -3,8 +3,7 @@ export interface PayoutInstructionBtcSummaryInterface {
   unpaid: number | null;
 }
 
-export class PayoutInstructionBtcSummary
-  implements PayoutInstructionBtcSummaryInterface {
+export class PayoutInstructionBtcSummary implements PayoutInstructionBtcSummaryInterface {
   paid: number | null;
   unpaid: number | null;
 

@@ -50,9 +50,7 @@ export class PayoutInstruction implements PayoutInstructionInterface {
         this.shopperId = methodValue;
         break;
       default:
-        throw new PayoutCreationException(
-          'method code must be a type of RecipientReferenceMethod',
-        );
+        throw new PayoutCreationException('method code must be a type of RecipientReferenceMethod');
     }
   }
 }

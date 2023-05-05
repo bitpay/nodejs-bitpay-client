@@ -11,11 +11,7 @@ export class PayoutClient {
   private tokenContainer: TokenContainer;
   private guidGenerator: GuidGenerator;
 
-  constructor(
-    bitPayClient: BitPayClient,
-    tokenContainer: TokenContainer,
-    guidGenerator: GuidGenerator,
-  ) {
+  constructor(bitPayClient: BitPayClient, tokenContainer: TokenContainer, guidGenerator: GuidGenerator) {
     this.bitPayClient = bitPayClient;
     this.tokenContainer = tokenContainer;
     this.guidGenerator = guidGenerator;
@@ -30,7 +26,7 @@ export class PayoutClient {
     } catch (e) {
       throw new Exceptions.PayoutCreation(
         'failed to deserialize BitPay server response (Payout) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
@@ -39,21 +35,17 @@ export class PayoutClient {
     const params = { token: this.tokenContainer.getToken(Facade.Payout) };
 
     try {
-      const result = await this.bitPayClient.get(
-        'payouts/' + payoutId,
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.get('payouts/' + payoutId, params, true);
       return <PayoutInterface>JSON.parse(result);
     } catch (e) {
       throw new Exceptions.PayoutQuery(
         'failed to deserialize BitPay server response (Payout) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
 
-  public async getPayouts(params: {}): Promise<PayoutInterface[]> {
+  public async getPayouts(params: object): Promise<PayoutInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Payout);
 
     try {
@@ -62,43 +54,35 @@ export class PayoutClient {
     } catch (e) {
       throw new Exceptions.PayoutQuery(
         'failed to deserialize BitPay server response (Payout) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
 
-  public requestNotification = async (payoutId: string): Promise<Boolean> => {
+  public requestNotification = async (payoutId: string): Promise<boolean> => {
     const params = { token: this.tokenContainer.getToken(Facade.Payout) };
 
     try {
-      const result = await this.bitPayClient.post(
-        'payouts/' + payoutId + '/notifications',
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.post('payouts/' + payoutId + '/notifications', params, true);
       return BitPayResponseParser.jsonToBoolean(result);
     } catch (e) {
       throw new Exceptions.PayoutNotification(
         'failed to deserialize BitPay server response (Payout) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   };
 
-  public cancel = async (payoutId: string): Promise<Boolean> => {
+  public cancel = async (payoutId: string): Promise<boolean> => {
     const params = { token: this.tokenContainer.getToken(Facade.Payout) };
 
     try {
-      const result = await this.bitPayClient.delete(
-        'payouts/' + payoutId,
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.delete('payouts/' + payoutId, params, true);
       return BitPayResponseParser.jsonToBoolean(result);
     } catch (e) {
       throw new Exceptions.PayoutDelete(
         'failed to deserialize BitPay server response (Payout) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   };
