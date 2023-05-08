@@ -1,4 +1,3 @@
-import { Client } from '../../Client';
 import RateQueryException from '../../Exceptions/RateQueryException';
 import { RateClient } from '../../Client/RateClient';
 
@@ -21,9 +20,9 @@ class Rates {
     return this.rates;
   }
 
-  public getRate(currencyCode: string): Number {
+  public getRate(currencyCode: string): number {
     let val = 0;
-    this.rates.forEach(function(rate) {
+    this.rates.forEach(function (rate) {
       if (rate.code === currencyCode) {
         val = rate.rate;
         return val;
@@ -35,7 +34,7 @@ class Rates {
 
   public async update(rateClient: RateClient) {
     try {
-      let rates = await rateClient.getRates();
+      const rates = await rateClient.getRates();
       this.rates = rates.getRates();
     } catch (e) {
       throw new RateQueryException(e);

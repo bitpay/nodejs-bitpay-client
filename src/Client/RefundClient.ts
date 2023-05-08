@@ -11,25 +11,21 @@ export class RefundClient {
   private tokenContainer: TokenContainer;
   private guidGenerator: GuidGenerator;
 
-  constructor(
-    bitPayClient: BitPayClient,
-    tokenContainer: TokenContainer,
-    guidGenerator: GuidGenerator,
-  ) {
+  constructor(bitPayClient: BitPayClient, tokenContainer: TokenContainer, guidGenerator: GuidGenerator) {
     this.bitPayClient = bitPayClient;
     this.tokenContainer = tokenContainer;
     this.guidGenerator = guidGenerator;
   }
 
   public async create(refund: RefundInterface): Promise<RefundInterface> {
-    let params = {
+    const params = {
       token: this.tokenContainer.getToken(Facade.Merchant),
       invoiceId: refund.invoice,
       amount: refund.amount,
       currency: refund.currency,
       preview: refund.preview,
       immediate: refund.immediate,
-      buyerPaysRefundFee: refund.buyerPaysRefundFee,
+      buyerPaysRefundFee: refund.buyerPaysRefundFee
     };
     params['guid'] = refund.guid ? refund.guid : this.guidGenerator.execute();
 
@@ -41,7 +37,7 @@ export class RefundClient {
     } catch (e) {
       throw new Exceptions.RefundCreation(
         'failed to deserialize BitPay server response (Refund) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
@@ -50,16 +46,12 @@ export class RefundClient {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
 
     try {
-      const result = await this.bitPayClient.get(
-        'refunds/' + refundId,
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.get('refunds/' + refundId, params, true);
       return <RefundInterface>JSON.parse(result);
     } catch (e) {
       throw new Exceptions.RefundQuery(
         'failed to deserialize BitPay server response (Refund) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
@@ -68,16 +60,12 @@ export class RefundClient {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
 
     try {
-      const result = await this.bitPayClient.get(
-        'refunds/guid/' + guid,
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.get('refunds/guid/' + guid, params, true);
       return <RefundInterface>JSON.parse(result);
     } catch (e) {
       throw new Exceptions.RefundQuery(
         'failed to deserialize BitPay server response (Refund) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
@@ -85,7 +73,7 @@ export class RefundClient {
   public async getRefunds(invoiceId: string): Promise<RefundInterface[]> {
     const params = {
       token: this.tokenContainer.getToken(Facade.Merchant),
-      invoiceId: invoiceId,
+      invoiceId: invoiceId
     };
 
     try {
@@ -94,73 +82,55 @@ export class RefundClient {
     } catch (e) {
       throw new Exceptions.RefundQuery(
         'failed to deserialize BitPay server response (Refund) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
 
-  public async sendRefundNotification(refundId: string): Promise<Boolean> {
+  public async sendRefundNotification(refundId: string): Promise<boolean> {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
 
     try {
-      const result = await this.bitPayClient.post(
-        'refunds/' + refundId + '/notifications',
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.post('refunds/' + refundId + '/notifications', params, true);
       return BitPayResponseParser.jsonToBoolean(result);
     } catch (e) {
       throw new Exceptions.RefundGeneric(
         'failed to deserialize BitPay server response (Refund) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
 
-  public async update(
-    refundId: string,
-    status: string,
-  ): Promise<RefundInterface> {
+  public async update(refundId: string, status: string): Promise<RefundInterface> {
     const params = {
       token: this.tokenContainer.getToken(Facade.Merchant),
-      status: status,
+      status: status
     };
 
     try {
-      const result = await this.bitPayClient.put(
-        'refunds/' + refundId,
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.put('refunds/' + refundId, params, true);
       return <RefundInterface>JSON.parse(result);
     } catch (e) {
       throw new Exceptions.RefundGeneric(
         'failed to deserialize BitPay server response (Refund) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
 
-  public async updateByGuid(
-    guid: string,
-    status: string,
-  ): Promise<RefundInterface> {
+  public async updateByGuid(guid: string, status: string): Promise<RefundInterface> {
     const params = {
       token: this.tokenContainer.getToken(Facade.Merchant),
-      status: status,
+      status: status
     };
 
     try {
-      const result = await this.bitPayClient.put(
-        'refunds/guid/' + guid,
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.put('refunds/guid/' + guid, params, true);
       return <RefundInterface>JSON.parse(result);
     } catch (e) {
       throw new Exceptions.RefundGeneric(
         'failed to deserialize BitPay server response (Refund) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
@@ -169,16 +139,12 @@ export class RefundClient {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
 
     try {
-      const result = await this.bitPayClient.delete(
-        'refunds/' + refundId,
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.delete('refunds/' + refundId, params, true);
       return <RefundInterface>JSON.parse(result);
     } catch (e) {
       throw new Exceptions.RefundCancellation(
         'failed to deserialize BitPay server response (Refund) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
@@ -187,16 +153,12 @@ export class RefundClient {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
 
     try {
-      const result = await this.bitPayClient.delete(
-        'refunds/guid/' + guid,
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.delete('refunds/guid/' + guid, params, true);
       return <RefundInterface>JSON.parse(result);
     } catch (e) {
       throw new Exceptions.RefundCancellation(
         'failed to deserialize BitPay server response (Refund) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }

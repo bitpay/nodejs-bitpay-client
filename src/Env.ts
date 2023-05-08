@@ -1,11 +1,11 @@
-export const Test: string = 'TEST';
-export const Prod: string = 'PROD';
-export const TestUrl: string = 'https://test.bitpay.com/';
-export const ProdUrl: string = 'https://bitpay.com/';
-export const BitpayApiVersion: string = '2.0.0';
-export const BitpayPluginInfo: string = 'BitPay_NodeJs_Client_v4.0.0';
-export const BitpayApiFrame: string = 'std';
-export const BitpayApiFrameVersion: string = '1.0.0';
+export const Test = 'TEST';
+export const Prod = 'PROD';
+export const TestUrl = 'https://test.bitpay.com/';
+export const ProdUrl = 'https://bitpay.com/';
+export const BitpayApiVersion = '2.0.0';
+export const BitpayPluginInfo = 'BitPay_NodeJs_Client_v4.0.0';
+export const BitpayApiFrame = 'std';
+export const BitpayApiFrameVersion = '1.0.0';
 
 module.exports = {
   Test: Test,
@@ -15,5 +15,5 @@ module.exports = {
   BitpayApiVersion: BitpayApiVersion,
   BitpayPluginInfo: BitpayPluginInfo,
   BitpayApiFrame: BitpayApiFrame,
-  BitpayApiFrameVersion: BitpayApiFrameVersion,
+  BitpayApiFrameVersion: BitpayApiFrameVersion
 };

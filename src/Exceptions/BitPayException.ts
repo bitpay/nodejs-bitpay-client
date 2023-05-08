@@ -13,16 +13,11 @@ export class BitPayException implements Error {
    * @param code    number [optional] The Exception code to throw.
    * @param apiCode string [optional] The API Exception code to throw.
    */
-  public constructor(
-    name: string = null,
-    message: string = null,
-    code: number = null,
-    apiCode: string = '000000',
-  ) {
-    this.message = Boolean(message) ? message : this.message;
-    this.name = Boolean(name) ? name : this.name;
-    this.code = Boolean(code) ? code : this.code;
-    this.apiCode = Boolean(apiCode) ? apiCode : this.apiCode;
+  public constructor(name: string = null, message: string = null, code: number = null, apiCode = '000000') {
+    this.message = message ? message : this.message;
+    this.name = name ? name : this.name;
+    this.code = code ? code : this.code;
+    this.apiCode = apiCode ? apiCode : this.apiCode;
   }
 }
 

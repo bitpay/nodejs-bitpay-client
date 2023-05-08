@@ -1,4 +1,4 @@
-import { InvoiceInterface, RateInterface, Rates } from '../Model';
+import { RateInterface, Rates } from '../Model';
 import { BitPayClient } from './BitPayClient';
 import { BitPayExceptions as Exceptions } from '../index';
 
@@ -9,13 +9,8 @@ export class RateClient {
     this.bitPayClient = bitPayClient;
   }
 
-  public async getRate(
-    baseCurrency: string,
-    currency: string,
-  ): Promise<RateInterface> {
-    let uri = currency
-      ? 'rates/' + baseCurrency + '/' + currency
-      : '/' + baseCurrency;
+  public async getRate(baseCurrency: string, currency: string): Promise<RateInterface> {
+    const uri = currency ? 'rates/' + baseCurrency + '/' + currency : '/' + baseCurrency;
     try {
       const result = await this.bitPayClient.get(uri, null, false);
       return <RateInterface>JSON.parse(result);

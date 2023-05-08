@@ -180,7 +180,7 @@ export class Currency {
 
   static isValid(value) {
     try {
-      return this.hasOwnProperty(value);
+      return this.hasOwnProperty.call(this, value);
     } catch (ex) {
       return false;
     }

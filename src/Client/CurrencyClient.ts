@@ -8,23 +8,19 @@ export class CurrencyClient {
     this.bitPayClient = bitPayClient;
   }
 
-  public async getCurrencyInfo(
-    currencyCode: string,
-  ): Promise<CurrencyInterface> {
+  public async getCurrencyInfo(currencyCode: string): Promise<CurrencyInterface> {
     let currencyInfo = null;
 
-    let loop = await this.bitPayClient
-      .get('currencies', null, false)
-      .then(ratesData => {
-        let data = <[]>JSON.parse(ratesData);
-        data.some(element => {
+    await this.bitPayClient.get('currencies', null, false).then((ratesData) => {
+      const data = <[]>JSON.parse(ratesData);
+      data.some((element) => {
+        currencyInfo = element;
+        if (element['code'] == currencyCode) {
           currencyInfo = element;
-          if (element['code'] == currencyCode) {
-            currencyInfo = element;
-            return true;
-          }
-        });
+          return true;
+        }
       });
+    });
     return currencyInfo;
   }
 }

@@ -39,12 +39,7 @@ export class BillData implements BillDataInterface {
   items: Item[] | [];
   merchant: string | null;
 
-  public constructor(
-    currency: string,
-    email: string,
-    dueDate: string,
-    items: any[],
-  ) {
+  public constructor(currency: string, email: string, dueDate: string, items: Item[]) {
     this.currency = currency;
     this.email = email;
     this.dueDate = dueDate;

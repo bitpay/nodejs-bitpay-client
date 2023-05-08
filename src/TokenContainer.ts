@@ -1,14 +1,13 @@
-import { Config } from './Config';
 import BitPayException from './Exceptions/BitPayException';
 import { Facade } from './Facade';
 
 export class TokenContainer {
   private readonly data: Map<string, string>;
 
-  constructor(tokens?: Object) {
+  constructor(tokens?: object) {
     this.data = new Map<string, string>();
     if (tokens !== undefined) {
-      (Object.keys(tokens) as (keyof typeof tokens)[]).forEach((key, index) => {
+      (Object.keys(tokens) as (keyof typeof tokens)[]).forEach((key) => {
         this.add(key, String(tokens[key]));
       });
     }
@@ -16,10 +15,7 @@ export class TokenContainer {
 
   public getToken(key: string): string {
     if (!this.data.has(key)) {
-      throw new BitPayException(
-        null,
-        'There is no token for the specified key : ' + key,
-      );
+      throw new BitPayException(null, 'There is no token for the specified key : ' + key);
     }
 
     return this.data.get(key);

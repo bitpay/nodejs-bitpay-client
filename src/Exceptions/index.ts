@@ -90,5 +90,5 @@ export {
   SubscriptionCreation,
   SubscriptionQuery,
   SubscriptionUpdate,
-  WalletQuery,
+  WalletQuery
 };

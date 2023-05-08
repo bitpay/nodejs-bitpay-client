@@ -28,28 +28,21 @@ export class LedgerClient {
     } catch (e) {
       throw new Exceptions.LedgerQuery(
         'failed to deserialize BitPay server response (Ledger) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
 
-  public async getEntries(
-    currency: string,
-    params: Object,
-  ): Promise<LedgerEntryInterface[]> {
+  public async getEntries(currency: string, params: object): Promise<LedgerEntryInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
     try {
-      const result = await this.bitPayClient.get(
-        'ledgers/' + currency,
-        params,
-        true,
-      );
+      const result = await this.bitPayClient.get('ledgers/' + currency, params, true);
       return <LedgerEntryInterface[]>JSON.parse(result);
     } catch (e) {
       throw new Exceptions.LedgerQuery(
         'failed to deserialize BitPay server response (Ledger) : ' + e.message,
-        e.apiCode,
+        e.apiCode
       );
     }
   }
