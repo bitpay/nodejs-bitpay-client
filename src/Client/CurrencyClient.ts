@@ -8,6 +8,12 @@ export class CurrencyClient {
     this.bitPayClient = bitPayClient;
   }
 
+  /**
+   * Retrieve the Currency Info
+   *
+   * @param currencyCode
+   * @returns Currency
+   */
   public async getCurrencyInfo(currencyCode: string): Promise<CurrencyInterface> {
     let currencyInfo = null;
 

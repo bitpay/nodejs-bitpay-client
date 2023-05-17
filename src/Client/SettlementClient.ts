@@ -12,6 +12,13 @@ export class SettlementClient {
     this.tokenContainer = tokenContainer;
   }
 
+  /**
+   * Retrieves a summary of the specified settlement.
+   *
+   * @param settlementId Settlement Id
+   * @returns Settlement
+   * @throws SettlementQueryException
+   */
   public async get(settlementId: string): Promise<SettlementInterface> {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
 
@@ -26,6 +33,13 @@ export class SettlementClient {
     }
   }
 
+  /**
+   * Retrieves settlement reports for the calling merchant filtered by query.
+   *
+   * @param params
+   * @returns Settlement[]
+   * @throws SettlementQueryException
+   */
   public async getSettlements(params: object): Promise<SettlementInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
@@ -40,6 +54,14 @@ export class SettlementClient {
     }
   }
 
+  /**
+   * Gets a detailed reconciliation report of the activity within the settlement period.
+   *
+   * @param settlementId
+   * @param token
+   * @returns Settlement
+   * @throws SettlementQueryException
+   */
   public async getReconciliationReport(settlementId: string, token: string): Promise<SettlementInterface> {
     const params = { token: token };
 

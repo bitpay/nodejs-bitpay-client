@@ -13,6 +13,11 @@ export class TokenContainer {
     }
   }
 
+  /**
+   *
+   * @param key
+   * @returns string
+   */
   public getToken(key: string): string {
     if (!this.data.has(key)) {
       throw new BitPayException(null, 'There is no token for the specified key : ' + key);
@@ -21,22 +26,44 @@ export class TokenContainer {
     return this.data.get(key);
   }
 
+  /**
+   *
+   * @param token
+   */
   public addPos(token: string): void {
     this.data.set(Facade.Pos, token);
   }
 
+  /**
+   *
+   * @param token
+   */
   public addMerchant(token: string): void {
     this.data.set(Facade.Merchant, token);
   }
 
+  /**
+   *
+   * @param token
+   */
   public addPayout(token: string): void {
     this.data.set(Facade.Payout, token);
   }
 
+  /**
+   *
+   * @param facade
+   * @returns
+   */
   public isTokenExist(facade: Facade): boolean {
     return this.data.has(facade);
   }
 
+  /**
+   *
+   * @param facade
+   * @param token
+   */
   private add(facade: string, token: string): void {
     this.data.set(facade, token);
   }

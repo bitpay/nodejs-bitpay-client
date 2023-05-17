@@ -30,6 +30,13 @@ export class BitPayClient {
     this.responseParser = new BitPayResponseParser();
   }
 
+  /**
+   *
+   * @param uri
+   * @param parameters
+   * @param signatureRequired
+   * @returns
+   */
   public async get(uri: string, parameters: any, signatureRequired = false): Promise<any> {
     try {
       let fullUrl = this.baseUrl + uri;
@@ -63,6 +70,13 @@ export class BitPayClient {
     }
   }
 
+  /**
+   *
+   * @param uri
+   * @param formData
+   * @param signatureRequired
+   * @returns
+   */
   public async post(uri: string, formData: any = {}, signatureRequired = true): Promise<any> {
     try {
       formData = JSON.stringify(formData);
@@ -91,6 +105,13 @@ export class BitPayClient {
     }
   }
 
+  /**
+   *
+   * @param uri
+   * @param formData
+   * @param signatureRequired
+   * @returns
+   */
   public async put(uri: string, formData: any = {}, signatureRequired = true): Promise<any> {
     try {
       formData = JSON.stringify(formData);
@@ -120,6 +141,13 @@ export class BitPayClient {
     }
   }
 
+  /**
+   *
+   * @param uri
+   * @param parameters
+   * @param signatureRequired
+   * @returns
+   */
   public async delete(uri: string, parameters: any = {}, signatureRequired = true): Promise<any> {
     try {
       const query = '?' + qs.stringify(parameters);
@@ -147,6 +175,13 @@ export class BitPayClient {
     }
   }
 
+  /**
+   *
+   * @param fullUrl
+   * @param headers
+   * @param jsonData
+   * @returns
+   */
   private getSignatureHeaders(fullUrl: string, headers: object, jsonData: string) {
     if (jsonData !== null) {
       fullUrl = fullUrl + jsonData;
