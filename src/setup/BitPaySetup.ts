@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
 
-import fs from 'fs';
+import * as fs from 'fs';
 import * as BitPaySDK from '../index';
-import readline from 'readline';
+import * as readline from 'readline';
 
 const privateKeyPath = __dirname + '/../secure/private_key';
 const ConfFilePath = __dirname + '/../secure/BitPay.config.json';
