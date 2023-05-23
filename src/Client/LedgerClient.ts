@@ -33,6 +33,14 @@ export class LedgerClient {
     }
   }
 
+  /**
+   * Retrieve a list of ledgers by params
+   *
+   * @param currency
+   * @param params
+   * @returns ledgers
+   * @throws LedgerQueryException
+   */
   public async getEntries(currency: string, params: object): Promise<LedgerEntryInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 

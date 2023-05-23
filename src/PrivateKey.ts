@@ -6,6 +6,10 @@ export class PrivateKey {
     this.value = value;
   }
 
+  /**
+   *
+   * @returns string
+   */
   public getValue(): string {
     return this.value;
   }

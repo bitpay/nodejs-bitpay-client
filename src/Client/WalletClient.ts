@@ -9,6 +9,12 @@ export class WalletClient {
     this.bitPayClient = bitPayClient;
   }
 
+  /**
+   * Retrieve all supported wallets.
+   *
+   * @returns Wallet[]
+   * @throws WalletQueryException
+   */
   public async getSupportedWallets(): Promise<WalletInterface[]> {
     try {
       const result = await this.bitPayClient.get('supportedwallets', null, false);

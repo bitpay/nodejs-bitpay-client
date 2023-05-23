@@ -16,6 +16,13 @@ export class PayoutRecipientClient {
     this.guidGenerator = guidGenerator;
   }
 
+  /**
+   * Submit BitPay Payout Recipients.
+   *
+   * @param recipients A PayoutRecipients object with request parameters defined.
+   * @returns PayoutRecipients[]  A list of BitPay PayoutRecipients objects.
+   * @throws PayoutRecipientCreationException
+   */
   public async submit(recipients: PayoutRecipients): Promise<PayoutRecipientInterface[]> {
     recipients.token = this.tokenContainer.getToken(Facade.Payout);
     recipients.guid = recipients.guid ? recipients.guid : this.guidGenerator.execute();
@@ -31,6 +38,14 @@ export class PayoutRecipientClient {
     }
   }
 
+  /**
+   * Update a Payout Recipient.
+   *
+   * @param recipientId The recipient id for the recipient to be updated.
+   * @param recipient A PayoutRecipient object with updated parameters defined.
+   * @returns PayoutRecipient
+   * @throws PayoutRecipientUpdateException
+   */
   public async update(recipientId: string, recipient: PayoutRecipientInterface): Promise<PayoutRecipientInterface> {
     recipient.token = this.tokenContainer.getToken(Facade.Payout);
     recipient.guid = recipient.guid ? recipient.guid : this.guidGenerator.execute();
@@ -46,6 +61,13 @@ export class PayoutRecipientClient {
     }
   }
 
+  /**
+   * Retrieve a BitPay payout recipient by batch id using.  The client must have been previously authorized for the payout facade.
+   *
+   * @param recipientId The id of the recipient to retrieve.
+   * @returns PayoutRecipient
+   * @throws PayoutRecipientQueryException
+   */
   public async get(recipientId: string): Promise<PayoutRecipientInterface> {
     const params = { token: this.tokenContainer.getToken(Facade.Payout) };
 
@@ -60,6 +82,13 @@ export class PayoutRecipientClient {
     }
   }
 
+  /**
+   * Retrieve a collection of BitPay Payout Recipients.
+   *
+   * @param params
+   * @returns PayoutRecipient[]
+   * @throws PayoutRecipientQueryException
+   */
   public async getByFilters(params: object): Promise<PayoutRecipientInterface[]> {
     try {
       params['token'] = this.tokenContainer.getToken(Facade.Payout);
@@ -74,6 +103,13 @@ export class PayoutRecipientClient {
     }
   }
 
+  /**
+   * Delete a Payout Recipient.
+   *
+   * @param recipientId The recipient id for the recipient to be deleted.
+   * @returns boolean True if the recipient was successfully deleted, false otherwise.
+   * @throws PayoutRecipientCancellationException
+   */
   public async delete(recipientId: string): Promise<boolean> {
     const params = { token: this.tokenContainer.getToken(Facade.Payout) };
 
@@ -88,6 +124,13 @@ export class PayoutRecipientClient {
     }
   }
 
+  /**
+   * Notify BitPay Payout Recipient.
+   *
+   * @param recipientId The id of the recipient to notify.
+   * @returns boolean  True if the notification was successfully sent, false otherwise.
+   * @throws PayoutRecipientNotificationException
+   */
   public async requestNotification(recipientId: string): Promise<boolean> {
     const params = { token: this.tokenContainer.getToken(Facade.Payout) };
 

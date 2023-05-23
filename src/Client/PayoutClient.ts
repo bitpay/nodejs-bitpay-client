@@ -17,6 +17,13 @@ export class PayoutClient {
     this.guidGenerator = guidGenerator;
   }
 
+  /**
+   * Submit a BitPay Payout.
+   *
+   * @param payout Payout object with request parameters defined.
+   * @returns Pyaout
+   * @throws PayoutCreationException
+   */
   public async submit(payout: PayoutInterface): Promise<PayoutInterface> {
     payout.token = this.tokenContainer.getToken(Facade.Payout);
 
@@ -31,6 +38,14 @@ export class PayoutClient {
     }
   }
 
+  /**
+   * Retrieve a BitPay payout by payout id using. The client must have been previously authorized
+   * for the payout facade.
+   *
+   * @param payoutId The id of the payout to retrieve.
+   * @returns Pyaout
+   * @throws PayoutQueryException
+   */
   public async get(payoutId: string): Promise<PayoutInterface> {
     const params = { token: this.tokenContainer.getToken(Facade.Payout) };
 
@@ -45,6 +60,13 @@ export class PayoutClient {
     }
   }
 
+  /**
+   * Retrieve a collection of BitPay payouts.
+   *
+   * @param params
+   * @returns Payout[]
+   * @throws PayoutQueryException
+   */
   public async getPayouts(params: object): Promise<PayoutInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Payout);
 
@@ -59,6 +81,13 @@ export class PayoutClient {
     }
   }
 
+  /**
+   * Notify BitPay Payout.
+   *
+   * @param payoutId The id of the Payout to notify.
+   * @returns boolean
+   * @throws PayoutNotificationException
+   */
   public requestNotification = async (payoutId: string): Promise<boolean> => {
     const params = { token: this.tokenContainer.getToken(Facade.Payout) };
 
@@ -73,6 +102,13 @@ export class PayoutClient {
     }
   };
 
+  /**
+   *  Cancel a BitPay Payout.
+   *
+   * @param payoutId
+   * @returns boolean
+   * @throws PayoutDeleteException
+   */
   public cancel = async (payoutId: string): Promise<boolean> => {
     const params = { token: this.tokenContainer.getToken(Facade.Payout) };
 
