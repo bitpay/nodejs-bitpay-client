@@ -515,7 +515,7 @@ export class Client {
    * @param payouts
    */
   public async submitPayouts(payouts: PayoutInterface[]): Promise<PayoutGroupInterface> {
-    return this.createPayoutClient().submitPayouts(payouts)
+    return this.createPayoutClient().submitPayouts(payouts);
   }
 
   /**

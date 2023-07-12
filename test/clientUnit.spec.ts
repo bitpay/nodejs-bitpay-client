@@ -673,14 +673,14 @@ describe('BitPaySDK.Client', () => {
 
     it('should submit payouts', async () => {
       server.use(
-          rest.post(host + '/payouts/group', async (req, res, ctx) => {
-            validateSignatureRequest(req);
+        rest.post(host + '/payouts/group', async (req, res, ctx) => {
+          validateSignatureRequest(req);
 
-            const response = await req.json();
-            validateRequest(response, createPayoutGroupRequestMock);
+          const response = await req.json();
+          validateRequest(response, createPayoutGroupRequestMock);
 
-            return res(ctx.status(200), ctx.json(createPayoutGroupResponseMock));
-          })
+          return res(ctx.status(200), ctx.json(createPayoutGroupResponseMock));
+        })
       );
 
       const notificationURL = 'https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx';
@@ -691,8 +691,8 @@ describe('BitPaySDK.Client', () => {
       payout.notificationEmail = 'merchant@email.com';
       payout.notificationURL = notificationURL;
       payout.email = 'john@doe.com';
-      payout.recipientId = 'LDxRZCGq174SF8AnQpdBPB'
-      payout.shopperId = shopperId
+      payout.recipientId = 'LDxRZCGq174SF8AnQpdBPB';
+      payout.shopperId = shopperId;
 
       const result: PayoutGroupInterface = await client.submitPayouts([payout]);
       const firstPayout = result.payouts[0];
@@ -709,10 +709,10 @@ describe('BitPaySDK.Client', () => {
       const groupId = '12345';
 
       server.use(
-          rest.delete(host + '/payouts/group/' + groupId, async (req, res, ctx) => {
-            validateSignatureRequest(req);
-            return res(ctx.status(200), ctx.json(cancelPayoutGroupResponseMock));
-          })
+        rest.delete(host + '/payouts/group/' + groupId, async (req, res, ctx) => {
+          validateSignatureRequest(req);
+          return res(ctx.status(200), ctx.json(cancelPayoutGroupResponseMock));
+        })
       );
 
       const result: PayoutGroupInterface = await client.cancelPayouts(groupId);

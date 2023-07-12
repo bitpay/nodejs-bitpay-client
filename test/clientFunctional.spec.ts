@@ -362,7 +362,7 @@ describe('BitPaySDK.Client', () => {
       recipientsList.push(requestedRecipient);
 
       const recipients: PayoutRecipientInterface[] = await client.submitPayoutRecipients(
-          new PayoutRecipients(recipientsList)
+        new PayoutRecipients(recipientsList)
       );
       const payoutRecipientId = recipients[0].id;
       const notificationURL = 'https://somenotiticationURL.com';
