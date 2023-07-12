@@ -1,0 +1,16 @@
+{
+  "instructions": [
+    {
+      "amount": 10,
+      "currency": "USD",
+      "ledgerCurrency": "USD",
+      "reference": "payout_20210527",
+      "notificationURL": "https:\/\/yournotiticationURL.com\/wed3sa0wx1rz5bg0bv97851eqx",
+      "notificationEmail": "merchant@email.com",
+      "email": "john@doe.com",
+      "recipientId": "LDxRZCGq174SF8AnQpdBPB",
+      "shopperId": "7qohDf2zZnQK5Qanj8oyC2"
+    }
+  ],
+  "token": "somePayoutToken"
+}

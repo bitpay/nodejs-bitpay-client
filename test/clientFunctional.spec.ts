@@ -11,7 +11,8 @@ import {
   LedgerInterface,
   LedgerEntryInterface,
   BillInterface,
-  PayoutRecipients
+  PayoutRecipients,
+  PayoutGroupInterface
 } from '../src/Model';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -308,6 +309,7 @@ describe('BitPaySDK.Client', () => {
 
   describe('Payout', () => {
     let payoutId: string;
+    let payoutGroupId: string;
 
     it('should submit payout', async () => {
       const recipientsList: PayoutRecipient[] = [];
@@ -342,15 +344,53 @@ describe('BitPaySDK.Client', () => {
       expect(result[0].email).toBe(getEmail());
     });
 
-    it('should send request payout notifiaction', async () => {
+    it('should send request payout notification', async () => {
       const result: boolean = await client.requestPayoutNotification(payoutId);
       expect(result).toBe(true);
     });
 
     it('should cancel payout', async () => {
-      //     payoutId = "EVuF716x4PxdTh8LLXLXXZ";
       const result: boolean = await client.cancelPayout(payoutId);
       expect(result).toBe(true);
+    });
+
+    it('should create payout groups', async () => {
+      // given
+      const recipientsList: PayoutRecipient[] = [];
+      const payoutEmail = getEmail();
+      const requestedRecipient: PayoutRecipientInterface = new PayoutRecipient(payoutEmail, 'Bob', null);
+      recipientsList.push(requestedRecipient);
+
+      const recipients: PayoutRecipientInterface[] = await client.submitPayoutRecipients(
+          new PayoutRecipients(recipientsList)
+      );
+      const payoutRecipientId = recipients[0].id;
+      const notificationURL = 'https://somenotiticationURL.com';
+      const reference = 'Nodejs Integration Test';
+
+      const payout = new Payout(10.0, 'USD', 'USD');
+      payout.recipientId = payoutRecipientId;
+      payout.notificationEmail = payoutEmail;
+      payout.reference = reference;
+      payout.notificationURL = notificationURL;
+
+      // when
+      const result: PayoutGroupInterface = await client.submitPayouts([payout]);
+      const firstPayout = result.payouts[0];
+      payoutGroupId = firstPayout.groupId;
+
+      // then
+      expect(result.payouts.length).toBe(1);
+      expect(firstPayout.notificationURL).toBe(notificationURL);
+      expect(firstPayout.reference).toBe(reference);
+    });
+
+    it('should cancel payout groups', async () => {
+      // when
+      const result: PayoutGroupInterface = await client.cancelPayouts(payoutGroupId);
+      // then
+      expect(result.payouts.length).toBe(1);
+      expect(result.payouts[0].status).toBe('cancelled');
     });
   });
 

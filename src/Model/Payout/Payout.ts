@@ -25,6 +25,7 @@ export interface PayoutInterface {
   exchangeRates: string | null;
   transactions: PayoutTransaction[];
   code: number | null;
+  ignoreEmails: boolean;
 }
 
 export class Payout implements PayoutInterface {
@@ -52,6 +53,7 @@ export class Payout implements PayoutInterface {
   exchangeRates: string | null;
   transactions: PayoutTransaction[];
   code: number | null;
+  ignoreEmails = false;
 
   /**
    * Constructor, create a request Payout object.

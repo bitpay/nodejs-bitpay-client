@@ -5,6 +5,7 @@ import {
   BillInterface,
   Invoice,
   Payout,
+  PayoutGroupInterface,
   PayoutRecipient,
   PayoutRecipients,
   RateInterface,
@@ -39,9 +40,12 @@ import * as getLedgerEntriesResponseMock from './json/getLedgerEntriesResponse.j
 import * as getLedgersResponseMock from './json/getLedgersResponse.json';
 import * as createPayoutRequestMock from './json/createPayoutRequest.json';
 import * as createPayoutResponseMock from './json/createPayoutResponse.json';
+import * as createPayoutGroupRequestMock from './json/createPayoutGroupRequest.json';
+import * as createPayoutGroupResponseMock from './json/createPayoutGroupResponse.json';
 import * as getPayoutResponseMock from './json/getPayoutResponse.json';
 import * as getPayoutsResponseMock from './json/getPayoutsResponse.json';
 import * as cancelPayoutResponseMock from './json/cancelPayoutResponse.json';
+import * as cancelPayoutGroupResponseMock from './json/cancelPayoutGroupResponse.json';
 import * as sendPayoutNotificationRequestMock from './json/sendPayoutNotificationRequest.json';
 import * as sendPayoutNotificationResponseMock from './json/sendPayoutNotificationResponse.json';
 import * as submitPayoutRecipientsRequestMock from './json/submitPayoutRecipientsRequest.json';
@@ -665,6 +669,61 @@ describe('BitPaySDK.Client', () => {
       const results = await client.cancelPayout('KMXZeQigXG6T5abzCJmTcH');
 
       expect(results).toBe(true);
+    });
+
+    it('should submit payouts', async () => {
+      server.use(
+          rest.post(host + '/payouts/group', async (req, res, ctx) => {
+            validateSignatureRequest(req);
+
+            const response = await req.json();
+            validateRequest(response, createPayoutGroupRequestMock);
+
+            return res(ctx.status(200), ctx.json(createPayoutGroupResponseMock));
+          })
+      );
+
+      const notificationURL = 'https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx';
+      const shopperId = '7qohDf2zZnQK5Qanj8oyC2';
+
+      const payout = new Payout(10, 'USD', 'USD');
+      payout.reference = 'payout_20210527';
+      payout.notificationEmail = 'merchant@email.com';
+      payout.notificationURL = notificationURL;
+      payout.email = 'john@doe.com';
+      payout.recipientId = 'LDxRZCGq174SF8AnQpdBPB'
+      payout.shopperId = shopperId
+
+      const result: PayoutGroupInterface = await client.submitPayouts([payout]);
+      const firstPayout = result.payouts[0];
+      const firstFailed = result.failed[0];
+
+      expect(result.payouts.length).toBe(1);
+      expect(firstPayout.notificationURL).toBe(notificationURL);
+      expect(firstPayout.shopperId).toBe(shopperId);
+      expect(firstFailed.errMessage).toBe('Ledger currency is required');
+      expect(firstFailed.payee).toBe('john@doe.com');
+    });
+
+    it('should cancel payouts', async () => {
+      const groupId = '12345';
+
+      server.use(
+          rest.delete(host + '/payouts/group/' + groupId, async (req, res, ctx) => {
+            validateSignatureRequest(req);
+            return res(ctx.status(200), ctx.json(cancelPayoutGroupResponseMock));
+          })
+      );
+
+      const result: PayoutGroupInterface = await client.cancelPayouts(groupId);
+      const firstPayout = result.payouts[0];
+      const firstFailed = result.failed[0];
+
+      expect(result.payouts.length).toBe(2);
+      expect(firstPayout.notificationURL).toBe('https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx');
+      expect(firstPayout.shopperId).toBe('7qohDf2zZnQK5Qanj8oyC2');
+      expect(firstFailed.errMessage).toBe('PayoutId is missing or invalid');
+      expect(firstFailed.payoutId).toBe('D8tgWzn1psUua4NYWW1vYo');
     });
 
     it('should send request payout notification', async () => {

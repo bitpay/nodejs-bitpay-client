@@ -6,6 +6,7 @@ import {
   LedgerEntryInterface,
   LedgerInterface,
   PayoutInterface,
+  PayoutGroupInterface,
   PayoutRecipientInterface,
   PayoutRecipients,
   RateInterface,
@@ -506,6 +507,24 @@ export class Client {
    */
   public async getPayouts(params = {}): Promise<PayoutInterface[]> {
     return this.createPayoutClient().getPayouts(params);
+  }
+
+  /**
+   * @see <a href="https://developer.bitpay.com/reference/create-payout-group">Create Payout Group</>
+   *
+   * @param payouts
+   */
+  public async submitPayouts(payouts: PayoutInterface[]): Promise<PayoutGroupInterface> {
+    return this.createPayoutClient().submitPayouts(payouts)
+  }
+
+  /**
+   * @see <a href="https://developer.bitpay.com/reference/cancel-a-payout-group">Cancel a Payout Group</>
+   *
+   * @param payoutGroupId
+   */
+  public async cancelPayouts(payoutGroupId: string): Promise<PayoutGroupInterface> {
+    return this.createPayoutClient().cancelPayouts(payoutGroupId);
   }
 
   /**
