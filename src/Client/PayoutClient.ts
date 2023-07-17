@@ -5,6 +5,7 @@ import { Facade } from '../Facade';
 import { BitPayExceptions as Exceptions } from '../index';
 import { PayoutInterface } from '../Model';
 import { BitPayResponseParser } from '../util/BitPayResponseParser';
+import { PayoutGroup, PayoutGroupInterface } from '../Model/Payout/PayoutGroup';
 
 export class PayoutClient {
   private bitPayClient: BitPayClient;
@@ -122,4 +123,40 @@ export class PayoutClient {
       );
     }
   };
+
+  submitPayouts = async (payouts: PayoutInterface[]): Promise<PayoutGroupInterface> => {
+    const params = { token: this.tokenContainer.getToken(Facade.Payout), instructions: payouts };
+    try {
+      const result = await this.bitPayClient.post('payouts/group', params, true);
+      return PayoutClient.getPayoutGroupResponse(result, 'created');
+    } catch (e) {
+      throw new Exceptions.PayoutCreation(
+        'failed to deserialize BitPay server response (Payout) : ' + e.message,
+        e.apiCode
+      );
+    }
+  };
+
+  cancelPayouts = async (payoutGroupId: string) => {
+    const params = { token: this.tokenContainer.getToken(Facade.Payout) };
+    try {
+      const result = await this.bitPayClient.delete('payouts/group/' + payoutGroupId, params, true);
+      return PayoutClient.getPayoutGroupResponse(result, 'cancelled');
+    } catch (e) {
+      throw new Exceptions.PayoutCreation(
+        'failed to deserialize BitPay server response (Payout) : ' + e.message,
+        e.apiCode
+      );
+    }
+  };
+
+  private static getPayoutGroupResponse(json: string, responseType: string): PayoutGroupInterface {
+    const response = JSON.parse(json);
+
+    if (!(responseType in response)) {
+      throw new Exceptions.PayoutCreation('Cannot parse Payout Group. Response : ' + response);
+    }
+
+    return new PayoutGroup(response[responseType], response['failed']);
+  }
 }

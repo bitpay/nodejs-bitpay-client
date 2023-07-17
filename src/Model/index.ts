@@ -22,6 +22,7 @@ import { LedgerEntryInterface } from './Ledger/LedgerEntry';
 import { PayoutRecipient, PayoutRecipientInterface } from './Payout/PayoutRecipient';
 import { PayoutRecipients, PayoutRecipientsInterface } from './Payout/PayoutRecipients';
 import { Payout, PayoutInterface } from './Payout/Payout';
+import { PayoutGroupInterface } from './Payout/PayoutGroup';
 import { PayoutInstruction, PayoutInstructionInterface } from './Payout/PayoutInstruction';
 import { BillData } from './Subscription/BillData';
 import { Item as SubscriptionItem } from './Subscription/Item';
@@ -42,6 +43,7 @@ export {
   PayoutRecipientsInterface,
   Payout,
   PayoutInterface,
+  PayoutGroupInterface,
   PayoutInstruction,
   PayoutInstructionInterface,
   BillData,
