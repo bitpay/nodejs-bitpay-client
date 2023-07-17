@@ -1,0 +1,29 @@
+{
+  "created": [
+    {
+      "id": "JMwv8wQCXANoU2ZZQ9a9GH",
+      "recipientId": "LDxRZCGq174SF8AnQpdBPB",
+      "accountId": "SJcWZCFq344DL8QnXpdBNM",
+      "shopperId": "7qohDf2zZnQK5Qanj8oyC2",
+      "amount": 10,
+      "currency": "USD",
+      "ledgerCurrency": "GBP",
+      "email": "john@doe.com",
+      "reference": "payout_20210527",
+      "label": "John Doe",
+      "notificationURL": "https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx",
+      "notificationEmail": "merchant@email.com",
+      "effectiveDate": "2021-05-27T09:00:00.000Z",
+      "requestDate": "2021-05-27T10:47:37.834Z",
+      "status": "new",
+      "groupId": "SxKRk4MdW8Ae3vsoR6UPQE",
+      "transactions": []
+    }
+  ],
+  "failed": [
+    {
+      "errMessage": "Ledger currency is required",
+      "payee": "john@doe.com"
+    }
+  ]
+}

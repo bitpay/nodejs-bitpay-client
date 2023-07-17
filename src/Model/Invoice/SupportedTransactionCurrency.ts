@@ -1,4 +1,4 @@
 export interface SupportedTransactionCurrency {
-    enabled: boolean;
-    reason: string;
+  enabled: boolean;
+  reason: string;
 }

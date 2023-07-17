@@ -9,7 +9,6 @@
   },
   "testEnvironment" : "node",
   "testRegex": "(/__test__/.*|(\\.|/)(test|spec))\\.(tsx?)$",
-  "testURL": "http://localhost/",
   "coverageThreshold": {
     "global": {
       "statements": 90,

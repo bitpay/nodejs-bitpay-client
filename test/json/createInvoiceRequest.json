@@ -1,0 +1,32 @@
+{
+  "autoRedirect": true,
+  "buyer": {
+    "address1": "SomeStreet",
+    "address2": "911",
+    "country": "USA",
+    "email": "buyer@buyeremaildomain.com",
+    "locality": "Washington",
+    "name": "Marcin",
+    "notify": true,
+    "postalCode": "20000",
+    "region": "District of Columbia"
+  },
+  "buyerProvidedInfo": {
+    "emailAddress": "john@doe.com",
+    "selectedWallet": "bitpay",
+    "selectedTransactionCurrency": "BTC"
+  },
+  "currency": "USD",
+  "extendedNotifications": true,
+  "forcedBuyerSelectedTransactionCurrency": null,
+  "forcedBuyerSelectedWallet": "bitpay",
+  "fullNotifications": true,
+  "itemDesc": "Example",
+  "notificationEmail": "notification@email.com",
+  "notificationURL": "https://notification.url/aaa",
+  "orderId": "ee26b5e0-9185-493e-bc12-e846d5fcf07c",
+  "price": 10.0,
+  "token": "someMerchantToken",
+  "transactionSpeed": "medium",
+  "guid": "ee26b5e0-9185-493e-bc12-e846d5fcf07c"
+}

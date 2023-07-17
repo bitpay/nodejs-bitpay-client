@@ -1,0 +1,81 @@
+[
+  {
+    "type": "Invoice",
+    "amount": 823000000,
+    "code": 1000,
+    "description": "20210510_fghij",
+    "timestamp": "2021-05-10T20:08:52.919Z",
+    "txType": "sale",
+    "scale": 100000000,
+    "invoiceId": "Hpqc63wvE1ZjzeeH4kEycF",
+    "buyerFields": {
+      "buyerName": "John Doe",
+      "buyerAddress1": "2630 Hegal Place",
+      "buyerAddress2": "Apt 42",
+      "buyerCity": "Alexandria",
+      "buyerState": "VA",
+      "buyerZip": "23242",
+      "buyerCountry": "US",
+      "buyerPhone": "555-123-456",
+      "buyerNotify": true,
+      "buyerEmail": "john@doe.com"
+    },
+    "invoiceAmount": 10,
+    "invoiceCurrency": "USD",
+    "transactionCurrency": "BCH",
+    "id": "FR4rgfADCRNmAhtz1Ci4kU"
+  },
+  {
+    "type": "Invoice Fee",
+    "amount": -8000000,
+    "code": 1023,
+    "description": "Invoice Fee",
+    "timestamp": "2021-05-10T20:08:52.919Z",
+    "txType": "Invoice Fee",
+    "scale": 100000000,
+    "invoiceId": "Hpqc63wvE1ZjzeeH4kEycF",
+    "buyerFields": {
+      "buyerName": "John Doe",
+      "buyerAddress1": "2630 Hegal Place",
+      "buyerAddress2": "Apt 42",
+      "buyerCity": "Alexandria",
+      "buyerState": "VA",
+      "buyerZip": "23242",
+      "buyerCountry": "US",
+      "buyerPhone": "555-123-456",
+      "buyerNotify": true,
+      "buyerEmail": "john@doe.com"
+    },
+    "invoiceAmount": 10,
+    "invoiceCurrency": "USD",
+    "transactionCurrency": "BCH",
+    "id": "XCkhgHKP2pSme4qszMpM3B"
+  },
+  {
+    "type": "Invoice Refund",
+    "supportRequest": "SYyrnbRCJ78V1DknHakKPo",
+    "amount": -823000000,
+    "code": 1020,
+    "description": "Invoice Refund",
+    "timestamp": "2021-05-12T13:00:45.063Z",
+    "txType": "Invoice Refund",
+    "scale": 100000000,
+    "invoiceId": "Hpqc63wvE1ZjzeeH4kEycF",
+    "buyerFields": {
+      "buyerName": "John Doe",
+      "buyerAddress1": "2630 Hegal Place",
+      "buyerAddress2": "Apt 42",
+      "buyerCity": "Alexandria",
+      "buyerState": "VA",
+      "buyerZip": "23242",
+      "buyerCountry": "US",
+      "buyerPhone": "555-123-456",
+      "buyerNotify": true,
+      "buyerEmail": "john@doe.com"
+    },
+    "invoiceAmount": 10,
+    "invoiceCurrency": "USD",
+    "transactionCurrency": "BCH",
+    "id": "PBqakmWMZ2H3RwhGq9vCsg"
+  }
+]

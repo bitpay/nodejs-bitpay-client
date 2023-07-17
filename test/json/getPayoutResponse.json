@@ -1,0 +1,37 @@
+{
+  "facade": "payout/payout",
+  "data": {
+    "id": "JMwv8wQCXANoU2ZZQ9a9GH",
+    "recipientId": "LDxRZCGq174SF8AnQpdBPB",
+    "accountId": "SJcWZCFq344DL8QnXpdBNM",
+    "shopperId": "7qohDf2zZnQK5Qanj8oyC2",
+    "amount": 10,
+    "currency": "USD",
+    "ledgerCurrency": "GBP",
+    "exchangeRates": {
+      "BTC": {
+        "USD": 39390.47,
+        "GBP": 27883.962246420004
+      }
+    },
+    "email": "john@doe.com",
+    "reference": "payout_20210527",
+    "label": "John Doe",
+    "notificationURL": "https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx",
+    "notificationEmail": "merchant@email.com",
+    "effectiveDate": "2021-05-27T09:00:00.000Z",
+    "requestDate": "2021-05-27T10:47:37.834Z",
+    "dateExecuted": "2021-05-27T09:00:00.000Z",
+    "status": "complete",
+    "transactions": [
+      {
+        "txid": "db53d7e2bf3385a31257ce09396202d9c2823370a5ca186db315c45e24594057",
+        "amount": 0.000254,
+        "date": "2021-05-27T11:04:23.155Z"
+      }
+    ],
+    "token": "6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL"
+  },
+  "status": "success",
+  "message": null
+}

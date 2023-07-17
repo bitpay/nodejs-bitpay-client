@@ -1,0 +1,387 @@
+{
+  "data": [
+    {
+      "key": "bitpay",
+      "displayName": "BitPay",
+      "avatar": "bitpay-wallet.png",
+      "payPro": true,
+      "currencies": [
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "BTC",
+          "image": "https://bitpay.com/img/icon/currencies/BTC.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "BCH",
+          "image": "https://bitpay.com/img/icon/currencies/BCH.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "XRP",
+          "image": "https://bitpay.com/img/icon/currencies/XRP.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "DOGE",
+          "image": "https://bitpay.com/img/icon/currencies/DOGE.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681"
+          },
+          "code": "ETH",
+          "image": "https://bitpay.com/img/icon/currencies/ETH.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "USDC",
+          "image": "https://bitpay.com/img/icon/currencies/USDC.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "PAX",
+          "image": "https://bitpay.com/img/icon/currencies/PAX.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "GUSD",
+          "image": "https://bitpay.com/img/icon/currencies/GUSD.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "BUSD",
+          "image": "https://bitpay.com/img/icon/currencies/BUSD.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "WBTC",
+          "image": "https://bitpay.com/img/icon/currencies/WBTC.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "SHIB",
+          "image": "https://bitpay.com/img/icon/currencies/SHIB.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "DAI",
+          "image": "https://bitpay.com/img/icon/currencies/DAI.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "LTC",
+          "image": "https://bitpay.com/img/icon/currencies/LTC.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "APE",
+          "image": "https://bitpay.com/img/icon/currencies/APE.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "EUROC",
+          "image": "https://bitpay.com/img/icon/currencies/EUROC.svg"
+        }
+      ],
+      "image": "https://bitpay.com/img/wallet-logos/bitpay-wallet.png"
+    },
+    {
+      "key": "copay",
+      "displayName": "Copay",
+      "avatar": "copay-wallet.svg",
+      "payPro": true,
+      "currencies": [
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "BTC",
+          "image": "https://bitpay.com/img/icon/currencies/BTC.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "BCH",
+          "image": "https://bitpay.com/img/icon/currencies/BCH.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "XRP",
+          "image": "https://bitpay.com/img/icon/currencies/XRP.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "DOGE",
+          "image": "https://bitpay.com/img/icon/currencies/DOGE.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681"
+          },
+          "code": "ETH",
+          "image": "https://bitpay.com/img/icon/currencies/ETH.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "USDC",
+          "image": "https://bitpay.com/img/icon/currencies/USDC.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "PAX",
+          "image": "https://bitpay.com/img/icon/currencies/PAX.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "GUSD",
+          "image": "https://bitpay.com/img/icon/currencies/GUSD.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "BUSD",
+          "image": "https://bitpay.com/img/icon/currencies/BUSD.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "WBTC",
+          "image": "https://bitpay.com/img/icon/currencies/WBTC.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "SHIB",
+          "image": "https://bitpay.com/img/icon/currencies/SHIB.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "EIP681b"
+          },
+          "code": "DAI",
+          "image": "https://bitpay.com/img/icon/currencies/DAI.svg"
+        },
+        {
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "LTC",
+          "image": "https://bitpay.com/img/icon/currencies/LTC.svg"
+        }
+      ],
+      "image": "https://bitpay.com/img/wallet-logos/copay-wallet.svg"
+    },
+    {
+      "key": "blockchainWallet",
+      "displayName": "Blockchain Wallet",
+      "avatar": "blockchain-wallet.svg",
+      "payPro": true,
+      "invoiceDefault": "BTC",
+      "uniCode": "bitcoin:?r=https://bitpay.com",
+      "verificationLink": "https://bitpay.com/id/verify",
+      "currencies": [
+        {
+          "payPro": true,
+          "p2p": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "BTC",
+          "image": "https://bitpay.com/img/icon/currencies/BTC.svg"
+        },
+        {
+          "p2p": true,
+          "payPro": true,
+          "qr": {
+            "type": "BIP72b"
+          },
+          "code": "BCH",
+          "image": "https://bitpay.com/img/icon/currencies/BCH.svg"
+        }
+      ],
+      "image": "https://bitpay.com/img/wallet-logos/blockchain-wallet.svg"
+    },
+    {
+      "key": "squareCash",
+      "displayName": "Cash App",
+      "lightning": true,
+      "avatar": "square-cash-app.svg",
+      "payPro": false,
+      "currencies": [
+        {
+          "p2p": true,
+          "qr": {
+            "type": "ADDRESS"
+          },
+          "code": "BTC",
+          "image": "https://bitpay.com/img/icon/currencies/BTC.svg"
+        }
+      ],
+      "image": "https://bitpay.com/img/wallet-logos/square-cash-app.svg"
+    },
+    {
+      "key": "coinbase",
+      "displayName": "Coinbase",
+      "avatar": "coinbase.svg",
+      "offChainMode": true,
+      "payPro": false,
+      "currencies": [
+        {
+          "p2p": true,
+          "qr": {
+            "collapsed": true,
+            "type": "ADDRESS"
+          },
+          "code": "BTC",
+          "image": "https://bitpay.com/img/icon/currencies/BTC.svg"
+        },
+        {
+          "p2p": true,
+          "qr": {
+            "collapsed": true,
+            "type": "ADDRESS"
+          },
+          "code": "BCH",
+          "image": "https://bitpay.com/img/icon/currencies/BCH.svg"
+        },
+        {
+          "p2p": true,
+          "qr": {
+            "collapsed": true,
+            "type": "ADDRESS"
+          },
+          "code": "XRP",
+          "image": "https://bitpay.com/img/icon/currencies/XRP.svg"
+        },
+        {
+          "p2p": true,
+          "qr": {
+            "collapsed": true,
+            "type": "ADDRESS"
+          },
+          "code": "DOGE",
+          "image": "https://bitpay.com/img/icon/currencies/DOGE.svg"
+        }
+      ],
+      "image": "https://bitpay.com/img/wallet-logos/coinbase.svg"
+    },
+    {
+      "key": "gemini",
+      "displayName": "Gemini",
+      "avatar": "gemini.svg",
+      "payPro": false,
+      "currencies": [
+        {
+          "p2p": true,
+          "qr": {
+            "collapsed": true,
+            "type": "ADDRESS"
+          },
+          "code": "BTC",
+          "image": "https://bitpay.com/img/icon/currencies/BTC.svg"
+        },
+        {
+          "p2p": true,
+          "qr": {
+            "collapsed": true,
+            "type": "ADDRESS"
+          },
+          "code": "BCH",
+          "image": "https://bitpay.com/img/icon/currencies/BCH.svg"
+        },
+        {
+          "p2p": true,
+          "qr": {
+            "collapsed": true,
+            "type": "ADDRESS"
+          },
+          "code": "LTC",
+          "image": "https://bitpay.com/img/icon/currencies/LTC.svg"
+        }
+      ],
+      "image": "https://bitpay.com/img/wallet-logos/gemini.svg"
+    },
+    {
+      "key": "bakkt",
+      "displayName": "Bakkt",
+      "avatar": "bakkt.svg",
+      "uniCode": "bakkt://bitpay",
+      "offChainMode": true,
+      "invoiceDefault": "USD",
+      "payPro": false,
+      "currencies": [],
+      "image": "https://bitpay.com/img/wallet-logos/bakkt.svg"
+    }
+  ]
+}

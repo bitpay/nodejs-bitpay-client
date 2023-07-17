@@ -1,0 +1,83 @@
+{
+  "facade": "merchant/bill",
+  "data": [
+    {
+      "status": "draft",
+      "url": "https://bitpay.com/bill?id=X6KJbe9RxAGWNReCwd1xRw&resource=bills",
+      "number": "bill1234-ABCD",
+      "createdDate": "2021-05-21T09:48:02.373Z",
+      "dueDate": "2021-05-31T00:00:00.000Z",
+      "currency": "USD",
+      "name": "John Doe",
+      "address1": "2630 Hegal Place",
+      "address2": "Apt 42",
+      "city": "Alexandria",
+      "state": "VA",
+      "zip": "23242",
+      "country": "US",
+      "email": "john@doe.com",
+      "cc": [
+        "jane@doe.com"
+      ],
+      "phone": "555-123-456",
+      "passProcessingFee": true,
+      "emailBill": true,
+      "id": "X6KJbe9RxAGWNReCwd1xRw",
+      "merchant": "7HyKWn3d4xdhAMQYAEVxVq",
+      "items": [
+        {
+          "id": "EL4vx41Nxc5RYhbqDthjE",
+          "description": "Test Item 1",
+          "price": 6,
+          "quantity": 1
+        },
+        {
+          "id": "6spPADZ2h6MfADvnhfsuBt",
+          "description": "Test Item 2",
+          "price": 4,
+          "quantity": 1
+        }
+      ],
+      "token": "6EBQR37MgDJPfEiLY3jtRqBMYLg8XSDqhp2kp7VSDqCMHGHnsw4bqnnwQmtehzCvSo"
+    },
+    {
+      "status": "draft",
+      "url": "https://bitpay.com/bill?id=3Zpmji8bRKxWJo2NJbWX5H&resource=bills",
+      "number": "bill1234-EFGH",
+      "createdDate": "2021-05-21T09:51:04.126Z",
+      "dueDate": "2021-05-31T00:00:00.000Z",
+      "currency": "USD",
+      "name": "John Doe",
+      "address1": "2630 Hegal Place",
+      "address2": "Apt 42",
+      "city": "Alexandria",
+      "state": "VA",
+      "zip": "23242",
+      "country": "US",
+      "email": "john@doe.com",
+      "cc": [
+        "jane@doe.com"
+      ],
+      "phone": "555-123-456",
+      "passProcessingFee": true,
+      "emailBill": true,
+      "id": "3Zpmji8bRKxWJo2NJbWX5H",
+      "merchant": "7HyKWn3d4xdhAMQYAEVxVq",
+      "items": [
+        {
+          "id": "NV35GRWtrdB2cmGEjY4LKY",
+          "description": "Test Item 1",
+          "price": 6,
+          "quantity": 1
+        },
+        {
+          "id": "Apy3i2TpzHRYP8tJCkrZMT",
+          "description": "Test Item 2",
+          "price": 4,
+          "quantity": 1
+        }
+      ],
+      "token": "6EBQR37MgDJPfEiLY3jtRq7eTP2aodR5V5wmXyyZhru5FM5yF4RCGKYQtnT7nhwHjA"
+    }
+  ]
+}

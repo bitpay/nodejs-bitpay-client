@@ -1,58 +1,57 @@
-import {Client} from "../../Client";
-import RateQueryException from "../../Exceptions/RateQueryException";
+import RateQueryException from '../../Exceptions/RateQueryException';
+import { RateClient } from '../../Client/RateClient';
 
 interface RateInterface {
-    Name: string;
-    cryptoCode: string;
-    currencyPair: string;
-    code: string;
-    rate: number;
+  Name: string;
+  cryptoCode: string;
+  currencyPair: string;
+  code: string;
+  rate: number;
 }
 
-class Rates{
-    private _rates: RateInterface[];
-    private _client: Client;
+class Rates {
+  private rates: RateInterface[];
 
-    public constructor(rates: RateInterface[], client: Client) {
-        this._rates = this.castRatesObj(rates);
-        this._client = client;
-    }
+  public constructor(rates: RateInterface[]) {
+    this.rates = this.castRatesObj(rates);
+  }
 
-    private castRatesObj(ratesObj:RateInterface[]|string) {
-        try {
-            if (typeof ratesObj === 'string' || ratesObj instanceof String) {
-                ratesObj = JSON.parse(ratesObj.toString());
-            }
+  public getRates() {
+    return this.rates;
+  }
 
-            return <RateInterface[]>ratesObj;
-        } catch (e) {
-            throw new RateQueryException(e);
-        }
-    }
-
-    public GetRates() {
-        return this._rates;
-    }
-
-    public async Update() {
-        try {
-            this._rates = await Promise.resolve(this._client.GetRates());
-        } catch (e) {
-            throw new RateQueryException(e);
-        }
-    }
-
-    public GetRate(currencyCode: string):Number {
-        let val = 0;
-        this._rates.forEach(function (rate) {
-            if (rate.code === currencyCode) {
-                val = rate.rate;
-                return val;
-            }
-        });
-
+  public getRate(currencyCode: string): number {
+    let val = 0;
+    this.rates.forEach(function (rate) {
+      if (rate.code === currencyCode) {
+        val = rate.rate;
         return val;
+      }
+    });
+
+    return val;
+  }
+
+  public async update(rateClient: RateClient) {
+    try {
+      const rates = await rateClient.getRates();
+      this.rates = rates.getRates();
+    } catch (e) {
+      throw new RateQueryException(e);
     }
+  }
+
+  private castRatesObj(ratesObj: RateInterface[] | string): RateInterface[] {
+    try {
+      if (typeof ratesObj === 'string' || ratesObj instanceof String) {
+        ratesObj = JSON.parse(ratesObj.toString());
+      }
+
+      return <RateInterface[]>ratesObj;
+    } catch (e) {
+      throw new RateQueryException(e);
+    }
+  }
 }
 
-export {Rates, RateInterface}
+export { Rates, RateInterface };

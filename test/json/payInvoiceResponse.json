@@ -1,0 +1,448 @@
+{
+  "facade": "merchant/invoice",
+  "data": {
+    "url": "https://test.bitpay.com/invoice?id=AwzYLpkN1cJidQJi2g1jRs",
+    "status": "complete",
+    "price": 12,
+    "currency": "USD",
+    "itemDesc": "Example",
+    "orderId": "0e5ab88f-839f-45e1-a5fe-57e01e17af8e",
+    "invoiceTime": 1671107858009,
+    "rateRefreshTime": 1671107858009,
+    "expirationTime": 1671108758009,
+    "currentTime": 1671107858346,
+    "guid": "09ebf602-79c0-4abe-abea-d3f7d09de48a",
+    "id": "AwzYLpkN1cJidQJi2g1jRs",
+    "lowFeeDetected": false,
+    "amountPaid": 67900,
+    "displayAmountPaid": "0.000679",
+    "exceptionStatus": false,
+    "targetConfirmations": 6,
+    "guaranteedPaymentTargetConfirmations": 0,
+    "guaranteedPayment": false,
+    "transactions": [
+      {
+        "amount": 67900,
+        "confirmations": 6,
+        "receivedTime": "2022-12-15T12:37:38.274Z",
+        "txid": "5569bcd139d333a54b75edb84b76156c6c0ee5ae96be085e7bc9124a0c8e2a56",
+        "exRates": {
+          "BTC": 1,
+          "USD": 17694.999999999996,
+          "BCH": 162.96739731073862,
+          "ETH": 13.747640098513745,
+          "GUSD": 17694.999999999996,
+          "PAX": 17694.999999999996,
+          "BUSD": 17694.999999999996,
+          "USDC": 17694.999999999996,
+          "DOGE": 202056.53472186538,
+          "LTC": 237.6443728176202,
+          "MATIC": 19808.57494682637,
+          "USDC_m": 17694.999999999996
+        }
+      },
+      {
+        "amount": -100,
+        "confirmations": 6,
+        "receivedTime": "2022-12-15T12:37:38.297Z",
+        "type": "buyerPaidMinerFee",
+        "txid": "5569bcd139d333a54b75edb84b76156c6c0ee5ae96be085e7bc9124a0c8e2a56"
+      }
+    ],
+    "transactionSpeed": "medium",
+    "buyer": {
+      "name": "Satoshi",
+      "address1": "street",
+      "address2": "911",
+      "locality": "Washington",
+      "region": "District of Columbia",
+      "postalCode": "20000",
+      "country": "USA",
+      "email": "buyer@buyer.com",
+      "notify": true
+    },
+    "redirectURL": "https://hookb.in/yDGknXr837sGkPZGa6Ed",
+    "autoRedirect": true,
+    "refundAddresses": [],
+    "refundAddressRequestPending": false,
+    "buyerProvidedEmail": "buyer@buyer.com",
+    "buyerProvidedInfo": {
+      "name": "Satoshi",
+      "selectedWallet": "bitpay",
+      "selectedTransactionCurrency": "BCH",
+      "emailAddress": "buyer@buyer.com"
+    },
+    "paymentSubtotals": {
+      "BTC": 67800,
+      "BCH": 11056900,
+      "ETH": 9324000000000000,
+      "GUSD": 1200,
+      "PAX": 12000000000000000000,
+      "BUSD": 12000000000000000000,
+      "USDC": 12000000,
+      "DOGE": 13709600900,
+      "LTC": 16120400,
+      "MATIC": 13433337000000000000,
+      "USDC_m": 12000000
+    },
+    "paymentTotals": {
+      "BTC": 67900,
+      "BCH": 11056900,
+      "ETH": 9324000000000000,
+      "GUSD": 1200,
+      "PAX": 12000000000000000000,
+      "BUSD": 12000000000000000000,
+      "USDC": 12000000,
+      "DOGE": 13709600900,
+      "LTC": 16120400,
+      "MATIC": 13433337000000000000,
+      "USDC_m": 12000000
+    },
+    "paymentDisplayTotals": {
+      "BTC": "0.000679",
+      "BCH": "0.110569",
+      "ETH": "0.009324",
+      "GUSD": "12.00",
+      "PAX": "12.00",
+      "BUSD": "12.00",
+      "USDC": "12.00",
+      "DOGE": "137.096009",
+      "LTC": "0.161204",
+      "MATIC": "13.433337",
+      "USDC_m": "12.00"
+    },
+    "paymentDisplaySubTotals": {
+      "BTC": "0.000678",
+      "BCH": "0.110569",
+      "ETH": "0.009324",
+      "GUSD": "12.00",
+      "PAX": "12.00",
+      "BUSD": "12.00",
+      "USDC": "12.00",
+      "DOGE": "137.096009",
+      "LTC": "0.161204",
+      "MATIC": "13.433337",
+      "USDC_m": "12.00"
+    },
+    "exchangeRates": {
+      "BTC": {
+        "USD": 17694.999999999996,
+        "BCH": 162.96739731073862,
+        "ETH": 13.747640098513745,
+        "GUSD": 17694.999999999996,
+        "PAX": 17694.999999999996,
+        "BUSD": 17694.999999999996,
+        "USDC": 17694.999999999996,
+        "DOGE": 202056.53472186538,
+        "LTC": 237.6443728176202,
+        "MATIC": 19808.57494682637,
+        "USDC_m": 17694.999999999996
+      },
+      "BCH": {
+        "USD": 108.53000000000002,
+        "BTC": 0.006134265408576103,
+        "ETH": 0.08431937721908432,
+        "GUSD": 108.53000000000002,
+        "PAX": 108.53000000000002,
+        "BUSD": 108.53000000000002,
+        "USDC": 108.53000000000002,
+        "DOGE": 1239.287692193504,
+        "LTC": 1.4575611066344347,
+        "MATIC": 121.49333930370538,
+        "USDC_m": 108.53000000000002
+      },
+      "ETH": {
+        "USD": 1286.94,
+        "BTC": 0.07273962521803123,
+        "BCH": 11.852459016393441,
+        "GUSD": 1286.94,
+        "PAX": 1286.94,
+        "BUSD": 1286.94,
+        "USDC": 1286.94,
+        "DOGE": 14695.373653289485,
+        "LTC": 17.283642224012894,
+        "MATIC": 1440.658233516176,
+        "USDC_m": 1286.94
+      },
+      "GUSD": {
+        "USD": 1,
+        "BTC": 0.00005652138034254218,
+        "BCH": 0.009209799226376865,
+        "ETH": 0.0007769223000007768,
+        "PAX": 1,
+        "BUSD": 1,
+        "USDC": 1,
+        "DOGE": 11.418849094199796,
+        "LTC": 0.013430029546065002,
+        "MATIC": 1.119444755401321,
+        "USDC_m": 1
+      },
+      "PAX": {
+        "USD": 1,
+        "BTC": 0.00005652138034254218,
+        "BCH": 0.009209799226376865,
+        "ETH": 0.0007769223000007768,
+        "GUSD": 1,
+        "BUSD": 1,
+        "USDC": 1,
+        "DOGE": 11.418849094199796,
+        "LTC": 0.013430029546065002,
+        "MATIC": 1.119444755401321,
+        "USDC_m": 1
+      },
+      "BUSD": {
+        "USD": 1,
+        "BTC": 0.00005652138034254218,
+        "BCH": 0.009209799226376865,
+        "ETH": 0.0007769223000007768,
+        "GUSD": 1,
+        "PAX": 1,
+        "USDC": 1,
+        "DOGE": 11.418849094199796,
+        "LTC": 0.013430029546065002,
+        "MATIC": 1.119444755401321,
+        "USDC_m": 1
+      },
+      "USDC": {
+        "USD": 1,
+        "BTC": 0.00005652138034254218,
+        "BCH": 0.009209799226376865,
+        "ETH": 0.0007769223000007768,
+        "GUSD": 1,
+        "PAX": 1,
+        "BUSD": 1,
+        "DOGE": 11.418849094199796,
+        "LTC": 0.013430029546065002,
+        "MATIC": 1.119444755401321,
+        "USDC_m": 1
+      },
+      "DOGE": {
+        "USD": 0.08752990000000001,
+        "BTC": 0.000004947310769244683,
+        "BCH": 0.0008061328053048444,
+        "ETH": 0.000068003931226838,
+        "GUSD": 0.08752990000000001,
+        "PAX": 0.08752990000000001,
+        "BUSD": 0.08752990000000001,
+        "USDC": 0.08752990000000001,
+        "LTC": 0.001175529143164115,
+        "MATIC": 0.09798488749580209,
+        "USDC_m": 0.08752990000000001
+      },
+      "LTC": {
+        "USD": 74.43999999999998,
+        "BTC": 0.004207451552698839,
+        "BCH": 0.6855774544114938,
+        "ETH": 0.05783409601205782,
+        "GUSD": 74.43999999999998,
+        "PAX": 74.43999999999998,
+        "BUSD": 74.43999999999998,
+        "USDC": 74.43999999999998,
+        "DOGE": 850.0191265722327,
+        "MATIC": 83.33146759207432,
+        "USDC_m": 74.43999999999998
+      },
+      "MATIC": {
+        "USD": 0.8933,
+        "BTC": 0.00005049054905999293,
+        "BCH": 0.008227113648922453,
+        "ETH": 0.000694024690590694,
+        "GUSD": 0.8933,
+        "PAX": 0.8933,
+        "BUSD": 0.8933,
+        "USDC": 0.8933,
+        "DOGE": 10.200457895848679,
+        "LTC": 0.011997045393499866,
+        "USDC_m": 0.8933
+      },
+      "USDC_m": {
+        "USD": 1,
+        "BTC": 0.00005652138034254218,
+        "BCH": 0.009209799226376865,
+        "ETH": 0.0007769223000007768,
+        "GUSD": 1,
+        "PAX": 1,
+        "BUSD": 1,
+        "USDC": 1,
+        "DOGE": 11.418849094199796,
+        "LTC": 0.013430029546065002,
+        "MATIC": 1.119444755401321
+      }
+    },
+    "minerFees": {
+      "BTC": {
+        "satoshisPerByte": 1,
+        "totalFee": 100,
+        "fiatAmount": 0.02
+      },
+      "BCH": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "ETH": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "GUSD": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "PAX": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "BUSD": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "USDC": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "DOGE": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "LTC": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "MATIC": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      },
+      "USDC_m": {
+        "satoshisPerByte": 0,
+        "totalFee": 0,
+        "fiatAmount": 0
+      }
+    },
+    "shopper": {},
+    "jsonPayProRequired": false,
+    "merchantName": "merchantName",
+    "bitpayIdRequired": false,
+    "itemizedDetails": [],
+    "shopify": {},
+    "transactionCurrency": "BTC",
+    "supportedTransactionCurrencies": {
+      "BTC": {
+        "enabled": true
+      },
+      "BCH": {
+        "enabled": true
+      },
+      "ETH": {
+        "enabled": true
+      },
+      "GUSD": {
+        "enabled": true
+      },
+      "PAX": {
+        "enabled": true
+      },
+      "BUSD": {
+        "enabled": true
+      },
+      "USDC": {
+        "enabled": true
+      },
+      "XRP": {
+        "enabled": false
+      },
+      "DOGE": {
+        "enabled": true
+      },
+      "LTC": {
+        "enabled": true
+      },
+      "APE": {
+        "enabled": false
+      },
+      "EUROC": {
+        "enabled": false
+      },
+      "MATIC": {
+        "enabled": true
+      },
+      "MATIC_e": {
+        "enabled": false
+      },
+      "ETH_m": {
+        "enabled": false
+      },
+      "USDC_m": {
+        "enabled": true
+      },
+      "BUSD_m": {
+        "enabled": false
+      },
+      "DAI_m": {
+        "enabled": false
+      },
+      "WBTC_m": {
+        "enabled": false
+      },
+      "SHIB_m": {
+        "enabled": false
+      },
+      "USDT": {
+        "enabled": false
+      },
+      "USDT_m": {
+        "enabled": false
+      }
+    },
+    "paymentCodes": {
+      "BTC": {
+        "BIP72b": "bitcoin:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs",
+        "BIP73": "https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "BCH": {
+        "BIP72b": "bitcoincash:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs",
+        "BIP73": "https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "ETH": {
+        "EIP681": "ethereum:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "GUSD": {
+        "EIP681b": "ethereum:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "PAX": {
+        "EIP681b": "ethereum:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "BUSD": {
+        "EIP681b": "ethereum:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "USDC": {
+        "EIP681b": "ethereum:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "DOGE": {
+        "BIP72b": "dogecoin:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs",
+        "BIP73": "https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "LTC": {
+        "BIP72b": "litecoin:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs",
+        "BIP73": "https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "MATIC": {
+        "EIP681": "matic:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      },
+      "USDC_m": {
+        "EIP681b": "matic:?r=https://test.bitpay.com/i/AwzYLpkN1cJidQJi2g1jRs"
+      }
+    },
+    "universalCodes": {
+      "paymentString": "https://link.test.bitpay.com/i/AwzYppkN5cDidQJi6g3kRs"
+    },
+    "token": "AShhrUJ2sEJ4stEzkt5AywcrDDE5A3SpeXsXdbU1TMVo"
+  }
+}

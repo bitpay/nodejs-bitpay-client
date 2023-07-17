@@ -1,0 +1,15 @@
+{
+  "facade": "merchant/invoice",
+  "data": {
+    "url": "https://bitpay.com/events",
+    "token": "4MuqDPt93i9Xbf8SnAPniwbGeNLW8A3ScgAmukFMgFUFRqTLuuhVdAFfePPysVqL2P",
+    "events": [
+      "payment",
+      "confirmation"
+    ],
+    "actions": [
+      "subscribe",
+      "unsubscribe"
+    ]
+  }
+}

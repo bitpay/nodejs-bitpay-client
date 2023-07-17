@@ -1,0 +1,919 @@
+{
+  "data": [
+    {
+      "code": "BTC",
+      "name": "Bitcoin",
+      "rate": 1
+    },
+    {
+      "code": "BCH",
+      "name": "Bitcoin Cash",
+      "rate": 161.51
+    },
+    {
+      "code": "USD",
+      "name": "US Dollar",
+      "rate": 17725.64
+    },
+    {
+      "code": "EUR",
+      "name": "Eurozone Euro",
+      "rate": 16648.83
+    },
+    {
+      "code": "GBP",
+      "name": "Pound Sterling",
+      "rate": 14335.77
+    },
+    {
+      "code": "JPY",
+      "name": "Japanese Yen",
+      "rate": 2392078.49
+    },
+    {
+      "code": "CAD",
+      "name": "Canadian Dollar",
+      "rate": 24032.76
+    },
+    {
+      "code": "AUD",
+      "name": "Australian Dollar",
+      "rate": 25805.2
+    },
+    {
+      "code": "CNY",
+      "name": "Chinese Yuan",
+      "rate": 123191.45
+    },
+    {
+      "code": "CHF",
+      "name": "Swiss Franc",
+      "rate": 16426.9
+    },
+    {
+      "code": "SEK",
+      "name": "Swedish Krona",
+      "rate": 180831.37
+    },
+    {
+      "code": "NZD",
+      "name": "New Zealand Dollar",
+      "rate": 27465.51
+    },
+    {
+      "code": "KRW",
+      "name": "South Korean Won",
+      "rate": 22971487.17
+    },
+    {
+      "code": "ETH",
+      "name": "Ether",
+      "rate": 13.35
+    },
+    {
+      "code": "MATIC_e",
+      "name": "Matic",
+      "rate": 19229.38
+    },
+    {
+      "code": "MATIC",
+      "name": "Matic",
+      "rate": 19229.38
+    },
+    {
+      "code": "ETH_m",
+      "name": "Ether",
+      "rate": 13.35
+    },
+    {
+      "code": "LTC",
+      "name": "Litecoin",
+      "rate": 226.15
+    },
+    {
+      "code": "XRP",
+      "name": "Ripple",
+      "rate": 45332.97
+    },
+    {
+      "code": "AED",
+      "name": "UAE Dirham",
+      "rate": 65104.51
+    },
+    {
+      "code": "AFN",
+      "name": "Afghan Afghani",
+      "rate": 1536032.6
+    },
+    {
+      "code": "ALL",
+      "name": "Albanian Lek",
+      "rate": 1911817.56
+    },
+    {
+      "code": "AMD",
+      "name": "Armenian Dram",
+      "rate": 6986207.72
+    },
+    {
+      "code": "ANG",
+      "name": "Netherlands Antillean Guilder",
+      "rate": 31960.4
+    },
+    {
+      "code": "AOA",
+      "name": "Angolan Kwanza",
+      "rate": 8951449.77
+    },
+    {
+      "code": "APE",
+      "name": "ApeCoin",
+      "rate": 4324.38
+    },
+    {
+      "code": "ARS",
+      "name": "Argentine Peso",
+      "rate": 3051460.6
+    },
+    {
+      "code": "AWG",
+      "name": "Aruban Florin",
+      "rate": 31950.47
+    },
+    {
+      "code": "AZN",
+      "name": "Azerbaijani Manat",
+      "rate": 30133.59
+    },
+    {
+      "code": "BAM",
+      "name": "Bosnia-Herzegovina Convertible Mark",
+      "rate": 32598.2
+    },
+    {
+      "code": "BBD",
+      "name": "Barbadian Dollar",
+      "rate": 35451.29
+    },
+    {
+      "code": "BDT",
+      "name": "Bangladeshi Taka",
+      "rate": 1831014.05
+    },
+    {
+      "code": "BGN",
+      "name": "Bulgarian Lev",
+      "rate": 32559.29
+    },
+    {
+      "code": "BHD",
+      "name": "Bahraini Dinar",
+      "rate": 6682.96
+    },
+    {
+      "code": "BIF",
+      "name": "Burundian Franc",
+      "rate": 36734334.28
+    },
+    {
+      "code": "BMD",
+      "name": "Bermudan Dollar",
+      "rate": 17725.64
+    },
+    {
+      "code": "BND",
+      "name": "Brunei Dollar",
+      "rate": 23882.49
+    },
+    {
+      "code": "BOB",
+      "name": "Bolivian Boliviano",
+      "rate": 122542.97
+    },
+    {
+      "code": "BRL",
+      "name": "Brazilian Real",
+      "rate": 94578.71
+    },
+    {
+      "code": "BSD",
+      "name": "Bahamian Dollar",
+      "rate": 17725.64
+    },
+    {
+      "code": "BTN",
+      "name": "Bhutanese Ngultrum",
+      "rate": 1463244.32
+    },
+    {
+      "code": "BUSD",
+      "name": "Binance USD",
+      "rate": 17725.64
+    },
+    {
+      "code": "BUSD_m",
+      "name": "Binance USD",
+      "rate": 17725.64
+    },
+    {
+      "code": "BWP",
+      "name": "Botswanan Pula",
+      "rate": 228658.67
+    },
+    {
+      "code": "BYN",
+      "name": "Belarusian Ruble",
+      "rate": 44762.39
+    },
+    {
+      "code": "BZD",
+      "name": "Belize Dollar",
+      "rate": 35746.97
+    },
+    {
+      "code": "CDF",
+      "name": "Congolese Franc",
+      "rate": 36443904.13
+    },
+    {
+      "code": "CLF",
+      "name": "Chilean Unit of Account (UF)",
+      "rate": 552.37
+    },
+    {
+      "code": "CLP",
+      "name": "Chilean Peso",
+      "rate": 15241039.71
+    },
+    {
+      "code": "COP",
+      "name": "Colombian Peso",
+      "rate": 84495304.55
+    },
+    {
+      "code": "CRC",
+      "name": "Costa Rican Colón",
+      "rate": 10248540.29
+    },
+    {
+      "code": "CUP",
+      "name": "Cuban Peso",
+      "rate": 456435.31
+    },
+    {
+      "code": "CVE",
+      "name": "Cape Verdean Escudo",
+      "rate": 1836776.68
+    },
+    {
+      "code": "CZK",
+      "name": "Czech Koruna",
+      "rate": 404151.15
+    },
+    {
+      "code": "DAI",
+      "name": "Dai",
+      "rate": 17727.42
+    },
+    {
+      "code": "DAI_m",
+      "name": "Dai",
+      "rate": 17727.42
+    },
+    {
+      "code": "DJF",
+      "name": "Djiboutian Franc",
+      "rate": 3157110.59
+    },
+    {
+      "code": "DKK",
+      "name": "Danish Krone",
+      "rate": 123841.11
+    },
+    {
+      "code": "DOGE",
+      "name": "Dogecoin",
+      "rate": 195130.37
+    },
+    {
+      "code": "DOP",
+      "name": "Dominican Peso",
+      "rate": 975879.64
+    },
+    {
+      "code": "DZD",
+      "name": "Algerian Dinar",
+      "rate": 2438015.26
+    },
+    {
+      "code": "EGP",
+      "name": "Egyptian Pound",
+      "rate": 437644.36
+    },
+    {
+      "code": "ETB",
+      "name": "Ethiopian Birr",
+      "rate": 948982.65
+    },
+    {
+      "code": "EUROC",
+      "name": "Circle Euro Coin",
+      "rate": 16647.87
+    },
+    {
+      "code": "FJD",
+      "name": "Fijian Dollar",
+      "rate": 38695.08
+    },
+    {
+      "code": "FKP",
+      "name": "Falkland Islands Pound",
+      "rate": 14335.77
+    },
+    {
+      "code": "GEL",
+      "name": "Georgian Lari",
+      "rate": 47061.58
+    },
+    {
+      "code": "GHS",
+      "name": "Ghanaian Cedi",
+      "rate": 231319.64
+    },
+    {
+      "code": "GIP",
+      "name": "Gibraltar Pound",
+      "rate": 14335.77
+    },
+    {
+      "code": "GMD",
+      "name": "Gambian Dalasi",
+      "rate": 1097217.31
+    },
+    {
+      "code": "GNF",
+      "name": "Guinean Franc",
+      "rate": 152814820.23
+    },
+    {
+      "code": "GTQ",
+      "name": "Guatemalan Quetzal",
+      "rate": 139565.56
+    },
+    {
+      "code": "GUSD",
+      "name": "Gemini US Dollar",
+      "rate": 17725.64
+    },
+    {
+      "code": "GYD",
+      "name": "Guyanaese Dollar",
+      "rate": 3710149.2
+    },
+    {
+      "code": "HKD",
+      "name": "Hong Kong Dollar",
+      "rate": 137743.31
+    },
+    {
+      "code": "HNL",
+      "name": "Honduran Lempira",
+      "rate": 437721.82
+    },
+    {
+      "code": "HRK",
+      "name": "Croatian Kuna",
+      "rate": 125517.05
+    },
+    {
+      "code": "HTG",
+      "name": "Haitian Gourde",
+      "rate": 2580346.7
+    },
+    {
+      "code": "HUF",
+      "name": "Hungarian Forint",
+      "rate": 6768330.88
+    },
+    {
+      "code": "IDR",
+      "name": "Indonesian Rupiah",
+      "rate": 276424692.9
+    },
+    {
+      "code": "ILS",
+      "name": "Israeli Shekel",
+      "rate": 60440.42
+    },
+    {
+      "code": "INR",
+      "name": "Indian Rupee",
+      "rate": 1461905.63
+    },
+    {
+      "code": "IQD",
+      "name": "Iraqi Dinar",
+      "rate": 25881526.1
+    },
+    {
+      "code": "IRR",
+      "name": "Iranian Rial",
+      "rate": 733841624.34
+    },
+    {
+      "code": "ISK",
+      "name": "Icelandic Króna",
+      "rate": 2512255.4
+    },
+    {
+      "code": "JEP",
+      "name": "Jersey Pound",
+      "rate": 14335.77
+    },
+    {
+      "code": "JMD",
+      "name": "Jamaican Dollar",
+      "rate": 2722537.43
+    },
+    {
+      "code": "JOD",
+      "name": "Jordanian Dinar",
+      "rate": 12572.8
+    },
+    {
+      "code": "KES",
+      "name": "Kenyan Shilling",
+      "rate": 2178127.02
+    },
+    {
+      "code": "KGS",
+      "name": "Kyrgystani Som",
+      "rate": 1505793.38
+    },
+    {
+      "code": "KHR",
+      "name": "Cambodian Riel",
+      "rate": 72903995.36
+    },
+    {
+      "code": "KMF",
+      "name": "Comorian Franc",
+      "rate": 8221592.26
+    },
+    {
+      "code": "KPW",
+      "name": "North Korean Won",
+      "rate": 15953078.79
+    },
+    {
+      "code": "KWD",
+      "name": "Kuwaiti Dinar",
+      "rate": 5434.91
+    },
+    {
+      "code": "KYD",
+      "name": "Cayman Islands Dollar",
+      "rate": 14779
+    },
+    {
+      "code": "KZT",
+      "name": "Kazakhstani Tenge",
+      "rate": 8328899.14
+    },
+    {
+      "code": "LAK",
+      "name": "Laotian Kip",
+      "rate": 307204409.57
+    },
+    {
+      "code": "LBP",
+      "name": "Lebanese Pound",
+      "rate": 26818140.97
+    },
+    {
+      "code": "LKR",
+      "name": "Sri Lankan Rupee",
+      "rate": 6481306.53
+    },
+    {
+      "code": "LRD",
+      "name": "Liberian Dollar",
+      "rate": 2733736.72
+    },
+    {
+      "code": "LSL",
+      "name": "Lesotho Loti",
+      "rate": 309891
+    },
+    {
+      "code": "LYD",
+      "name": "Libyan Dinar",
+      "rate": 85840.34
+    },
+    {
+      "code": "MAD",
+      "name": "Moroccan Dirham",
+      "rate": 185659.24
+    },
+    {
+      "code": "MDL",
+      "name": "Moldovan Leu",
+      "rate": 343158.15
+    },
+    {
+      "code": "MGA",
+      "name": "Malagasy Ariary",
+      "rate": 78437739.91
+    },
+    {
+      "code": "MKD",
+      "name": "Macedonian Denar",
+      "rate": 1025815.74
+    },
+    {
+      "code": "MMK",
+      "name": "Myanma Kyat",
+      "rate": 37240883.49
+    },
+    {
+      "code": "MNT",
+      "name": "Mongolian Tugrik",
+      "rate": 60390650.34
+    },
+    {
+      "code": "MOP",
+      "name": "Macanese Pataca",
+      "rate": 141976.29
+    },
+    {
+      "code": "MRU",
+      "name": "Mauritanian Ouguiya",
+      "rate": 668216.19
+    },
+    {
+      "code": "MUR",
+      "name": "Mauritian Rupee",
+      "rate": 779042.01
+    },
+    {
+      "code": "MVR",
+      "name": "Maldivian Rufiyaa",
+      "rate": 272974.9
+    },
+    {
+      "code": "MWK",
+      "name": "Malawian Kwacha",
+      "rate": 18202410.95
+    },
+    {
+      "code": "MXN",
+      "name": "Mexican Peso",
+      "rate": 347715.34
+    },
+    {
+      "code": "MYR",
+      "name": "Malaysian Ringgit",
+      "rate": 77842.16
+    },
+    {
+      "code": "MZN",
+      "name": "Mozambican Metical",
+      "rate": 1131782.33
+    },
+    {
+      "code": "NAD",
+      "name": "Namibian Dollar",
+      "rate": 305944.6
+    },
+    {
+      "code": "NGN",
+      "name": "Nigerian Naira",
+      "rate": 7914499.64
+    },
+    {
+      "code": "NIO",
+      "name": "Nicaraguan Córdoba",
+      "rate": 647465.72
+    },
+    {
+      "code": "NOK",
+      "name": "Norwegian Krone",
+      "rate": 172468.04
+    },
+    {
+      "code": "NPR",
+      "name": "Nepalese Rupee",
+      "rate": 2341198.58
+    },
+    {
+      "code": "OMR",
+      "name": "Omani Rial",
+      "rate": 6824.41
+    },
+    {
+      "code": "PAB",
+      "name": "Panamanian Balboa",
+      "rate": 17725.64
+    },
+    {
+      "code": "PAX",
+      "name": "Paxos Standard USD",
+      "rate": 17725.64
+    },
+    {
+      "code": "PEN",
+      "name": "Peruvian Nuevo Sol",
+      "rate": 67601.92
+    },
+    {
+      "code": "PGK",
+      "name": "Papua New Guinean Kina",
+      "rate": 62487.36
+    },
+    {
+      "code": "PHP",
+      "name": "Philippine Peso",
+      "rate": 986210.47
+    },
+    {
+      "code": "PKR",
+      "name": "Pakistani Rupee",
+      "rate": 3987647.24
+    },
+    {
+      "code": "PLN",
+      "name": "Polish Zloty",
+      "rate": 77929.28
+    },
+    {
+      "code": "PYG",
+      "name": "Paraguayan Guarani",
+      "rate": 127845404.73
+    },
+    {
+      "code": "QAR",
+      "name": "Qatari Rial",
+      "rate": 65079.11
+    },
+    {
+      "code": "RON",
+      "name": "Romanian Leu",
+      "rate": 81989.96
+    },
+    {
+      "code": "RSD",
+      "name": "Serbian Dinar",
+      "rate": 1954764.23
+    },
+    {
+      "code": "RUB",
+      "name": "Russian Ruble",
+      "rate": 1127350.9
+    },
+    {
+      "code": "RWF",
+      "name": "Rwandan Franc",
+      "rate": 19046411.13
+    },
+    {
+      "code": "SAR",
+      "name": "Saudi Riyal",
+      "rate": 66617.1
+    },
+    {
+      "code": "SBD",
+      "name": "Solomon Islands Dollar",
+      "rate": 145892.54
+    },
+    {
+      "code": "SCR",
+      "name": "Seychellois Rupee",
+      "rate": 230860.21
+    },
+    {
+      "code": "SDG",
+      "name": "Sudanese Pound",
+      "rate": 10059302.46
+    },
+    {
+      "code": "SGD",
+      "name": "Singapore Dollar",
+      "rate": 23883.64
+    },
+    {
+      "code": "SHIB",
+      "name": "Shiba Inu",
+      "rate": 1939348260.39
+    },
+    {
+      "code": "SHIB_m",
+      "name": "Shiba Inu",
+      "rate": 1939348260.39
+    },
+    {
+      "code": "SHP",
+      "name": "Saint Helena Pound",
+      "rate": 14335.77
+    },
+    {
+      "code": "SLL",
+      "name": "Sierra Leonean Leone",
+      "rate": 313123485.36
+    },
+    {
+      "code": "SOS",
+      "name": "Somali Shilling",
+      "rate": 10082605.46
+    },
+    {
+      "code": "SRD",
+      "name": "Surinamese Dollar",
+      "rate": 566254.53
+    },
+    {
+      "code": "STN",
+      "name": "São Tomé and Príncipe Dobra",
+      "rate": 407903.23
+    },
+    {
+      "code": "SVC",
+      "name": "Salvadoran Colón",
+      "rate": 155184.9
+    },
+    {
+      "code": "SYP",
+      "name": "Syrian Pound",
+      "rate": 44536210.06
+    },
+    {
+      "code": "SZL",
+      "name": "Swazi Lilangeni",
+      "rate": 309886.85
+    },
+    {
+      "code": "THB",
+      "name": "Thai Baht",
+      "rate": 613626.31
+    },
+    {
+      "code": "TJS",
+      "name": "Tajikistani Somoni",
+      "rate": 179379.15
+    },
+    {
+      "code": "TMT",
+      "name": "Turkmenistani Manat",
+      "rate": 61596.61
+    },
+    {
+      "code": "TND",
+      "name": "Tunisian Dinar",
+      "rate": 56216.88
+    },
+    {
+      "code": "TOP",
+      "name": "Tongan Paʻanga",
+      "rate": 41549.14
+    },
+    {
+      "code": "TRY",
+      "name": "Turkish Lira",
+      "rate": 330531.82
+    },
+    {
+      "code": "TTD",
+      "name": "Trinidad and Tobago Dollar",
+      "rate": 120383.6
+    },
+    {
+      "code": "TWD",
+      "name": "New Taiwan Dollar",
+      "rate": 540446.01
+    },
+    {
+      "code": "TZS",
+      "name": "Tanzanian Shilling",
+      "rate": 41381559.63
+    },
+    {
+      "code": "UAH",
+      "name": "Ukrainian Hryvnia",
+      "rate": 654920.59
+    },
+    {
+      "code": "UGX",
+      "name": "Ugandan Shilling",
+      "rate": 65526906.53
+    },
+    {
+      "code": "USDC",
+      "name": "Circle USD Coin",
+      "rate": 17725.64
+    },
+    {
+      "code": "USDC_m",
+      "name": "Circle USD Coin",
+      "rate": 17725.64
+    },
+    {
+      "code": "USDT",
+      "name": "Tether",
+      "rate": 17725.64
+    },
+    {
+      "code": "USDT_m",
+      "name": "Tether",
+      "rate": 17725.64
+    },
+    {
+      "code": "UYU",
+      "name": "Uruguayan Peso",
+      "rate": 688521.21
+    },
+    {
+      "code": "UZS",
+      "name": "Uzbekistan Som",
+      "rate": 199616037.59
+    },
+    {
+      "code": "VES",
+      "name": "Venezuelan Bolívar Soberano",
+      "rate": 249885.48
+    },
+    {
+      "code": "VND",
+      "name": "Vietnamese Dong",
+      "rate": 417319905.72
+    },
+    {
+      "code": "VUV",
+      "name": "Vanuatu Vatu",
+      "rate": 2092405.81
+    },
+    {
+      "code": "WBTC",
+      "name": "Wrapped BTC",
+      "rate": 0.99
+    },
+    {
+      "code": "WBTC_m",
+      "name": "Wrapped BTC",
+      "rate": 0.99
+    },
+    {
+      "code": "WST",
+      "name": "Samoan Tala",
+      "rate": 47815.81
+    },
+    {
+      "code": "XAF",
+      "name": "CFA Franc BEAC",
+      "rate": 10920292.82
+    },
+    {
+      "code": "XAG",
+      "name": "Silver (troy ounce)",
+      "rate": 747.29
+    },
+    {
+      "code": "XAU",
+      "name": "Gold (troy ounce)",
+      "rate": 9.8
+    },
+    {
+      "code": "XCD",
+      "name": "East Caribbean Dollar",
+      "rate": 47904.44
+    },
+    {
+      "code": "XPF",
+      "name": "CFP Franc",
+      "rate": 1986620.42
+    },
+    {
+      "code": "XOF",
+      "name": "CFA Franc BCEAO",
+      "rate": 10920292.82
+    },
+    {
+      "code": "YER",
+      "name": "Yemeni Rial",
+      "rate": 4435843.2
+    },
+    {
+      "code": "ZAR",
+      "name": "South African Rand",
+      "rate": 303629.97
+    },
+    {
+      "code": "ZMW",
+      "name": "Zambian Kwacha",
+      "rate": 311145.66
+    },
+    {
+      "code": "ZWL",
+      "name": "Zimbabwean Dollar",
+      "rate": 5707657.08
+    }
+  ]
+}
