@@ -1,7 +1,8 @@
 import { BitPayClient } from './BitPayClient';
 import { TokenContainer } from '../TokenContainer';
 import { SettlementInterface } from '../Model/Settlement/Settlement';
-import { BitPayExceptions as Exceptions, Facade } from '../index';
+import { Facade } from '../index';
+import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
 
 export class SettlementClient {
   private bitPayClient: BitPayClient;
@@ -17,7 +18,8 @@ export class SettlementClient {
    *
    * @param settlementId Settlement Id
    * @returns Settlement
-   * @throws SettlementQueryException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async get(settlementId: string): Promise<SettlementInterface> {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
@@ -26,10 +28,7 @@ export class SettlementClient {
       const result = await this.bitPayClient.get('settlements/' + settlementId, params, true);
       return <SettlementInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.SettlementQuery(
-        'failed to deserialize BitPay server response (Settlement) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Settlement', e.message);
     }
   }
 
@@ -38,19 +37,18 @@ export class SettlementClient {
    *
    * @param params
    * @returns Settlement[]
-   * @throws SettlementQueryException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async getSettlements(params: object): Promise<SettlementInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
+    const result = await this.bitPayClient.get('settlements', params, true);
+
     try {
-      const result = await this.bitPayClient.get('settlements', params, true);
       return <SettlementInterface[]>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.SettlementQuery(
-        'failed to deserialize BitPay server response (Settlement) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Settlement', e.message);
     }
   }
 
@@ -60,19 +58,18 @@ export class SettlementClient {
    * @param settlementId
    * @param token
    * @returns Settlement
-   * @throws SettlementQueryException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async getReconciliationReport(settlementId: string, token: string): Promise<SettlementInterface> {
     const params = { token: token };
 
+    const result = await this.bitPayClient.get('settlements/' + settlementId + '/reconciliationReport', params, true);
+
     try {
-      const result = await this.bitPayClient.get('settlements/' + settlementId + '/reconciliationReport', params, true);
       return <SettlementInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.SettlementQuery(
-        'failed to deserialize BitPay server response (Settlement) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Settlement', e.message);
     }
   }
 }

@@ -1,5 +1,5 @@
-import BitPayException from './Exceptions/BitPayException';
 import { Facade } from './Facade';
+import { BitPayExceptionProvider } from './Exceptions/BitPayExceptionProvider';
 
 export class TokenContainer {
   private readonly data: Map<string, string>;
@@ -17,10 +17,11 @@ export class TokenContainer {
    *
    * @param key
    * @returns string
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public getToken(key: string): string {
     if (!this.data.has(key)) {
-      throw new BitPayException(null, 'There is no token for the specified key : ' + key);
+      BitPayExceptionProvider.throwGenericExceptionWithMessage('There is no token for the specified key : ' + key);
     }
 
     return this.data.get(key);

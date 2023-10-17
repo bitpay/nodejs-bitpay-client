@@ -1,5 +1,5 @@
 import { ec } from 'elliptic';
-import { BitPayExceptions as Exceptions, Env, Facade, KeyUtils } from './index';
+import { Env, Facade, KeyUtils } from './index';
 import {
   BillInterface,
   InvoiceInterface,
@@ -12,31 +12,34 @@ import {
   RateInterface,
   Rates
 } from './Model';
-import { BitPayClient } from './Client/BitPayClient';
+import {
+  BitPayClient,
+  RateClient,
+  CurrencyClient,
+  InvoiceClient,
+  RefundClient,
+  PayoutClient,
+  PayoutGroupClient,
+  PayoutRecipientClient,
+  LedgerClient,
+  BillClient,
+  WalletClient,
+  SettlementClient
+} from './Client/index';
+
 import { TokenContainer } from './TokenContainer';
 import { Environment } from './Environment';
-import BitPayException from './Exceptions/BitPayException';
 import { GuidGenerator } from './util/GuidGenerator';
-import { RateClient } from './Client/RateClient';
-import { CurrencyClient } from './Client/CurrencyClient';
-import { InvoiceClient } from './Client/InvoiceClient';
 import { InvoiceEventTokenInterface } from './Model/Invoice/InvoiceEventToken';
 import { RefundInterface } from './Model/Invoice/Refund';
-import { RefundClient } from './Client/RefundClient';
-import { PayoutRecipientClient } from './Client/PayoutRecipientClient';
-import { PayoutClient } from './Client/PayoutClient';
-import { LedgerClient } from './Client/LedgerClient';
 import { ParamsRemover } from './util/ParamsRemover';
-import { BillClient } from './Client/BillClient';
 import { WalletInterface } from './Model/Wallet/Wallet';
-import { WalletClient } from './Client/WalletClient';
 import { SettlementInterface } from './Model/Settlement/Settlement';
-import { SettlementClient } from './Client/SettlementClient';
 import { PosToken } from './PosToken';
 import { PrivateKey } from './PrivateKey';
 import { CurrencyInterface } from './Model/Currency/Currency';
-
 import * as fs from 'fs';
+import { BitPayExceptionProvider } from './Exceptions/BitPayExceptionProvider';
 
 export class Client {
   private bitPayClient: BitPayClient;
@@ -59,14 +62,14 @@ export class Client {
       return;
     }
 
+    if (tokenContainer === null) {
+      tokenContainer = new TokenContainer();
+    }
+
     if (bitPayClient !== undefined && bitPayClient !== null) {
       // using for tests
       this.initForTests(bitPayClient, guidGenerator, tokenContainer);
       return;
-    }
-
-    if (tokenContainer === null) {
-      tokenContainer = new TokenContainer();
     }
 
     if (environment === undefined) {
@@ -515,7 +518,7 @@ export class Client {
    * @param payouts
    */
   public async submitPayouts(payouts: PayoutInterface[]): Promise<PayoutGroupInterface> {
-    return this.createPayoutClient().submitPayouts(payouts);
+    return this.createPayoutGroupClient().submitPayouts(payouts);
   }
 
   /**
@@ -524,7 +527,7 @@ export class Client {
    * @param payoutGroupId
    */
   public async cancelPayouts(payoutGroupId: string): Promise<PayoutGroupInterface> {
-    return this.createPayoutClient().cancelPayouts(payoutGroupId);
+    return this.createPayoutGroupClient().cancelPayouts(payoutGroupId);
   }
 
   /**
@@ -731,7 +734,7 @@ export class Client {
       return this.keyUtils.load_keypair(Buffer.from(keyHex).toString().trim());
     }
 
-    throw new BitPayException(null, 'Missing ECKey');
+    BitPayExceptionProvider.throwGenericExceptionWithMessage('Missing ECKey');
   }
 
   private static getBaseUrl(environment: string) {
@@ -742,43 +745,47 @@ export class Client {
     return this.keyUtils.getPublicKeyFromPrivateKey(ecKey);
   }
 
-  private createRateClient() {
+  private createRateClient(): RateClient {
     return new RateClient(this.bitPayClient);
   }
 
-  private getCurrencyClient() {
+  private getCurrencyClient(): CurrencyClient {
     return new CurrencyClient(this.bitPayClient);
   }
 
-  private createInvoiceClient() {
+  private createInvoiceClient(): InvoiceClient {
     return new InvoiceClient(this.bitPayClient, this.tokenContainer, this.guidGenerator);
   }
 
-  private createRefundClient() {
+  private createRefundClient(): RefundClient {
     return new RefundClient(this.bitPayClient, this.tokenContainer, this.guidGenerator);
   }
 
-  private createPayoutRecipientClient() {
+  private createPayoutRecipientClient(): PayoutRecipientClient {
     return new PayoutRecipientClient(this.bitPayClient, this.tokenContainer, this.guidGenerator);
   }
 
-  private createPayoutClient() {
+  private createPayoutClient(): PayoutClient {
     return new PayoutClient(this.bitPayClient, this.tokenContainer, this.guidGenerator);
   }
 
-  private createLedgerClient() {
+  private createPayoutGroupClient(): PayoutGroupClient {
+    return new PayoutGroupClient(this.bitPayClient, this.tokenContainer, this.guidGenerator);
+  }
+
+  private createLedgerClient(): LedgerClient {
     return new LedgerClient(this.bitPayClient, this.tokenContainer);
   }
 
-  private createBillClient() {
+  private createBillClient(): BillClient {
     return new BillClient(this.bitPayClient, this.tokenContainer);
   }
 
-  private createWalletClient() {
+  private createWalletClient(): WalletClient {
     return new WalletClient(this.bitPayClient);
   }
 
-  private createSettlementClient() {
+  private createSettlementClient(): SettlementClient {
     return new SettlementClient(this.bitPayClient, this.tokenContainer);
   }
 
@@ -800,7 +807,7 @@ export class Client {
 
   private initByConfigFilePath(configFilePath: string): void {
     if (!fs.existsSync(configFilePath)) {
-      throw new Exceptions.Generic(null, 'Configuration file not found');
+      BitPayExceptionProvider.throwGenericExceptionWithMessage('Configuration file not found');
     }
 
     try {
@@ -813,7 +820,7 @@ export class Client {
       this.bitPayClient = new BitPayClient(Client.getBaseUrl(environment), ecKey, this.getIdentity(ecKey));
       this.guidGenerator = new GuidGenerator();
     } catch (e) {
-      throw new Exceptions.Generic(null, 'Error when reading configuration file', null, e.apiCode);
+      BitPayExceptionProvider.throwGenericExceptionWithMessage('Error when reading configuration file');
     }
   }
 

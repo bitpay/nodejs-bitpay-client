@@ -1,6 +1,6 @@
 import { BitPayClient } from './BitPayClient';
-import { BitPayExceptions as Exceptions } from '../index';
 import { WalletInterface } from '../Model/Wallet/Wallet';
+import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
 
 export class WalletClient {
   private bitPayClient: BitPayClient;
@@ -16,14 +16,12 @@ export class WalletClient {
    * @throws WalletQueryException
    */
   public async getSupportedWallets(): Promise<WalletInterface[]> {
+    const result = await this.bitPayClient.get('supportedwallets', null, false);
+
     try {
-      const result = await this.bitPayClient.get('supportedwallets', null, false);
       return <WalletInterface[]>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.WalletQuery(
-        'failed to deserialize BitPay server response (Wallet) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Wallet', e.message);
     }
   }
 }

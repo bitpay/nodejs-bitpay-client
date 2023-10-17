@@ -1,44 +1,48 @@
-import BitPayException from '../Exceptions/BitPayException';
+import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
+import { BitPayApiException } from '../Exceptions/BitPayApiException';
 
 export class BitPayResponseParser {
-  public async responseToJsonString(response: Response) {
+  public async getJsonDataFromJsonResponse(responseObj: object) {
+    if (responseObj === null) {
+      BitPayExceptionProvider.throwApiExceptionWithMessage('HTTP response is null', null);
+    }
+
     try {
-      if (response == null) {
-        throw new BitPayException(null, 'Error: HTTP response is null');
-      }
-      const responsObj = await response.json();
-
-      if (Object.prototype.hasOwnProperty.call(responsObj, 'status')) {
-        if (responsObj['status'] === 'error') {
-          throw new BitPayException(null, 'Error: ' + responsObj['error'], null, responsObj['code']);
+      if (Object.prototype.hasOwnProperty.call(responseObj, 'status')) {
+        if (responseObj['status'] === 'error') {
+          BitPayExceptionProvider.throwApiExceptionWithMessage(
+            responseObj['error'] ?? null,
+            responseObj['code'] ?? null
+          );
         }
 
-        if (Object.prototype.hasOwnProperty.call(responsObj, 'data') && Object.keys(responsObj.data).length === 0) {
-          return JSON.stringify(responsObj);
+        if (
+          Object.prototype.hasOwnProperty.call(responseObj, 'data') &&
+          Object.keys(responseObj['data']).length === 0
+        ) {
+          return JSON.stringify(responseObj);
         }
       }
 
-      if (Object.prototype.hasOwnProperty.call(responsObj, 'error')) {
-        throw new BitPayException(null, 'Error: ' + responsObj['error']);
-      } else if (Object.prototype.hasOwnProperty.call(responsObj, 'errors')) {
-        let message = '';
-        responsObj['errors'].forEach(function (error) {
-          message += '\n' + error.toString();
-        });
-        throw new BitPayException(null, 'Errors: ' + message);
+      if (Object.prototype.hasOwnProperty.call(responseObj, 'error')) {
+        BitPayExceptionProvider.throwApiExceptionWithMessage(responseObj['error'] ?? null, responseObj['code'] ?? null);
       }
 
-      if (Object.prototype.hasOwnProperty.call(responsObj, 'success')) {
-        return JSON.stringify(responsObj['success']);
+      if (Object.prototype.hasOwnProperty.call(responseObj, 'success')) {
+        return JSON.stringify(responseObj['success']);
       }
 
-      if (Object.prototype.hasOwnProperty.call(responsObj, 'data')) {
-        return JSON.stringify(responsObj['data']);
+      if (Object.prototype.hasOwnProperty.call(responseObj, 'data')) {
+        return JSON.stringify(responseObj['data']);
       }
 
-      return JSON.stringify(responsObj);
+      return JSON.stringify(responseObj);
     } catch (e) {
-      throw new BitPayException(null, 'failed to retrieve HTTP response body : ' + e.message);
+      if (e instanceof BitPayApiException) {
+        throw e;
+      }
+
+      BitPayExceptionProvider.throwApiExceptionWithMessage(e.message, null);
     }
   }
 
