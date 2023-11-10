@@ -26,6 +26,7 @@ import * as updateBillRequestMock from './json/updateBillRequest.json';
 import * as updateBillResponseMock from './json/updateBillResponse.json';
 import * as deliverBillRequestMock from './json/deliverBillRequest.json';
 import * as deliverBillResponseMock from './json/deliverBillResponse.json';
+import * as errorResponse from './json/errorResponse.json';
 import * as getCurrenciesResponseMock from './json/getCurrenciesResponse.json';
 import * as createInvoiceRequestMock from './json/createInvoiceRequest.json';
 import * as createInvoiceResponseMcok from './json/createInvoiceResponse.json';
@@ -66,9 +67,11 @@ import * as getSettlementsResponseMock from './json/getSettlementsResponse.json'
 import * as getSettlementResponseMock from './json/getSettlementResponse.json';
 import * as getSettlementReconciliationReportResponseMock from './json/getSettlementReconciliationReportResponse.json';
 import * as getSupportedWalletsMock from './json/getSupportedWallets.json';
+import * as invalidSignature from './json/invalidSignature.json';
 
 import { isEqual } from 'lodash';
 import * as BitPaySDK from '../src/index';
+import BitPayApiException from '../src/Exceptions/BitPayApiException';
 
 let client;
 let oneMonthAgo;
@@ -176,6 +179,58 @@ describe('BitPaySDK.Client', () => {
     it('should create client by config file', async () => {
       const client = Client.createClientByConfig(__dirname + '/BitPayUnit.config.json');
       expect(client.getToken(Facade.Pos)).toBe('somePosToken');
+    });
+  });
+
+  describe('Exceptions', () => {
+    const hexPrivate = '2f72ed3291b536aa43d750829875f5a742a0f1095b8ad529944cbc0bd498693g';
+    const ecKey = keyUtils.load_keypair(hexPrivate);
+    const tokenContainer = new TokenContainer();
+    tokenContainer.addMerchant(merchantToken);
+    tokenContainer.addPayout(payoutToken);
+
+    const client = new Client(
+      null,
+      null,
+      tokenContainer,
+      null,
+      null,
+      undefined,
+      new BitPayClient(host + '/', ecKey, 'someIdentity'),
+      null
+    );
+
+    it('should throws BitPayException for invalid signature', async () => {
+      server.use(
+        rest.get(host + '/invoices/1234', async (req, res, ctx) => {
+          validateSignatureRequest(req);
+          validateMerchantTokenInUrl(req);
+
+          return res(ctx.status(200), ctx.json(invalidSignature));
+        })
+      );
+
+      await expect(client.getInvoice('1234')).rejects.toBeInstanceOf(BitPayApiException);
+      await expect(client.getInvoice('1234')).rejects.toEqual({
+        code: '000000',
+        message: 'Invalid signature',
+        name: 'BITPAY-EXCEPTION'
+      });
+    });
+    it('should throws BitPayException for error response', async () => {
+      server.use(
+        rest.post(host + '/payouts', async (req, res, ctx) => {
+          return res(ctx.status(200), ctx.json(errorResponse));
+        })
+      );
+
+      const payout: Payout = new Payout(10.0, 'USD', 'USD');
+      await expect(client.submitPayout(payout)).rejects.toBeInstanceOf(BitPayApiException);
+      await expect(client.submitPayout(payout)).rejects.toEqual({
+        code: '0000',
+        message: '["Currency disabled for user location."]',
+        name: 'BITPAY-EXCEPTION'
+      });
     });
   });
 

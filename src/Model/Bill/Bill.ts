@@ -1,6 +1,6 @@
 import { Currency } from '../../Currency';
-import BitPayException from '../../Exceptions/BitPayException';
 import { Item } from './Item';
+import { BitPayExceptionProvider } from '../../Exceptions/BitPayExceptionProvider';
 
 export interface BillInterface {
   currency: string | null;
@@ -64,11 +64,10 @@ export class Bill implements BillInterface {
     this.items = items;
   }
 
-  setCurrency(_currency: string) {
-    if (!Currency.isValid(_currency))
-      throw new BitPayException(null, 'Error: currency code must be a type of Model.Currency', null);
+  setCurrency(currency: string) {
+    if (!Currency.isValid(currency)) BitPayExceptionProvider.throwInvalidCurrencyException(currency);
 
-    this.currency = _currency;
+    this.currency = currency;
   }
 }
 

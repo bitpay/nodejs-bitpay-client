@@ -1,5 +1,4 @@
 import { Currency } from '../../Currency';
-import BitPayException from '../../Exceptions/BitPayException';
 import { Buyer } from './Buyer';
 import { InvoiceBuyerProvidedInfo } from './InvoiceBuyerProvidedInfo';
 import { InvoiceTransaction } from './InvoiceTransaction';
@@ -8,6 +7,7 @@ import { Shopper } from './Shopper';
 import { RefundInfo } from './RefundInfo';
 import { SupportedTransactionCurrencies } from './SupportedTransactionCurrencies';
 import { InvoiceUniversalCodes } from './InvoiceUniversalCodes';
+import { BitPayExceptionProvider } from '../../Exceptions/BitPayExceptionProvider';
 
 export interface InvoiceInterface {
   // API fields
@@ -168,10 +168,14 @@ export class Invoice implements InvoiceInterface {
     this.setCurrency(currency);
   }
 
-  setCurrency(_currency: string) {
-    if (!Currency.isValid(_currency))
-      throw new BitPayException(null, 'Error: currency code must be a type of Model.Currency', null);
+  /**
+   * Set currency for invoice.
+   * @param currency string
+   * @throws BitPayGenericException BitPayGenericException class
+   */
+  setCurrency(currency: string) {
+    if (!Currency.isValid(currency)) BitPayExceptionProvider.throwInvalidCurrencyException(currency);
 
-    this.currency = _currency;
+    this.currency = currency;
   }
 }

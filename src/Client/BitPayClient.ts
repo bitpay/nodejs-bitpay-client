@@ -6,6 +6,8 @@ import KeyPair = ec.KeyPair;
 import * as qs from 'querystring';
 import BitPayException from '../Exceptions/BitPayException';
 import { BitPayResponseParser } from '../util/BitPayResponseParser';
+import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
+import { LoggerProvider } from '../Logger/LoggerProvider';
 
 export class BitPayClient {
   private readonly ecKey: KeyPair;
@@ -52,21 +54,26 @@ export class BitPayClient {
         headers = this.getSignatureHeaders(fullUrl, headers, null);
       }
 
-      const result = await fetch(fullUrl, {
-        method: 'get',
+      const method = 'GET';
+
+      LoggerProvider.getLogger().logRequest(method, fullUrl, null);
+
+      const response = await fetch(fullUrl, {
+        method: method,
         headers: headers
       });
 
-      return this.responseParser.responseToJsonString(result);
+      const jsonObject = await response.json();
+
+      LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
+
+      return this.responseParser.getJsonDataFromJsonResponse(jsonObject);
     } catch (e) {
-      let message;
       if (e instanceof BitPayException) {
-        message = e.message;
-      } else {
-        message = e.response.data;
+        throw e;
       }
 
-      throw new BitPayException(null, 'GET failed : ' + JSON.stringify(message));
+      BitPayExceptionProvider.throwApiExceptionWithMessage(JSON.stringify(e.message), null);
     }
   }
 
@@ -87,21 +94,25 @@ export class BitPayClient {
         headers = this.getSignatureHeaders(fullUrl, headers, formData);
       }
 
-      const result = await fetch(fullUrl, {
-        method: 'post',
+      const method = 'POST';
+
+      const response = await fetch(fullUrl, {
+        method: method,
         headers: headers,
         body: formData
       });
-      return this.responseParser.responseToJsonString(result);
+
+      const jsonObject = await response.json();
+
+      LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
+
+      return this.responseParser.getJsonDataFromJsonResponse(jsonObject);
     } catch (e) {
-      let message: string;
       if (e instanceof BitPayException) {
-        message = e.message;
-      } else {
-        message = e.response.data;
+        throw e;
       }
 
-      throw new BitPayException(null, 'Post failed : ' + JSON.stringify(message));
+      BitPayExceptionProvider.throwApiExceptionWithMessage(JSON.stringify(e.message), null);
     }
   }
 
@@ -123,21 +134,25 @@ export class BitPayClient {
         headers = this.getSignatureHeaders(fullUrl, headers, formData);
       }
 
-      const result = await fetch(fullUrl, {
-        method: 'PUT',
+      const method = 'PUT';
+
+      const response = await fetch(fullUrl, {
+        method: method,
         headers: headers,
         body: formData
       });
-      return this.responseParser.responseToJsonString(result);
+
+      const jsonObject = await response.json();
+
+      LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
+
+      return this.responseParser.getJsonDataFromJsonResponse(jsonObject);
     } catch (e) {
-      let message: string;
       if (e instanceof BitPayException) {
-        message = e.message;
-      } else {
-        message = e.response.data;
+        throw e;
       }
 
-      throw new BitPayException(null, 'Put failed : ' + JSON.stringify(message));
+      BitPayExceptionProvider.throwApiExceptionWithMessage(JSON.stringify(e.message), null);
     }
   }
 
@@ -158,20 +173,24 @@ export class BitPayClient {
         headers = this.getSignatureHeaders(fullUrl, headers, null);
       }
 
-      const result = await fetch(fullUrl, {
-        method: 'delete',
+      const method = 'DELETE';
+
+      const response = await fetch(fullUrl, {
+        method: method,
         headers: headers
       });
-      return this.responseParser.responseToJsonString(result);
+
+      const jsonObject = await response.json();
+
+      LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
+
+      return this.responseParser.getJsonDataFromJsonResponse(jsonObject);
     } catch (e) {
-      let message: string;
       if (e instanceof BitPayException) {
-        message = e.message;
-      } else {
-        message = e.response.data;
+        throw e;
       }
 
-      throw new BitPayException(null, 'Delete failed : ' + JSON.stringify(message));
+      BitPayExceptionProvider.throwApiExceptionWithMessage(JSON.stringify(e.message), null);
     }
   }
 
@@ -180,14 +199,18 @@ export class BitPayClient {
    * @param fullUrl
    * @param headers
    * @param jsonData
-   * @returns
+   * @throws BitPayApiExtension
    */
   private getSignatureHeaders(fullUrl: string, headers: object, jsonData: string) {
     if (jsonData !== null) {
       fullUrl = fullUrl + jsonData;
     }
 
-    headers['X-Signature'] = this.keyUtils.sign(fullUrl, this.ecKey);
+    try {
+      headers['X-Signature'] = this.keyUtils.sign(fullUrl, this.ecKey);
+    } catch (e) {
+      BitPayExceptionProvider.throwGenericExceptionWithMessage('Wrong ecKey. ' + e.message);
+    }
     headers['X-Identity'] = this.identity;
 
     return headers;

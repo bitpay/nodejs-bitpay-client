@@ -1,5 +1,5 @@
-import RateQueryException from '../../Exceptions/RateQueryException';
 import { RateClient } from '../../Client/RateClient';
+import { BitPayExceptionProvider } from '../../Exceptions/BitPayExceptionProvider';
 
 interface RateInterface {
   Name: string;
@@ -13,7 +13,7 @@ class Rates {
   private rates: RateInterface[];
 
   public constructor(rates: RateInterface[]) {
-    this.rates = this.castRatesObj(rates);
+    this.rates = Rates.castRatesObj(rates);
   }
 
   public getRates() {
@@ -33,15 +33,11 @@ class Rates {
   }
 
   public async update(rateClient: RateClient) {
-    try {
-      const rates = await rateClient.getRates();
-      this.rates = rates.getRates();
-    } catch (e) {
-      throw new RateQueryException(e);
-    }
+    const rates = await rateClient.getRates();
+    this.rates = rates.getRates();
   }
 
-  private castRatesObj(ratesObj: RateInterface[] | string): RateInterface[] {
+  private static castRatesObj(ratesObj: RateInterface[] | string): RateInterface[] {
     try {
       if (typeof ratesObj === 'string' || ratesObj instanceof String) {
         ratesObj = JSON.parse(ratesObj.toString());
@@ -49,7 +45,7 @@ class Rates {
 
       return <RateInterface[]>ratesObj;
     } catch (e) {
-      throw new RateQueryException(e);
+      BitPayExceptionProvider.throwGenericExceptionWithMessage(e.message);
     }
   }
 }

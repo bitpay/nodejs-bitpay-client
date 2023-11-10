@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "code": "0000",
+  "data": null,
+  "error": "[\"Currency disabled for user location.\"]",
+  "message": "[\"Currency disabled for user location.\"]"
+}

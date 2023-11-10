@@ -1,10 +1,11 @@
 import { BitPayClient } from './BitPayClient';
 import { Invoice, InvoiceInterface } from '../Model';
-import { BitPayExceptions as Exceptions, Facade } from '../index';
 import { TokenContainer } from '../TokenContainer';
 import { GuidGenerator } from '../util/GuidGenerator';
 import { InvoiceEventTokenInterface } from '../Model/Invoice/InvoiceEventToken';
 import { BitPayResponseParser } from '../util/BitPayResponseParser';
+import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
+import { Facade } from '../Facade';
 
 export class InvoiceClient {
   private bitPayClient: BitPayClient;
@@ -24,20 +25,19 @@ export class InvoiceClient {
    * @param facade The facade used to create it.
    * @param signRequest Signed request.
    * @returns Invoice
-   * @throws InvoiceCreationException.
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async create(invoice: Invoice, facade: Facade, signRequest: boolean): Promise<InvoiceInterface> {
     invoice.guid = invoice.guid ? invoice.guid : this.guidGenerator.execute();
     invoice.token = this.tokenContainer.getToken(facade);
 
+    const result = await this.bitPayClient.post('invoices', invoice, signRequest);
+
     try {
-      const result = await this.bitPayClient.post('invoices', invoice, signRequest);
       return <InvoiceInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.InvoiceCreation(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 
@@ -49,19 +49,18 @@ export class InvoiceClient {
    * @param facade The facade used to create it.
    * @param signRequest Signed request.
    * @returns Invoice
-   * @throws InvoiceQueryException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async get(invoiceId: string, facade: Facade, signRequest: boolean): Promise<InvoiceInterface> {
     const params = { token: this.tokenContainer.getToken(facade) };
 
+    const result = await this.bitPayClient.get('invoices/' + invoiceId, params, signRequest);
+
     try {
-      const result = await this.bitPayClient.get('invoices/' + invoiceId, params, signRequest);
       return <InvoiceInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.InvoiceQuery(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 
@@ -70,19 +69,18 @@ export class InvoiceClient {
    * @param facade
    * @param signRequest
    * @returns Invoice
-   * @throws InvoiceQueryException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async getByGuid(guid: string, facade: Facade, signRequest: boolean): Promise<InvoiceInterface> {
     const params = { token: this.tokenContainer.getToken(facade) };
 
+    const result = await this.bitPayClient.get('invoices/guid/' + guid, params, signRequest);
+
     try {
-      const result = await this.bitPayClient.get('invoices/guid/' + guid, params, signRequest);
       return <InvoiceInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.InvoiceQuery(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 
@@ -91,19 +89,18 @@ export class InvoiceClient {
    *
    * @param params
    * @returns Invoice[]
-   * @throws InvoiceQueryException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async getInvoices(params: object): Promise<InvoiceInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
+    const result = await this.bitPayClient.get('invoices', params, true);
+
     try {
-      const result = await this.bitPayClient.get('invoices', params, true);
       return <InvoiceInterface[]>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.InvoiceQuery(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 
@@ -116,14 +113,12 @@ export class InvoiceClient {
     const params = {};
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
+    const result = await this.bitPayClient.get('invoices/' + invoiceId + '/events', params, true);
+
     try {
-      const result = await this.bitPayClient.get('invoices/' + invoiceId + '/events', params, true);
       return <InvoiceEventTokenInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.InvoiceQuery(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 
@@ -133,19 +128,18 @@ export class InvoiceClient {
    * @param invoiceId The id of the invoice to updated.
    * @param params
    * @returns Invoice
-   * @throws InvoiceUpdateException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async update(invoiceId: string, params: []): Promise<InvoiceInterface> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
+    const result = await this.bitPayClient.put('invoices/' + invoiceId, params);
+
     try {
-      const result = await this.bitPayClient.put('invoices/' + invoiceId, params);
       return <InvoiceInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.InvoiceUpdate(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 
@@ -155,22 +149,20 @@ export class InvoiceClient {
    * @param invoiceId The id of the invoice.
    * @param status  Status the invoice will become. Acceptable values are confirmed (default) and complete.
    * @returns Invoice Invoice object.
-   * @throws BitPayException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async pay(invoiceId: string, status: string): Promise<InvoiceInterface> {
     const params = {
       token: this.tokenContainer.getToken(Facade.Merchant),
       status: status
     };
+    const result = await this.bitPayClient.put('invoices/pay/' + invoiceId, params);
 
     try {
-      const result = await this.bitPayClient.put('invoices/pay/' + invoiceId, params);
       return <InvoiceInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.InvoiceGeneric(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 
@@ -180,22 +172,20 @@ export class InvoiceClient {
    * @param invoiceId The id of the invoice to updated.
    * @param forceCancel
    * @returns Invoice  Cancelled invoice object.
-   * @throws BitPayException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async cancel(invoiceId: string, forceCancel: boolean): Promise<InvoiceInterface> {
     const params = {
       token: this.tokenContainer.getToken(Facade.Merchant),
       forceCancel: forceCancel
     };
+    const result = await this.bitPayClient.delete('invoices/' + invoiceId, params);
 
     try {
-      const result = await this.bitPayClient.delete('invoices/' + invoiceId, params);
       return <InvoiceInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.InvoiceGeneric(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 
@@ -205,22 +195,20 @@ export class InvoiceClient {
    * @param guid The guid of the invoice to cancel.
    * @param forceCancel
    * @returns Invoice Cancelled invoice object.
-   * @throws BitPayException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async cancelByGuid(guid: string, forceCancel: boolean): Promise<InvoiceInterface> {
     const params = {
       token: this.tokenContainer.getToken(Facade.Merchant),
       forceCancel: forceCancel
     };
+    const result = await this.bitPayClient.delete('invoices/guid/' + guid, params);
 
     try {
-      const result = await this.bitPayClient.delete('invoices/guid/' + guid, params);
       return <InvoiceInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.InvoiceGeneric(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 
@@ -229,19 +217,17 @@ export class InvoiceClient {
    *
    * @param invoiceId A BitPay invoice ID.
    * @returns boolean
-   * @throws BitPayException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async requestInvoiceWebhookToBeResent(invoiceId: string): Promise<boolean> {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
+    const result = await this.bitPayClient.post('invoices/' + invoiceId + '/notifications', params);
 
     try {
-      const result = await this.bitPayClient.post('invoices/' + invoiceId + '/notifications', params);
       return BitPayResponseParser.jsonToBoolean(result);
     } catch (e) {
-      throw new Exceptions.InvoiceGeneric(
-        'failed to deserialize BitPay server response (Invoice) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
     }
   }
 }

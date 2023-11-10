@@ -2,7 +2,7 @@ import { BitPayClient } from './BitPayClient';
 import { TokenContainer } from '../TokenContainer';
 import { BillInterface } from '../Model';
 import { Facade } from '../Facade';
-import { BitPayExceptions as Exceptions } from '../index';
+import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
 
 export class BillClient {
   private bitPayClient: BitPayClient;
@@ -20,19 +20,17 @@ export class BillClient {
    * @param facade The facade used to create it.
    * @param signRequest Signed request.
    * @returns Bill
-   * @throws BillCreationException
+   * @throws BitPayGenericException BitPayGenericException
+   * @throws BitPayApiException BitPayApiException
    */
   public async create(bill: BillInterface, facade: string, signRequest: boolean): Promise<BillInterface> {
     bill.token = this.tokenContainer.getToken(facade);
+    const result = await this.bitPayClient.post('bills', bill, signRequest);
 
     try {
-      const result = await this.bitPayClient.post('bills', bill, signRequest);
       return <BillInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.BillCreation(
-        'failed to deserialize BitPay server response (Bill) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwSerializeResourceException('Bill', e.message);
     }
   }
 
@@ -43,16 +41,17 @@ export class BillClient {
    * @param facade The facade used to retrieve it.
    * @param signRequest Signed request
    * @returns Bill
-   * @throws BillQueryException
+   * @throws BitPayGenericException BitPayGenericException class
+   * @throws BitPayApiException BitPayApiException class
    */
   public async get(billId: string, facade: string, signRequest: boolean): Promise<BillInterface> {
     const params = { token: this.tokenContainer.getToken(facade) };
+    const result = await this.bitPayClient.get('bills/' + billId, params, signRequest);
 
     try {
-      const result = await this.bitPayClient.get('bills/' + billId, params, signRequest);
       return <BillInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.BillQuery('failed to deserialize BitPay server response (Bill) : ' + e.message, e.apiCode);
+      BitPayExceptionProvider.throwDeserializeResourceException('Bill', e.message);
     }
   }
 
@@ -61,7 +60,8 @@ export class BillClient {
    *
    * @param status
    * @returns Bill[]
-   * @throws BillQueryException
+   * @throws BitPayGenericException BitPayGenericException
+   * @throws BitPayApiException BitPayApiException
    */
   public async getBills(status: string | null): Promise<BillInterface> {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
@@ -69,11 +69,12 @@ export class BillClient {
       params['status'] = status;
     }
 
+    const result = await this.bitPayClient.get('bills', params, true);
+
     try {
-      const result = await this.bitPayClient.get('bills', params, true);
       return <BillInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.BillQuery('failed to deserialize BitPay server response (Bill) : ' + e.message, e.apiCode);
+      BitPayExceptionProvider.throwDeserializeResourceException('Bill', e.message);
     }
   }
 
@@ -83,14 +84,16 @@ export class BillClient {
    * @param bill
    * @param billId
    * @returns Bill
-   * @throws BillUpdateException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async update(bill: BillInterface, billId: string): Promise<BillInterface> {
+    const result = await this.bitPayClient.put('bills/' + billId, bill);
+
     try {
-      const result = await this.bitPayClient.put('bills/' + billId, bill);
       return <BillInterface>JSON.parse(result);
     } catch (e) {
-      throw new Exceptions.BillUpdate('failed to deserialize BitPay server response (Bill) : ' + e.message, e.apiCode);
+      BitPayExceptionProvider.throwDeserializeResourceException('Bill', e.message);
     }
   }
 
@@ -101,19 +104,17 @@ export class BillClient {
    * @param billToken
    * @param signRequest
    * @returns string
-   * @throws BillDeliveryException
+   * @throws BitPayApiException BitPayApiException class
+   * @throws BitPayGenericException BitPayGenericException class
    */
   public async deliver(billId: string, billToken: string, signRequest: boolean): Promise<boolean> {
     const params = { token: billToken };
+    const result = await this.bitPayClient.post('bills/' + billId + '/deliveries', params, signRequest);
 
     try {
-      const result = await this.bitPayClient.post('bills/' + billId + '/deliveries', params, signRequest);
       return <string>JSON.parse(result) == 'Success';
     } catch (e) {
-      throw new Exceptions.BillDelivery(
-        'failed to deserialize BitPay server response (Bill) : ' + e.message,
-        e.apiCode
-      );
+      BitPayExceptionProvider.throwDeserializeResourceException('Bill', e.message);
     }
   }
 }
