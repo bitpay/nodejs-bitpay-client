@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import fetch from 'node-fetch';
 import { Env, KeyUtils } from '../index';
 import { ec } from 'elliptic';
 import KeyPair = ec.KeyPair;
@@ -13,7 +12,7 @@ export class BitPayClient {
   private readonly ecKey: KeyPair;
   private readonly identity: string;
   private readonly baseUrl: string;
-  private readonly defaultHeaders: object;
+  private readonly defaultHeaders: Record<string, string>;
   private readonly keyUtils: KeyUtils;
   private readonly responseParser: BitPayResponseParser;
 
@@ -63,7 +62,7 @@ export class BitPayClient {
         headers: headers
       });
 
-      const jsonObject = await response.json();
+      const jsonObject = (await response.json()) as object;
 
       LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
 
@@ -102,7 +101,7 @@ export class BitPayClient {
         body: formData
       });
 
-      const jsonObject = await response.json();
+      const jsonObject = (await response.json()) as object;
 
       LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
 
@@ -142,7 +141,7 @@ export class BitPayClient {
         body: formData
       });
 
-      const jsonObject = await response.json();
+      const jsonObject = (await response.json()) as object;
 
       LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
 
@@ -180,7 +179,7 @@ export class BitPayClient {
         headers: headers
       });
 
-      const jsonObject = await response.json();
+      const jsonObject = (await response.json()) as object;
 
       LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
 
@@ -201,7 +200,7 @@ export class BitPayClient {
    * @param jsonData
    * @throws BitPayApiExtension
    */
-  private getSignatureHeaders(fullUrl: string, headers: object, jsonData: string) {
+  private getSignatureHeaders(fullUrl: string, headers: Record<string, string>, jsonData: string) {
     if (jsonData !== null) {
       fullUrl = fullUrl + jsonData;
     }
