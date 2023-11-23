@@ -1,7 +1,7 @@
 export interface InvoiceTransaction {
-  amount: bigint;
-  confirmations: number;
-  time: string;
-  receivedTime: string;
-  txid: string;
+  amount: number;
+  confirmations?: number;
+  time?: string;
+  receivedTime?: string;
+  txid?: string;
 }

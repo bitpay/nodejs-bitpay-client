@@ -22,9 +22,15 @@ export class TokenContainer {
   public getToken(key: string): string {
     if (!this.data.has(key)) {
       BitPayExceptionProvider.throwGenericExceptionWithMessage('There is no token for the specified key : ' + key);
+      throw new Error();
     }
 
-    return this.data.get(key);
+    const value: string | undefined = this.data.get(key);
+    if (value === undefined) {
+      throw new Error();
+    }
+
+    return value;
   }
 
   /**

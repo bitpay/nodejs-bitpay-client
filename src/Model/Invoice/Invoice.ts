@@ -2,86 +2,86 @@ import { Currency } from '../../Currency';
 import { Buyer } from './Buyer';
 import { InvoiceBuyerProvidedInfo } from './InvoiceBuyerProvidedInfo';
 import { InvoiceTransaction } from './InvoiceTransaction';
-import { MinerFees } from './MinerFees';
 import { Shopper } from './Shopper';
 import { RefundInfo } from './RefundInfo';
-import { SupportedTransactionCurrencies } from './SupportedTransactionCurrencies';
 import { InvoiceUniversalCodes } from './InvoiceUniversalCodes';
 import { BitPayExceptionProvider } from '../../Exceptions/BitPayExceptionProvider';
+import {MinerFeesItem} from "./MinerFeesItem";
+import {SupportedTransactionCurrency} from "./SupportedTransactionCurrency";
 
 export interface InvoiceInterface {
   // API fields
   // Required fields
 
-  currency: string | null;
-  guid: string | null;
-  token: string | null;
+  currency: string;
+  guid: string;
+  token: string;
 
   // Optional fields
 
-  price: number | null;
-  posData: string | null;
-  notificationURL: string | null;
-  transactionSpeed: string | null;
-  fullNotifications: boolean | null;
-  notificationEmail: string | null;
-  redirectURL: string | null;
-  closeURL: string | null;
-  orderId: string | null;
-  itemDesc: string | null;
-  itemCode: string | null;
-  physical: boolean | null;
-  paymentCurrencies: string[] | [];
-  acceptanceWindow: number | null;
-  autoRedirect: boolean | null;
-  forcedBuyerSelectedWallet: string | null;
-  forcedBuyerSelectedTransactionCurrency: string | null;
+  price?: number;
+  posData?: string;
+  notificationURL?: string;
+  transactionSpeed?: string;
+  fullNotifications?: boolean;
+  notificationEmail?: string;
+  redirectURL?: string;
+  closeURL?: string;
+  orderId?: string;
+  itemDesc?: string;
+  itemCode?: string;
+  physical?: boolean;
+  paymentCurrencies?: string[];
+  acceptanceWindow?: number;
+  autoRedirect?: boolean;
+  forcedBuyerSelectedWallet?: string;
+  forcedBuyerSelectedTransactionCurrency?: string;
 
   // Buyer data
 
-  buyer: Buyer | null;
+  buyer?: Buyer;
 
   // Response fields
 
-  id: string | null;
-  url: string | null;
-  status: string | null;
-  lowFeeDetected: boolean | null;
-  invoiceTime: number | null;
-  expirationTime: number | null;
-  currentTime: number | null;
-  exceptionStatus: string | null;
-  targetConfirmations: number | null;
-  transactions: InvoiceTransaction | null;
-  refundAddresses: unknown | null;
-  refundAddressRequestPending: boolean | null;
-  buyerProvidedEmail: string | null;
-  buyerProvidedInfo: InvoiceBuyerProvidedInfo | null;
-  supportedTransactionCurrencies: SupportedTransactionCurrencies | null;
-  minerFees: MinerFees | null;
-  shopper: Shopper | null;
-  billId: string | null;
-  refundInfo: RefundInfo | null;
-  extendedNotifications: boolean | null;
-  transactionCurrency: string | null;
-  amountPaid: number | null;
-  displayAmountPaid: number | null;
-  exchangeRates: Array<[string, Array<[string, number]>]> | null;
-  paymentSubtotals: Array<[string, number]> | null;
-  paymentTotals: Array<[string, number]> | null;
-  paymentDisplayTotals: Array<[string, number]> | null;
-  paymentDisplaySubTotals: Array<[string, number]> | null;
-  nonPayProPaymentReceived: boolean | null;
-  jsonPayProRequired: boolean | null;
-  merchantName: string | null;
-  bitpayIdRequired: boolean | null;
-  underpaidAmount: number | null;
-  overpaidAmount: number | null;
-  paymentCodes: Array<[string, Array<[string, number]>]> | null;
-  isCancelled: boolean | null;
-  universalCodes: InvoiceUniversalCodes | null;
+  id?: string;
+  url?: string;
+  status?: string;
+  lowFeeDetected?: boolean;
+  invoiceTime?: number;
+  expirationTime?: number;
+  currentTime?: number;
+  exceptionStatus?: boolean;
+  targetConfirmations?: number;
+  transactions?: InvoiceTransaction[];
+  refundAddresses?: unknown;
+  refundAddressRequestPending?: boolean;
+  buyerProvidedEmail?: string;
+  buyerProvidedInfo?: InvoiceBuyerProvidedInfo;
+  supportedTransactionCurrencies?: Record<string, SupportedTransactionCurrency>;
+  minerFees?: Record<string, MinerFeesItem>;
+  shopper?: Shopper;
+  billId?: string;
+  refundInfo?: RefundInfo;
+  extendedNotifications?: boolean;
+  transactionCurrency?: string;
+  amountPaid?: number;
+  displayAmountPaid?: string;
+  exchangeRates?: Record<string, Record<string, number>>;
+  paymentSubtotals?: Record<string, number>;
+  paymentTotals?: Record<string, number>;
+  paymentDisplayTotals?: Record<string, string>;
+  paymentDisplaySubTotals?: Record<string, string>;
+  nonPayProPaymentReceived?: boolean;
+  jsonPayProRequired?: boolean;
+  merchantName?: string;
+  bitpayIdRequired?: boolean;
+  underpaidAmount?: number;
+  overpaidAmount?: number;
+  paymentCodes?: Record<string, Record<string, string>>;
+  isCancelled?: boolean;
+  universalCodes?: InvoiceUniversalCodes;
 
-  setCurrency(_currency: string): void;
+  setCurrency(_currency?: string): void;
 }
 
 export class Invoice implements InvoiceInterface {
@@ -89,73 +89,73 @@ export class Invoice implements InvoiceInterface {
 
   // Required fields
 
-  currency: string | null;
-  guid: string | null;
-  token: string | null;
+  currency: string;
+  guid: string;
+  token: string;
 
   // Optional fields
 
-  price: number | null;
-  posData: string | null;
-  notificationURL: string | null;
-  transactionSpeed: string | null;
-  fullNotifications: boolean | null;
-  notificationEmail: string | null;
-  redirectURL: string | null;
-  closeURL: string | null;
-  orderId: string | null;
-  itemDesc: string | null;
-  itemCode: string | null;
-  physical: boolean | null;
-  paymentCurrencies: string[] | [];
-  acceptanceWindow: number | null;
-  autoRedirect: boolean | null;
-  forcedBuyerSelectedWallet: string | null;
-  forcedBuyerSelectedTransactionCurrency: string | null;
+  price?: number;
+  posData?: string;
+  notificationURL?: string;
+  transactionSpeed?: string;
+  fullNotifications?: boolean;
+  notificationEmail?: string;
+  redirectURL?: string;
+  closeURL?: string;
+  orderId?: string;
+  itemDesc?: string;
+  itemCode?: string;
+  physical?: boolean;
+  paymentCurrencies?: string[];
+  acceptanceWindow?: number;
+  autoRedirect?: boolean;
+  forcedBuyerSelectedWallet?: string;
+  forcedBuyerSelectedTransactionCurrency?: string;
 
   // Buyer data
 
-  buyer: Buyer | null;
+  buyer?: Buyer;
 
   // Response fields
 
-  id: string | null;
-  url: string | null;
-  status: string | null;
-  lowFeeDetected: boolean | null;
-  invoiceTime: number | null;
-  expirationTime: number | null;
-  currentTime: number | null;
-  exceptionStatus: string | null;
-  targetConfirmations: number | null;
-  transactions: InvoiceTransaction | null;
-  refundAddresses: unknown | null;
-  refundAddressRequestPending: boolean | null;
-  buyerProvidedEmail: string | null;
-  buyerProvidedInfo: InvoiceBuyerProvidedInfo | null;
-  supportedTransactionCurrencies: SupportedTransactionCurrencies | null;
-  minerFees: MinerFees | null;
-  shopper: Shopper | null;
-  billId: string | null;
-  refundInfo: RefundInfo | null;
-  extendedNotifications: boolean | null;
-  transactionCurrency: string | null;
-  amountPaid: number | null;
-  displayAmountPaid: number | null;
-  exchangeRates: Array<[string, Array<[string, number]>]> | null;
-  paymentSubtotals: Array<[string, number]> | null;
-  paymentTotals: Array<[string, number]> | null;
-  paymentDisplayTotals: Array<[string, number]> | null;
-  paymentDisplaySubTotals: Array<[string, number]> | null;
-  nonPayProPaymentReceived: boolean | null;
-  jsonPayProRequired: boolean | null;
-  merchantName: string | null;
-  bitpayIdRequired: boolean | null;
-  underpaidAmount: number | null;
-  overpaidAmount: number | null;
-  paymentCodes: Array<[string, Array<[string, number]>]> | null;
-  isCancelled: boolean | null;
-  universalCodes: InvoiceUniversalCodes | null;
+  id?: string;
+  url?: string;
+  status?: string;
+  lowFeeDetected?: boolean;
+  invoiceTime?: number;
+  expirationTime?: number;
+  currentTime?: number;
+  exceptionStatus?: boolean;
+  targetConfirmations?: number;
+  transactions?: InvoiceTransaction[];
+  refundAddresses?: unknown;
+  refundAddressRequestPending?: boolean;
+  buyerProvidedEmail?: string;
+  buyerProvidedInfo?: InvoiceBuyerProvidedInfo;
+  supportedTransactionCurrencies?: Record<string, SupportedTransactionCurrency>;
+  minerFees?: Record<string, MinerFeesItem>;
+  shopper?: Shopper;
+  billId?: string;
+  refundInfo?: RefundInfo;
+  extendedNotifications?: boolean;
+  transactionCurrency?: string;
+  amountPaid?: number;
+  displayAmountPaid?: string;
+  exchangeRates?: Record<string, Record<string, number>>;
+  paymentSubtotals?: Record<string, number>;
+  paymentTotals?: Record<string, number>;
+  paymentDisplayTotals?: Record<string, string>;
+  paymentDisplaySubTotals?: Record<string, string>;
+  nonPayProPaymentReceived?: boolean;
+  jsonPayProRequired?: boolean;
+  merchantName?: string;
+  bitpayIdRequired?: boolean;
+  underpaidAmount?: number;
+  overpaidAmount?: number;
+  paymentCodes?: Record<string, Record<string, string>>;
+  isCancelled?: boolean;
+  universalCodes?: InvoiceUniversalCodes;
 
   /**
    * Constructor, create a minimal request Invoice object.

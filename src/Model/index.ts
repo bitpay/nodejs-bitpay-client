@@ -14,7 +14,8 @@
  */
 
 import { Invoice, InvoiceInterface } from './Invoice/Invoice';
-import { RateInterface, Rates } from './Rates/Rates';
+import { RateInterface } from './Rates/Rate';
+import { Rates } from './Rates/Rates';
 import { Bill, BillInterface } from './Bill/Bill';
 import { Item as BillItem } from './Bill/Item';
 import { LedgerInterface } from './Ledger/Ledger';
@@ -23,8 +24,6 @@ import { PayoutRecipient, PayoutRecipientInterface } from './Payout/PayoutRecipi
 import { PayoutRecipients, PayoutRecipientsInterface } from './Payout/PayoutRecipients';
 import { Payout, PayoutInterface } from './Payout/Payout';
 import { PayoutGroupInterface } from './Payout/PayoutGroup';
-import { BillData } from './Subscription/BillData';
-import { Item as SubscriptionItem } from './Subscription/Item';
 
 export {
   Invoice,
@@ -42,7 +41,5 @@ export {
   PayoutRecipientsInterface,
   Payout,
   PayoutInterface,
-  PayoutGroupInterface,
-  BillData,
-  SubscriptionItem
+  PayoutGroupInterface
 };

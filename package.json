@@ -43,7 +43,8 @@
     "bs58": "^4.0.1",
     "elliptic": "^6.5.4",
     "lodash": "^4.17.21",
-    "node-fetch": "^2.6.9"
+    "node-fetch": "^2.6.9",
+    "zod": "3.22.4"
   },
   "devDependencies": {
     "@types/bs58": "^4.0.0",

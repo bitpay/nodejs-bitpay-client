@@ -5,39 +5,39 @@ import { WithHoldings } from './WithHoldings';
 export interface SettlementInterface {
   id: string | null;
   accountId: string | null;
-  currency: string | null;
-  payoutInfo: PayoutInfo | null;
-  status: string | null;
-  dateCreated: number;
-  dateExecuted: number;
-  openingDate: number;
-  closingDate: number;
+  currency: string;
+  payoutInfo?: PayoutInfo;
+  status: string;
+  dateCreated: string;
+  dateExecuted: string;
+  openingDate: string;
+  closingDate: string;
   openingBalance: number;
   ledgerEntriesSum: number;
-  withholdings: WithHoldings[] | null;
-  withholdingsSum: number | null;
+  withholdings?: WithHoldings[];
+  withholdingsSum?: number;
   totalAmount: number;
-  ledgerEntries: SettlementLedgerEntry[];
-  token: string | null;
+  ledgerEntries?: SettlementLedgerEntry[];
+  token?: string;
 }
 
 export class Settlement implements SettlementInterface {
   id: string | null;
   accountId: string | null;
-  currency: string | null;
-  payoutInfo: PayoutInfo | null;
-  status: string | null;
-  dateCreated: number;
-  dateExecuted: number;
-  openingDate: number;
-  closingDate: number;
+  currency: string;
+  payoutInfo?: PayoutInfo;
+  status: string;
+  dateCreated: string;
+  dateExecuted: string;
+  openingDate: string;
+  closingDate: string;
   openingBalance: number;
   ledgerEntriesSum: number;
-  withholdings: WithHoldings[] | null;
-  withholdingsSum: number | null;
+  withholdings?: WithHoldings[];
+  withholdingsSum?: number;
   totalAmount: number;
-  ledgerEntries: SettlementLedgerEntry[];
-  token: string | null;
+  ledgerEntries?: SettlementLedgerEntry[];
+  token?: string;
 
   public constructor() {}
 }

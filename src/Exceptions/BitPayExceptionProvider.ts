@@ -7,12 +7,18 @@ export class BitPayExceptionProvider {
   static readonly GENERIC_API_UNMAPPED_ERROR_CODE: string = '000000';
 
   public static throwGenericExceptionWithMessage(errorMessage: string | null): void {
+    if (errorMessage == null) {
+      errorMessage = 'Unexpected generic error';
+    }
     this.logErrorMessage(errorMessage);
 
     throw new BitPayGenericException(errorMessage);
   }
 
   public static throwApiExceptionWithMessage(errorMessage: string | null, code: string | null): void {
+    if (errorMessage == null) {
+      errorMessage = 'Unexpected api error';
+    }
     this.logErrorMessage(errorMessage);
 
     code = code ? code : this.GENERIC_API_UNMAPPED_ERROR_CODE;
@@ -39,6 +45,9 @@ export class BitPayExceptionProvider {
   }
 
   public static throwEncodeException(errorMessage: string | null): void {
+    if (errorMessage == null) {
+      errorMessage = 'Unexpected encode error';
+    }
     this.logErrorMessage(errorMessage);
 
     const message = 'Failed to encode params : ' + errorMessage;
@@ -61,6 +70,9 @@ export class BitPayExceptionProvider {
   }
 
   public static throwValidationException(errorMessage: string | null): void {
+    if (errorMessage == null) {
+      errorMessage = 'Unexpected validation error';
+    }
     this.logErrorMessage(errorMessage);
 
     throw new BitPayValidationException(errorMessage);

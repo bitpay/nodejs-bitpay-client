@@ -27,8 +27,9 @@ export class SettlementClient {
     try {
       const result = await this.bitPayClient.get('settlements/' + settlementId, params, true);
       return <SettlementInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Settlement', e.message);
+      throw new Error();
     }
   }
 
@@ -47,8 +48,9 @@ export class SettlementClient {
 
     try {
       return <SettlementInterface[]>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Settlement', e.message);
+      throw new Error();
     }
   }
 
@@ -68,8 +70,9 @@ export class SettlementClient {
 
     try {
       return <SettlementInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Settlement', e.message);
+      throw new Error();
     }
   }
 }

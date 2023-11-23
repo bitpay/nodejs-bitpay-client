@@ -51,7 +51,6 @@ export class Client {
     configFilePath: string | null,
     privateKey: PrivateKey | null,
     tokenContainer: TokenContainer | null,
-    identity: string | null,
     posToken: PosToken | null,
     environment?: Environment,
     bitPayClient?: BitPayClient, // using for tests
@@ -68,6 +67,9 @@ export class Client {
 
     if (bitPayClient !== undefined && bitPayClient !== null) {
       // using for tests
+      if (guidGenerator == undefined) {
+        guidGenerator = new GuidGenerator();
+      }
       this.initForTests(bitPayClient, guidGenerator, tokenContainer);
       return;
     }
@@ -100,7 +102,7 @@ export class Client {
    * @param environment
    */
   public static createPosClient(posToken: string, environment?: Environment): Client {
-    return new Client(null, null, null, null, new PosToken(posToken), environment);
+    return new Client(null, null, null, new PosToken(posToken), environment);
   }
 
   /**
@@ -109,7 +111,7 @@ export class Client {
    * @param configFilePath
    */
   public static createClientByConfig(configFilePath: string): Client {
-    return new Client(configFilePath, null, null, null, null, null);
+    return new Client(configFilePath, null, null, null);
   }
 
   /**
@@ -123,7 +125,7 @@ export class Client {
     tokenContainer: TokenContainer,
     environment?: Environment
   ) {
-    return new Client(null, new PrivateKey(privateKey), tokenContainer, null, null, environment);
+    return new Client(null, new PrivateKey(privateKey), tokenContainer, null, environment);
   }
 
   public getToken(facade: Facade) {
@@ -148,7 +150,7 @@ export class Client {
    *                     Current supported values are BTC and BCH.
    * @return A Rates object populated with the BitPay exchange rate table.
    */
-  public async getRates(currency: string = null): Promise<Rates> {
+  public async getRates(currency: string | null): Promise<Rates> {
     return this.createRateClient().getRates(currency);
   }
 
@@ -626,7 +628,7 @@ export class Client {
    * @param status The status to filter the bills.
    * @return BillInterface A list of BitPay Bill objects.
    */
-  public async getBills(status: string | null): Promise<BillInterface> {
+  public async getBills(status: string | null): Promise<BillInterface[]> {
     return this.createBillClient().getBills(status);
   }
 
@@ -707,9 +709,9 @@ export class Client {
    * Gets info for specific currency.
    *
    * @param currencyCode String Currency code for which the info will be retrieved.
-   * @return CurrencyInterface Currency info.
+   * @return CurrencyInterface|null Currency info.
    */
-  public async getCurrencyInfo(currencyCode: string): Promise<CurrencyInterface> {
+  public async getCurrencyInfo(currencyCode: string): Promise<CurrencyInterface | null> {
     return this.getCurrencyClient().getCurrencyInfo(currencyCode);
   }
 
@@ -735,6 +737,7 @@ export class Client {
     }
 
     BitPayExceptionProvider.throwGenericExceptionWithMessage('Missing ECKey');
+    throw new Error();
   }
 
   private static getBaseUrl(environment: string) {
@@ -801,7 +804,10 @@ export class Client {
     return facade !== Facade.Pos;
   }
 
-  private static getDateAsString(date: Date): string {
+  private static getDateAsString(date: Date | null): string | null {
+    if (date === null) {
+      return null;
+    }
     return date.toISOString().split('T')[0];
   }
 
@@ -824,7 +830,11 @@ export class Client {
     }
   }
 
-  private initForTests(bitPayClient: BitPayClient, guidGenerator: GuidGenerator, tokenContainer: TokenContainer) {
+  private initForTests(
+    bitPayClient: BitPayClient,
+    guidGenerator: GuidGenerator,
+    tokenContainer: TokenContainer
+  ) {
     this.bitPayClient = bitPayClient;
     this.guidGenerator = guidGenerator;
     this.tokenContainer = tokenContainer;

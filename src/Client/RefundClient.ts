@@ -43,8 +43,9 @@ export class RefundClient {
 
     try {
       return <RefundInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Refund', e.message);
+      throw new Error();
     }
   }
 
@@ -62,8 +63,9 @@ export class RefundClient {
 
     try {
       return <RefundInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Refund', e.message);
+      throw new Error();
     }
   }
 
@@ -81,8 +83,9 @@ export class RefundClient {
 
     try {
       return <RefundInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Refund', e.message);
+      throw new Error();
     }
   }
 
@@ -103,8 +106,9 @@ export class RefundClient {
 
     try {
       return <RefundInterface[]>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Refund', e.message);
+      throw new Error();
     }
   }
 
@@ -122,8 +126,9 @@ export class RefundClient {
 
     try {
       return BitPayResponseParser.jsonToBoolean(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Refund', e.message);
+      throw new Error();
     }
   }
 
@@ -145,8 +150,9 @@ export class RefundClient {
 
     try {
       return <RefundInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Refund', e.message);
+      throw new Error();
     }
   }
 
@@ -168,8 +174,9 @@ export class RefundClient {
 
     try {
       return <RefundInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Refund', e.message);
+      throw new Error();
     }
   }
 
@@ -187,8 +194,9 @@ export class RefundClient {
 
     try {
       return <RefundInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Refund', e.message);
+      throw new Error();
     }
   }
 
@@ -206,8 +214,9 @@ export class RefundClient {
 
     try {
       return <RefundInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Refund', e.message);
+      throw new Error();
     }
   }
 }

@@ -1,26 +1,26 @@
 export interface PayoutRecipientInterface {
-  email: string;
-  label: string;
-  notificationURL: string;
+  email?: string | null;
+  label?: string | null;
+  notificationURL?: string | null;
 
-  status: string | null;
-  id: string | null;
-  shopperId: string | null;
-  token: string | null;
-  guid: string | null;
+  status?: string;
+  id?: string;
+  shopperId?: string | null;
+  token?: string;
+  guid?: string;
 }
 
 export class PayoutRecipient implements PayoutRecipientInterface {
-  email: string;
-  id: string | null;
-  label: string;
-  notificationURL: string;
+  email?: string;
+  id?: string;
+  label?: string;
+  notificationURL?: string;
   shopperId: string | null;
-  status: string | null;
-  token: string | null;
-  guid: string | null;
+  status?: string;
+  token?: string;
+  guid?: string;
 
-  public constructor(email: string | null, label: string | null, notificationURL: string | null);
+
   /**
    * Constructor, create a minimal Recipient object.
    *
@@ -29,6 +29,7 @@ export class PayoutRecipient implements PayoutRecipientInterface {
    * @param notificationURL string URL to which BitPay sends webhook notifications to inform the merchant about the
    *                        status of a given recipient. HTTPS is mandatory (Optional).
    */
+  public constructor(email: string | null, label: string | null, notificationURL: string | null);
   public constructor(email: string, label: string, notificationURL: string) {
     this.email = email;
     this.label = label;

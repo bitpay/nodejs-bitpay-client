@@ -22,6 +22,18 @@ import { Item } from '../src/Model/Bill/Item';
 import { WalletInterface } from '../src/Model/Wallet/Wallet';
 import { CurrencyInterface } from '../src/Model/Currency/Currency';
 import * as BitPaySDK from '../src/index';
+import {rateInterfaceSchema} from "../src/Model/Rates/Rate.zod";
+import {currencyInterfaceSchema} from "../src/Model/Currency/Currency.zod";
+import {invoiceSchema} from "../src/Model/Invoice/Invoice.zod";
+import {invoiceEventTokenInterfaceSchema} from "../src/Model/Invoice/InvoiceEventToken.zod";
+import {refundInterfaceSchema} from "../src/Model/Invoice/Refund.zod";
+import {payoutRecipientInterfaceSchema} from "../src/Model/Payout/PayoutRecipient.zod";
+import {payoutInterfaceSchema} from "../src/Model/Payout/Payout.zod";
+import {payoutGroupInterfaceSchema} from "../src/Model/Payout/PayoutGroup.zod";
+import {ledgerInterfaceSchema} from "../src/Model/Ledger/Ledger.zod";
+import {ledgerEntryInterfaceSchema} from "../src/Model/Ledger/LedgerEntry.zod";
+import {billInterfaceSchema} from "../src/Model/Bill/Bill.zod";
+import {walletInterfaceSchema} from "../src/Model/Wallet/Wallet.zod";
 const Currencies = BitPaySDK.Currency;
 const PayoutStatus = BitPaySDK.PayoutStatus;
 
@@ -75,6 +87,20 @@ describe('BitPaySDK.Client', () => {
   });
 
   /**
+   *     Tested wallet requests:
+   *
+   *     - GetSupportedWallets()
+   */
+  describe('Wallet', () => {
+    it('should retrieve supported wallets', async () => {
+      const result: WalletInterface[] = await client.getSupportedWallets();
+
+      walletInterfaceSchema.parse(result[0]);
+      expect(result.length).toBeGreaterThan(0);
+    });
+  });
+
+  /**
    * Tested rates requests:
    * - GetRate(string baseCurrency, string currency)
    * - GetRates()
@@ -87,10 +113,14 @@ describe('BitPaySDK.Client', () => {
     });
     it('should get rates', async () => {
       const result = await client.getRates();
+
+      rateInterfaceSchema.parse(result.getRates()[0]);
       expect(result.getRates()[0].rate).toBeGreaterThan(0);
     });
     it('should get BTC rates', async () => {
       const rates = await client.getRates(Currencies.BTC);
+
+      rateInterfaceSchema.parse(rates.getRates()[0]);
       expect(rates.getRates().length).toBeGreaterThan(0);
     });
   });
@@ -102,6 +132,8 @@ describe('BitPaySDK.Client', () => {
   describe('Currency', () => {
     it('should get currency info', async () => {
       const result: CurrencyInterface = await client.getCurrencyInfo('BTC');
+
+      currencyInterfaceSchema.parse(result);
       expect(result.name).toBe('Bitcoin');
     });
   });
@@ -130,17 +162,22 @@ describe('BitPaySDK.Client', () => {
       invoiceToken = invoice.token;
       invoiceGuid = invoice.guid;
 
+      invoiceSchema.parse(invoice);
       expect(invoice.id).not.toBeNull();
       expect(invoice.token).not.toBeNull();
       expect(invoice.guid).not.toBeNull();
     });
     it('should get invoice by id', async () => {
       const invoice: InvoiceInterface = await client.getInvoice(invoiceId);
+
+      invoiceSchema.parse(invoice);
       expect(invoice.id).toBe(invoiceId);
       expect(invoice.token).toBe(invoiceToken);
     });
     it('should get invoice by guid', async () => {
       const invoice: InvoiceInterface = await client.getInvoiceByGuid(invoiceGuid);
+
+      invoiceSchema.parse(invoice);
       expect(invoice.id).toBe(invoiceId);
       expect(invoice.token).toBe(invoiceToken);
     });
@@ -150,19 +187,27 @@ describe('BitPaySDK.Client', () => {
         dateEnd: tomorrow.toISOString().split('T')[0]
       };
       const invoices: InvoiceInterface[] = await client.getInvoices(params);
+
+      invoiceSchema.parse(invoices[0]);
       expect(invoices.length).toBeGreaterThan(0);
     });
     it('should get invoice event token', async () => {
       const invoiceEventToken: InvoiceEventTokenInterface = await client.getInvoiceEventToken(invoiceId);
+
+      invoiceEventTokenInterfaceSchema.parse(invoiceEventToken);
       expect(invoiceEventToken.token).not.toBeNull();
     });
     it('should update invoice', async () => {
       const updatedEmail = 'updated@email.com';
       const params = { buyerEmail: updatedEmail };
       const updatedInvoice: InvoiceInterface = await client.updateInvoice(invoiceId, params);
+
+      invoiceSchema.parse(updatedInvoice);
       expect(updatedInvoice.buyerProvidedEmail).toBe(updatedEmail);
 
       const getInvoiceAfterUpdate: InvoiceInterface = await client.getInvoice(invoiceId);
+
+      invoiceSchema.parse(getInvoiceAfterUpdate);
       expect(getInvoiceAfterUpdate.buyerProvidedEmail).toBe(updatedEmail);
     });
     it('should cancel invoice', async () => {
@@ -204,24 +249,32 @@ describe('BitPaySDK.Client', () => {
       const refundToCreateRequest: RefundInterface = new Refund(10.0, invoiceId, 'token');
       const refund: RefundInterface = await client.createRefund(refundToCreateRequest);
       refundId = refund.id;
-      refundGuid = refund.guid;
+      refundGuid = refund.guid ?? "invalidGuid";
+
+      refundInterfaceSchema.parse(refund);
       expect(refund.id).not.toBeNull();
     });
 
     it('should retrieve refund', async () => {
       const retrieveRefund: RefundInterface = await client.getRefund(refundId);
+
+      refundInterfaceSchema.parse(retrieveRefund);
       expect(retrieveRefund.id).not.toBeNull();
       expect(retrieveRefund.invoice).not.toBeNull();
     });
 
     it('should retrieve refund by guid ', async () => {
       const retrieveRefund: RefundInterface = await client.getRefundByGuid(refundGuid);
+
+      refundInterfaceSchema.parse(retrieveRefund);
       expect(retrieveRefund.id).not.toBeNull();
       expect(retrieveRefund.invoice).not.toBeNull();
     });
 
     it('should retrieve refunds', async () => {
       const result: RefundInterface[] = await client.getRefunds(invoiceId);
+
+      refundInterfaceSchema.parse(result[0]);
       expect(result.length).toBeGreaterThan(0);
     });
 
@@ -232,8 +285,11 @@ describe('BitPaySDK.Client', () => {
 
     it('should cancel refund', async () => {
       const result: RefundInterface = await client.cancelRefund(refundId);
+      refundInterfaceSchema.parse(result);
       expect(result.status).toBe('canceled');
+
       const refundAfterCanceled: RefundInterface = await client.getRefund(refundId);
+      refundInterfaceSchema.parse(refundAfterCanceled);
       expect(refundAfterCanceled.status).toBe('canceled');
     });
 
@@ -243,8 +299,11 @@ describe('BitPaySDK.Client', () => {
 
       const result: RefundInterface = await client.cancelRefundByGuid(refund.guid);
       expect(result.status).toBe('canceled');
+      refundInterfaceSchema.parse(result);
+
       const refundAfterCanceled: RefundInterface = await client.getRefundByGuid(refund.guid);
       expect(refundAfterCanceled.status).toBe('canceled');
+      refundInterfaceSchema.parse(refundAfterCanceled);
     });
   });
 
@@ -263,7 +322,7 @@ describe('BitPaySDK.Client', () => {
 
     it('should create recipient', async () => {
       const recipientsList: PayoutRecipient[] = [];
-      const requestedRecipient: PayoutRecipientInterface = new PayoutRecipient(email, 'Bob', null);
+      const requestedRecipient: PayoutRecipient = new PayoutRecipient(email, 'Bob', null);
       recipientsList.push(requestedRecipient);
 
       const result: PayoutRecipientInterface[] = await client.submitPayoutRecipients(
@@ -271,11 +330,14 @@ describe('BitPaySDK.Client', () => {
       );
       recipientId = result[0].id as string;
 
+      payoutRecipientInterfaceSchema.parse(result[0]);
       expect(recipientId).not.toBeNull();
     });
 
     it('should retrieve recipient', async () => {
       const result: PayoutRecipientInterface = await client.getPayoutRecipient(recipientId);
+
+      payoutRecipientInterfaceSchema.parse(result)
       expect(result.email).toBe(email);
     });
 
@@ -285,6 +347,8 @@ describe('BitPaySDK.Client', () => {
         limit: 1,
         offset: 0
       });
+
+      payoutRecipientInterfaceSchema.parse(result[0]);
       expect(result.length).toBeGreaterThan(0);
     });
 
@@ -293,28 +357,32 @@ describe('BitPaySDK.Client', () => {
       const updateRecipientRequest = new PayoutRecipient(null, null, null);
       updateRecipientRequest.label = updatedLabel;
       const result: PayoutRecipientInterface = await client.updatePayoutRecipient(recipientId, updateRecipientRequest);
+
+      payoutRecipientInterfaceSchema.parse(result);
       expect(result.label).toBe(updatedLabel);
     });
 
     it('should request recipient notification', async () => {
       const result: boolean = await client.requestPayoutRecipientNotification(recipientId);
+
       expect(result).toBe(true);
     });
 
     it('should delete recipient', async () => {
       const result: boolean = await client.deletePayoutRecipient(recipientId);
+
       expect(result).toBe(true);
     });
   });
 
   describe('Payout', () => {
     let payoutId: string;
-    let payoutGroupId: string;
+    let payoutGroupId: string | null;
 
     it('should submit payout', async () => {
       const recipientsList: PayoutRecipient[] = [];
       const payoutEmail = getEmail();
-      const requestedRecipient: PayoutRecipientInterface = new PayoutRecipient(payoutEmail, 'Bob', null);
+      const requestedRecipient: PayoutRecipient = new PayoutRecipient(payoutEmail, 'Bob', null);
       recipientsList.push(requestedRecipient);
 
       const recipients: PayoutRecipientInterface[] = await client.submitPayoutRecipients(
@@ -330,17 +398,23 @@ describe('BitPaySDK.Client', () => {
 
       const result: PayoutInterface = await client.submitPayout(payout);
       payoutId = result.id as string;
+
+      payoutInterfaceSchema.parse(result);
       expect(result.id).not.toBeNull();
     });
 
     it('should retrieve payout', async () => {
       const result: PayoutInterface = await client.getPayout(payoutId);
+
+      payoutInterfaceSchema.parse(result);
       expect(result.email).toBe(getEmail());
     });
 
     it('should retrieve payouts', async () => {
       const params = { status: PayoutStatus.New };
       const result: PayoutInterface[] = await client.getPayouts(params);
+
+      payoutInterfaceSchema.parse(result[0]);
       expect(result[0].email).toBe(getEmail());
     });
 
@@ -358,7 +432,7 @@ describe('BitPaySDK.Client', () => {
       // given
       const recipientsList: PayoutRecipient[] = [];
       const payoutEmail = getEmail();
-      const requestedRecipient: PayoutRecipientInterface = new PayoutRecipient(payoutEmail, 'Bob', null);
+      const requestedRecipient: PayoutRecipient = new PayoutRecipient(payoutEmail, 'Bob', null);
       recipientsList.push(requestedRecipient);
 
       const recipients: PayoutRecipientInterface[] = await client.submitPayoutRecipients(
@@ -377,9 +451,11 @@ describe('BitPaySDK.Client', () => {
       // when
       const result: PayoutGroupInterface = await client.submitPayouts([payout]);
       const firstPayout = result.payouts[0];
-      payoutGroupId = firstPayout.groupId;
+      payoutGroupId = firstPayout.groupId ?? null;
 
       // then
+      payoutGroupInterfaceSchema.parse(result);
+      payoutInterfaceSchema.parse(firstPayout);
       expect(result.payouts.length).toBe(1);
       expect(firstPayout.notificationURL).toBe(notificationURL);
       expect(firstPayout.reference).toBe(reference);
@@ -389,6 +465,7 @@ describe('BitPaySDK.Client', () => {
       // when
       const result: PayoutGroupInterface = await client.cancelPayouts(payoutGroupId);
       // then
+      payoutGroupInterfaceSchema.parse(result);
       expect(result.payouts.length).toBe(1);
       expect(result.payouts[0].status).toBe('cancelled');
     });
@@ -404,11 +481,15 @@ describe('BitPaySDK.Client', () => {
   describe('Ledgers', () => {
     it('should get ledgers', async () => {
       const result: LedgerInterface[] = await client.getLedgers();
+
+      ledgerInterfaceSchema.parse(result[0]);
       expect(result.length).toBeGreaterThan(0);
     });
 
     it('should get ledger entries', async () => {
       const result: LedgerEntryInterface[] = await client.getLedgerEntries('USD', oneMonthAgo, tomorrow);
+
+      ledgerEntryInterfaceSchema.parse(result[0]);
       expect(result.length).toBeGreaterThan(0);
     });
   });
@@ -444,6 +525,8 @@ describe('BitPaySDK.Client', () => {
       requestedBill.items = [item1];
 
       const result: BillInterface = await client.createBill(requestedBill);
+
+      billInterfaceSchema.parse(result);
       expect(result.id).not.toBeNull();
       billId = result.id as string;
       billToken = result.token as string;
@@ -451,11 +534,15 @@ describe('BitPaySDK.Client', () => {
 
     it('should retrieve bill', async () => {
       const result: BillInterface = await client.getBill(billId);
+
+      billInterfaceSchema.parse(result);
       expect(result.name).toBe('John Doe');
     });
 
     it('should retrieve bills', async () => {
       const result: BillInterface[] = await client.getBills(null);
+
+      billInterfaceSchema.parse(result[0]);
       expect(result.length).toBeGreaterThan(0);
     });
 
@@ -469,24 +556,14 @@ describe('BitPaySDK.Client', () => {
       updatedBillRequest.token = billToken;
 
       const result: BillInterface = await client.updateBill(updatedBillRequest, billId);
+
+      billInterfaceSchema.parse(result);
       expect(result.items[0].price).toBe(9.0);
     });
 
     it('should deliver bill', async () => {
       const result: string = await client.deliverBill(billId, billToken);
       expect(result).toBe(true);
-    });
-  });
-
-  /**
-   *     Tested wallet requests:
-   *
-   *     - GetSupportedWallets()
-   */
-  describe('Wallet', () => {
-    it('should retrieve supported wallets', async () => {
-      const result: WalletInterface[] = await client.getSupportedWallets();
-      expect(result.length).toBeGreaterThan(0);
     });
   });
 });

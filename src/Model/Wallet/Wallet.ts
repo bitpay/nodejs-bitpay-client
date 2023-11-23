@@ -6,19 +6,19 @@
 import { CurrenciesInterface } from './Currencies';
 
 export interface WalletInterface {
-  key: string | null;
-  displayName: string | null;
-  avatar: string | null;
-  payPro: boolean | null;
-  currencies: CurrenciesInterface[] | null;
-  image: string | null;
+  key?: string;
+  displayName?: string;
+  avatar?: string;
+  payPro?: boolean;
+  currencies?: CurrenciesInterface[];
+  image?: string;
 }
 
 export class Wallet implements WalletInterface {
-  key: string | null;
-  displayName: string | null;
-  avatar: string | null;
-  payPro: boolean | null;
-  currencies: CurrenciesInterface[] | null;
-  image: string | null;
+  key?: string;
+  displayName?: string;
+  avatar?: string;
+  payPro?: boolean;
+  currencies?: CurrenciesInterface[];
+  image?: string;
 }

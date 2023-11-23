@@ -1,57 +1,57 @@
 import { RefundParams } from './RefundParams';
 
 export interface RefundInterface {
-  guid: string;
-  refundEmail: string;
   amount: number;
   currency: string;
-  token: string;
+  guid?: string;
+  refundEmail?: string;
+  token?: string;
   id: string;
   requestDate: string;
   status: string;
   invoice: string;
-  supportRequest: string;
-  refundAddress: string;
-  txid: string;
-  type: string;
+  supportRequest?: string;
+  refundAddress?: string;
+  txid?: string;
+  type?: string;
   reference?: string;
   transactionCurrency: string;
   transactionAmount: number;
   transactionRefundFee: number;
-  lastRefundNotification: string;
-  notificationURL: string;
+  lastRefundNotification?: string;
+  notificationURL?: string;
   refundFee: number;
   immediate: boolean;
   buyerPaysRefundFee: boolean;
-  preview: boolean;
-  params: RefundParams;
+  preview?: boolean;
+  params?: RefundParams;
 }
 
 export class Refund implements RefundInterface {
   amount: number;
   currency: string;
-  guid: string;
+  guid?: string;
   id: string;
-  params: RefundParams;
-  refundEmail: string;
+  params?: RefundParams;
+  refundEmail?: string;
   requestDate: string;
   status: string;
-  token: string;
+  token?: string;
   invoice: string;
-  supportRequest: string;
-  refundAddress: string;
-  txid: string;
-  type: string;
+  supportRequest?: string;
+  refundAddress?: string;
+  txid?: string;
+  type?: string;
   reference?: string;
   transactionCurrency: string;
   transactionAmount: number;
   transactionRefundFee: number;
-  lastRefundNotification: string;
-  notificationURL: string;
+  lastRefundNotification?: string;
+  notificationURL?: string;
   refundFee: number;
   immediate: boolean;
   buyerPaysRefundFee: boolean;
-  preview: boolean;
+  preview?: boolean;
 
   public constructor(amount: number, invoiceId: string, token: string) {
     this.amount = amount;

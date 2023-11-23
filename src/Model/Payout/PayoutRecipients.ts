@@ -1,15 +1,15 @@
 import { PayoutRecipient } from './PayoutRecipient';
 
 export interface PayoutRecipientsInterface {
-  guid: string | null;
+  guid?: string;
   recipients: PayoutRecipient[] | [];
-  token: string | null;
+  token?: string;
 }
 
 export class PayoutRecipients implements PayoutRecipientsInterface {
-  guid: string | null;
+  guid?: string;
   recipients: PayoutRecipient[] | [];
-  token: string | null;
+  token?: string;
 
   /**
    * Constructor, create an recipient-full request PayoutBatch object.

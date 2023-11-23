@@ -1,11 +1,11 @@
 export interface PayoutGroupFailedInterface {
   errMessage: string;
-  payoutId: string | null;
-  payee: string | null;
+  payoutId?: string;
+  payee?: string;
 }
 
 export class PayoutGroupFailed implements PayoutGroupFailedInterface {
   errMessage = '';
-  payee: string | null;
-  payoutId: string | null;
+  payee?: string;
+  payoutId?: string;
 }
