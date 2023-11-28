@@ -3,7 +3,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
-    "target": "es2019",
+    "target": "es2021",
     "outDir": "./dist",
     "sourceMap": true,
     "strictBindCallApply": true,
@@ -17,7 +17,7 @@
     "resolveJsonModule": true
   },
   "lib": [
-    "es2019",
+    "es2021",
     "node"
   ],
   "include": [
