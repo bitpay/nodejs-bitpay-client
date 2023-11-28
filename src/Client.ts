@@ -825,7 +825,7 @@ export class Client {
       const ecKey = this.getEcKeyByConfig(envConfig);
       this.bitPayClient = new BitPayClient(Client.getBaseUrl(environment), ecKey, this.getIdentity(ecKey));
       this.guidGenerator = new GuidGenerator();
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwGenericExceptionWithMessage('Error when reading configuration file');
     }
   }

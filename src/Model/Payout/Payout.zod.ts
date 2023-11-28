@@ -1,6 +1,5 @@
 import { z } from "zod"
 import {payoutTransactionInterfaceSchema} from "./PayoutTransaction.zod";
-import {supportedTransactionCurrencySchema} from "../Invoice/SupportedTransactionCurrency.zod";
 
 export const payoutInterfaceSchema = z.object({
   transactions: payoutTransactionInterfaceSchema.array().optional(),
