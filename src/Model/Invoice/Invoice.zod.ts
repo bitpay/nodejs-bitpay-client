@@ -1,12 +1,12 @@
-import { z } from "zod"
-import {buyerInterfaceSchema} from "./Buyer.zod";
-import {invoiceTransactionSchema} from "./InvoiceTransaction.zod";
-import {invoiceBuyerProvidedInfoSchema} from "./InvoiceBuyerProvidedInfo.zod";
-import {invoiceUniversalCodesSchema} from "./InvoiceUniversalCodes.zod";
-import {refundInfoSchema} from "./RefundInfo.zod";
-import {shopperSchema} from "./Shopper.zod";
-import {minerFeesItemSchema} from "./MinerFeesItem.zod";
-import {supportedTransactionCurrencySchema} from "./SupportedTransactionCurrency.zod";
+import { z } from 'zod';
+import { buyerInterfaceSchema } from './Buyer.zod';
+import { invoiceTransactionSchema } from './InvoiceTransaction.zod';
+import { invoiceBuyerProvidedInfoSchema } from './InvoiceBuyerProvidedInfo.zod';
+import { invoiceUniversalCodesSchema } from './InvoiceUniversalCodes.zod';
+import { refundInfoSchema } from './RefundInfo.zod';
+import { shopperSchema } from './Shopper.zod';
+import { minerFeesItemSchema } from './MinerFeesItem.zod';
+import { supportedTransactionCurrencySchema } from './SupportedTransactionCurrency.zod';
 
 export const invoiceSchema = z.object({
   buyer: buyerInterfaceSchema.optional(),
@@ -68,4 +68,4 @@ export const invoiceSchema = z.object({
   overpaidAmount: z.number().optional(),
   paymentCodes: z.record(z.record(z.string())).nullable(),
   isCancelled: z.boolean().optional()
-})
+});

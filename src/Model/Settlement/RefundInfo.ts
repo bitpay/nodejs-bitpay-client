@@ -8,7 +8,7 @@ export interface RefundInfoInterface {
 export class RefundInfo implements RefundInfoInterface {
   supportRequest?: string;
   currency: string;
-  refundRequestEid?: string ;
+  refundRequestEid?: string;
   amounts?: Record<string, number>;
 
   public constructor() {}

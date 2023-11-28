@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from 'zod';
 
 export const withHoldingsInterfaceSchema = z.object({
   amount: z.number(),
@@ -7,4 +7,4 @@ export const withHoldingsInterfaceSchema = z.object({
   notes: z.string().optional(),
   label: z.string().optional(),
   bankCountry: z.string().optional()
-})
+});

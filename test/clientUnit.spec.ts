@@ -72,19 +72,19 @@ import * as invalidSignature from './json/invalidSignature.json';
 import { isEqual } from 'lodash';
 import * as BitPaySDK from '../src/index';
 import BitPayApiException from '../src/Exceptions/BitPayApiException';
-import {invoiceSchema} from "../src/Model/Invoice/Invoice.zod";
-import {billInterfaceSchema} from "../src/Model/Bill/Bill.zod";
-import {currencyInterfaceSchema} from "../src/Model/Currency/Currency.zod";
-import {ledgerEntryInterfaceSchema} from "../src/Model/Ledger/LedgerEntry.zod";
-import {ledgerInterfaceSchema} from "../src/Model/Ledger/Ledger.zod";
-import {payoutInterfaceSchema} from "../src/Model/Payout/Payout.zod";
-import {payoutGroupInterfaceSchema} from "../src/Model/Payout/PayoutGroup.zod";
-import {payoutGroupFailedInterfaceSchema} from "../src/Model/Payout/PayoutGroupFailed.zod";
-import {rateInterfaceSchema} from "../src/Model/Rates/Rate.zod";
-import {refundInterfaceSchema} from "../src/Model/Invoice/Refund.zod";
-import {settlementInterfaceSchema} from "../src/Model/Settlement/Settlement.zod";
-import {walletInterfaceSchema} from "../src/Model/Wallet/Wallet.zod";
-import {payoutRecipientInterfaceSchema} from "../src/Model/Payout/PayoutRecipient.zod";
+import { invoiceSchema } from '../src/Model/Invoice/Invoice.zod';
+import { billInterfaceSchema } from '../src/Model/Bill/Bill.zod';
+import { currencyInterfaceSchema } from '../src/Model/Currency/Currency.zod';
+import { ledgerEntryInterfaceSchema } from '../src/Model/Ledger/LedgerEntry.zod';
+import { ledgerInterfaceSchema } from '../src/Model/Ledger/Ledger.zod';
+import { payoutInterfaceSchema } from '../src/Model/Payout/Payout.zod';
+import { payoutGroupInterfaceSchema } from '../src/Model/Payout/PayoutGroup.zod';
+import { payoutGroupFailedInterfaceSchema } from '../src/Model/Payout/PayoutGroupFailed.zod';
+import { rateInterfaceSchema } from '../src/Model/Rates/Rate.zod';
+import { refundInterfaceSchema } from '../src/Model/Invoice/Refund.zod';
+import { settlementInterfaceSchema } from '../src/Model/Settlement/Settlement.zod';
+import { walletInterfaceSchema } from '../src/Model/Wallet/Wallet.zod';
+import { payoutRecipientInterfaceSchema } from '../src/Model/Payout/PayoutRecipient.zod';
 import { HttpRequestResolverExtras } from 'msw/lib/core/handlers/HttpHandler';
 import { ResponseResolverInfo } from 'msw/lib/core/handlers/RequestHandler';
 
@@ -751,9 +751,9 @@ describe('BitPaySDK.Client', () => {
 
       const results = await client.getLedgers();
 
-      ledgerInterfaceSchema.parse(results[0])
-      ledgerInterfaceSchema.parse(results[1])
-      ledgerInterfaceSchema.parse(results[2])
+      ledgerInterfaceSchema.parse(results[0]);
+      ledgerInterfaceSchema.parse(results[1]);
+      ledgerInterfaceSchema.parse(results[2]);
       expect(results.length).toBe(3);
       expect(results[0].currency).toBe('EUR');
       expect(results[1].currency).toBe('USD');
@@ -897,7 +897,7 @@ describe('BitPaySDK.Client', () => {
       const firstFailed = result.failed[0];
 
       payoutGroupInterfaceSchema.parse(result);
-      payoutInterfaceSchema.parse(firstPayout)
+      payoutInterfaceSchema.parse(firstPayout);
       payoutGroupFailedInterfaceSchema.parse(firstFailed);
       expect(result.payouts.length).toBe(1);
       expect(firstPayout.notificationURL).toBe(notificationURL);
@@ -924,7 +924,7 @@ describe('BitPaySDK.Client', () => {
       const firstFailed = result.failed[0];
 
       payoutGroupInterfaceSchema.parse(result);
-      payoutInterfaceSchema.parse(firstPayout)
+      payoutInterfaceSchema.parse(firstPayout);
       payoutGroupFailedInterfaceSchema.parse(firstFailed);
       expect(result.payouts.length).toBe(2);
       expect(firstPayout.notificationURL).toBe('https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx');
@@ -1217,7 +1217,7 @@ describe('BitPaySDK.Client', () => {
 
       const result = await client.getRefunds('Hpqc63wvE1ZjzeeH4kEycF');
 
-      refundInterfaceSchema.parse(result)
+      refundInterfaceSchema.parse(result);
       expect(result.id).toBe('WoE46gSLkJQS48RJEiNw3L');
       expect(result.amount).toBe(10);
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -1240,7 +1240,7 @@ describe('BitPaySDK.Client', () => {
 
       const result = await client.updateRefund('WoE46gSLkJQS48RJEiNw3L', 'created');
 
-      refundInterfaceSchema.parse(result)
+      refundInterfaceSchema.parse(result);
       expect(result.id).toBe('WoE46gSLkJQS48RJEiNw3L');
       expect(result.status).toBe('created');
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -1263,7 +1263,7 @@ describe('BitPaySDK.Client', () => {
 
       const result = await client.updateRefundByGuid('ee26b5e0-9185-493e-bc12-e846d5fcf07c', 'created');
 
-      refundInterfaceSchema.parse(result)
+      refundInterfaceSchema.parse(result);
       expect(result.id).toBe('WoE46gSLkJQS48RJEiNw3L');
       expect(result.status).toBe('created');
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -1303,7 +1303,7 @@ describe('BitPaySDK.Client', () => {
 
       const result = await client.cancelRefund('WoE46gSLkJQS48RJEiNw3L');
 
-      refundInterfaceSchema.parse(result)
+      refundInterfaceSchema.parse(result);
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
       expect(result.reference).toBe('Test refund');
     });
@@ -1323,7 +1323,7 @@ describe('BitPaySDK.Client', () => {
 
       const result = await client.cancelRefundByGuid('WoE46gSLkJQS48RJEiNw3L');
 
-      refundInterfaceSchema.parse(result)
+      refundInterfaceSchema.parse(result);
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
       expect(result.reference).toBe('Test refund');
     });

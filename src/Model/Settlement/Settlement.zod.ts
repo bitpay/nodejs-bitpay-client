@@ -1,7 +1,7 @@
-import { z } from "zod"
-import {withHoldingsInterfaceSchema} from "./WithHoldings.zod";
-import {payoutInfoInterfaceSchema} from "./PayoutInfo.zod";
-import {settlementLedgerEntryInterfaceSchema} from "./SettlementLedgerEntry.zod";
+import { z } from 'zod';
+import { withHoldingsInterfaceSchema } from './WithHoldings.zod';
+import { payoutInfoInterfaceSchema } from './PayoutInfo.zod';
+import { settlementLedgerEntryInterfaceSchema } from './SettlementLedgerEntry.zod';
 
 export const settlementInterfaceSchema = z.object({
   payoutInfo: payoutInfoInterfaceSchema.optional(),
@@ -21,4 +21,4 @@ export const settlementInterfaceSchema = z.object({
   withholdingsSum: z.number().optional(),
   totalAmount: z.number(),
   token: z.string().optional()
-})
+});

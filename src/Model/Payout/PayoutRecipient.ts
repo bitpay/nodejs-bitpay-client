@@ -20,7 +20,6 @@ export class PayoutRecipient implements PayoutRecipientInterface {
   token?: string;
   guid?: string;
 
-
   /**
    * Constructor, create a minimal Recipient object.
    *

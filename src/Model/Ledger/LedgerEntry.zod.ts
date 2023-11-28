@@ -1,5 +1,5 @@
-import { z } from "zod"
-import {buyerFieldsInterfaceSchema} from "./BuyerFields.zod";
+import { z } from 'zod';
+import { buyerFieldsInterfaceSchema } from './BuyerFields.zod';
 
 export const ledgerEntryInterfaceSchema = z.object({
   buyerFields: buyerFieldsInterfaceSchema,
@@ -17,4 +17,4 @@ export const ledgerEntryInterfaceSchema = z.object({
   transactionCurrency: z.string(),
   id: z.string(),
   supportRequest: z.string().optional()
-})
+});

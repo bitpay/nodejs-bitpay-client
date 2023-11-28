@@ -1,5 +1,5 @@
-import { z } from "zod"
-import {refundParamsSchema} from "./RefundParams.zod";
+import { z } from 'zod';
+import { refundParamsSchema } from './RefundParams.zod';
 
 export const refundInterfaceSchema = z.object({
   params: refundParamsSchema.optional(),
@@ -26,5 +26,5 @@ export const refundInterfaceSchema = z.object({
   refundFee: z.number(),
   immediate: z.boolean(),
   buyerPaysRefundFee: z.boolean(),
-  preview: z.boolean().optional(),
-})
+  preview: z.boolean().optional()
+});

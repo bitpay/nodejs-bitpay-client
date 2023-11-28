@@ -6,8 +6,8 @@ import { Shopper } from './Shopper';
 import { RefundInfo } from './RefundInfo';
 import { InvoiceUniversalCodes } from './InvoiceUniversalCodes';
 import { BitPayExceptionProvider } from '../../Exceptions/BitPayExceptionProvider';
-import {MinerFeesItem} from "./MinerFeesItem";
-import {SupportedTransactionCurrency} from "./SupportedTransactionCurrency";
+import { MinerFeesItem } from './MinerFeesItem';
+import { SupportedTransactionCurrency } from './SupportedTransactionCurrency';
 
 export interface InvoiceInterface {
   // API fields

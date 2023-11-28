@@ -215,7 +215,10 @@ export class BitPayClient {
     } catch (e: any) {
       BitPayExceptionProvider.throwGenericExceptionWithMessage('Wrong ecKey. ' + e.message);
     }
-    headers['X-Identity'] = this.identity;
+
+    if (this.identity !== null) {
+      headers['X-Identity'] = this.identity;
+    }
 
     return headers;
   }

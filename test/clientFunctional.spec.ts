@@ -22,18 +22,18 @@ import { Item } from '../src/Model/Bill/Item';
 import { WalletInterface } from '../src/Model/Wallet/Wallet';
 import { CurrencyInterface } from '../src/Model/Currency/Currency';
 import * as BitPaySDK from '../src/index';
-import {rateInterfaceSchema} from "../src/Model/Rates/Rate.zod";
-import {currencyInterfaceSchema} from "../src/Model/Currency/Currency.zod";
-import {invoiceSchema} from "../src/Model/Invoice/Invoice.zod";
-import {invoiceEventTokenInterfaceSchema} from "../src/Model/Invoice/InvoiceEventToken.zod";
-import {refundInterfaceSchema} from "../src/Model/Invoice/Refund.zod";
-import {payoutRecipientInterfaceSchema} from "../src/Model/Payout/PayoutRecipient.zod";
-import {payoutInterfaceSchema} from "../src/Model/Payout/Payout.zod";
-import {payoutGroupInterfaceSchema} from "../src/Model/Payout/PayoutGroup.zod";
-import {ledgerInterfaceSchema} from "../src/Model/Ledger/Ledger.zod";
-import {ledgerEntryInterfaceSchema} from "../src/Model/Ledger/LedgerEntry.zod";
-import {billInterfaceSchema} from "../src/Model/Bill/Bill.zod";
-import {walletInterfaceSchema} from "../src/Model/Wallet/Wallet.zod";
+import { rateInterfaceSchema } from '../src/Model/Rates/Rate.zod';
+import { currencyInterfaceSchema } from '../src/Model/Currency/Currency.zod';
+import { invoiceSchema } from '../src/Model/Invoice/Invoice.zod';
+import { invoiceEventTokenInterfaceSchema } from '../src/Model/Invoice/InvoiceEventToken.zod';
+import { refundInterfaceSchema } from '../src/Model/Invoice/Refund.zod';
+import { payoutRecipientInterfaceSchema } from '../src/Model/Payout/PayoutRecipient.zod';
+import { payoutInterfaceSchema } from '../src/Model/Payout/Payout.zod';
+import { payoutGroupInterfaceSchema } from '../src/Model/Payout/PayoutGroup.zod';
+import { ledgerInterfaceSchema } from '../src/Model/Ledger/Ledger.zod';
+import { ledgerEntryInterfaceSchema } from '../src/Model/Ledger/LedgerEntry.zod';
+import { billInterfaceSchema } from '../src/Model/Bill/Bill.zod';
+import { walletInterfaceSchema } from '../src/Model/Wallet/Wallet.zod';
 const Currencies = BitPaySDK.Currency;
 const PayoutStatus = BitPaySDK.PayoutStatus;
 
@@ -249,7 +249,7 @@ describe('BitPaySDK.Client', () => {
       const refundToCreateRequest: RefundInterface = new Refund(10.0, invoiceId, 'token');
       const refund: RefundInterface = await client.createRefund(refundToCreateRequest);
       refundId = refund.id;
-      refundGuid = refund.guid ?? "invalidGuid";
+      refundGuid = refund.guid ?? 'invalidGuid';
 
       refundInterfaceSchema.parse(refund);
       expect(refund.id).not.toBeNull();
@@ -337,7 +337,7 @@ describe('BitPaySDK.Client', () => {
     it('should retrieve recipient', async () => {
       const result: PayoutRecipientInterface = await client.getPayoutRecipient(recipientId);
 
-      payoutRecipientInterfaceSchema.parse(result)
+      payoutRecipientInterfaceSchema.parse(result);
       expect(result.email).toBe(email);
     });
 

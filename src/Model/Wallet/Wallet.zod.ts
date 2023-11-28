@@ -1,5 +1,5 @@
-import { z } from "zod"
-import {currenciesInterfaceSchema} from "./Currencies.zod";
+import { z } from 'zod';
+import { currenciesInterfaceSchema } from './Currencies.zod';
 
 export const walletInterfaceSchema = z.object({
   currencies: currenciesInterfaceSchema.array().optional(),
@@ -9,4 +9,4 @@ export const walletInterfaceSchema = z.object({
   avatar: z.string().optional(),
   payPro: z.boolean().optional(),
   image: z.string().optional()
-})
+});

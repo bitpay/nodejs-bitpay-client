@@ -830,11 +830,7 @@ export class Client {
     }
   }
 
-  private initForTests(
-    bitPayClient: BitPayClient,
-    guidGenerator: GuidGenerator,
-    tokenContainer: TokenContainer
-  ) {
+  private initForTests(bitPayClient: BitPayClient, guidGenerator: GuidGenerator, tokenContainer: TokenContainer) {
     this.bitPayClient = bitPayClient;
     this.guidGenerator = guidGenerator;
     this.tokenContainer = tokenContainer;

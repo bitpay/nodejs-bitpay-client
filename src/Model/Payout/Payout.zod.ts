@@ -1,5 +1,5 @@
-import { z } from "zod"
-import {payoutTransactionInterfaceSchema} from "./PayoutTransaction.zod";
+import { z } from 'zod';
+import { payoutTransactionInterfaceSchema } from './PayoutTransaction.zod';
 
 export const payoutInterfaceSchema = z.object({
   transactions: payoutTransactionInterfaceSchema.array().optional(),
@@ -26,4 +26,4 @@ export const payoutInterfaceSchema = z.object({
   exchangeRates: z.record(z.record(z.number())).optional(),
   code: z.number().optional(),
   ignoreEmails: z.boolean().optional()
-})
+});

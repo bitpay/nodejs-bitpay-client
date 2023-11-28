@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from 'zod';
 
 export const buyerFieldsInterfaceSchema = z.object({
   buyerName: z.string().optional(),
@@ -11,4 +11,4 @@ export const buyerFieldsInterfaceSchema = z.object({
   buyerPhone: z.string().optional(),
   buyerNotify: z.boolean().optional(),
   buyerEmail: z.string().optional()
-})
+});

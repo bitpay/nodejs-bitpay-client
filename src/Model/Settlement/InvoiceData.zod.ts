@@ -1,5 +1,5 @@
-import { z } from "zod"
-import {refundInfoInterfaceSchema} from "./RefundInfo.zod";
+import { z } from 'zod';
+import { refundInfoInterfaceSchema } from './RefundInfo.zod';
 
 export const invoiceDataInterfaceSchema = z.object({
   refundInfo: refundInfoInterfaceSchema.optional(),
@@ -10,4 +10,4 @@ export const invoiceDataInterfaceSchema = z.object({
   currency: z.string().optional(),
   transactionCurrency: z.string().optional(),
   payoutPercentage: z.record(z.number()).optional()
-})
+});

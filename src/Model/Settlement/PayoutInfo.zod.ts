@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from 'zod';
 
 export const payoutInfoInterfaceSchema = z.object({
   name: z.string().optional(),
@@ -25,4 +25,4 @@ export const payoutInfoInterfaceSchema = z.object({
   accountHolderPostalCode: z.string().optional(),
   accountHolderCity: z.string().optional(),
   accountHolderCountry: z.string().optional()
-})
+});

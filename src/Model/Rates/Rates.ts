@@ -1,6 +1,6 @@
 import { RateClient } from '../../Client/RateClient';
 import { BitPayExceptionProvider } from '../../Exceptions/BitPayExceptionProvider';
-import {RateInterface} from "./Rate";
+import { RateInterface } from './Rate';
 
 class Rates {
   private rates: RateInterface[];
@@ -39,9 +39,9 @@ class Rates {
       return <RateInterface[]>ratesObj;
     } catch (e: any) {
       BitPayExceptionProvider.throwGenericExceptionWithMessage(e.message);
-      throw new Error()
+      throw new Error();
     }
   }
 }
 
-export { Rates};
+export { Rates };

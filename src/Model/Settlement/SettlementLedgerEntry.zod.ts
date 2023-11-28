@@ -1,5 +1,5 @@
-import { z } from "zod"
-import {invoiceDataInterfaceSchema} from "./InvoiceData.zod";
+import { z } from 'zod';
+import { invoiceDataInterfaceSchema } from './InvoiceData.zod';
 
 export const settlementLedgerEntryInterfaceSchema = z.object({
   invoiceData: invoiceDataInterfaceSchema.optional(),
@@ -9,4 +9,4 @@ export const settlementLedgerEntryInterfaceSchema = z.object({
   invoiceId: z.string().optional(),
   timestamp: z.string().optional(),
   description: z.string().optional()
-})
+});

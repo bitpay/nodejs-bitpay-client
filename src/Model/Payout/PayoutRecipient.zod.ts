@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from 'zod';
 
 export const payoutRecipientInterfaceSchema = z.object({
   email: z.string().optional().nullable(),
@@ -9,4 +9,4 @@ export const payoutRecipientInterfaceSchema = z.object({
   shopperId: z.string().nullable().optional(),
   token: z.string().optional(),
   guid: z.string().optional()
-})
+});

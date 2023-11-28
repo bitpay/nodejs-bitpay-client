@@ -1,5 +1,5 @@
-import {array, z} from 'zod';
-import {itemInterfaceSchema} from "./Item.zod";
+import { array, z } from 'zod';
+import { itemInterfaceSchema } from './Item.zod';
 
 export const billInterfaceSchema = z.object({
   number: z.string(),
