@@ -45,7 +45,7 @@ export const invoiceSchema = z.object({
   invoiceTime: z.number().optional(),
   expirationTime: z.number().optional(),
   currentTime: z.number().optional(),
-  exceptionStatus: z.boolean().optional(),
+  exceptionStatus: z.union([z.boolean(), z.string()]).optional(),
   targetConfirmations: z.number().optional(),
   refundAddresses: z.unknown().optional(),
   refundAddressRequestPending: z.boolean().optional(),

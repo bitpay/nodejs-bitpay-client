@@ -50,7 +50,7 @@ export interface InvoiceInterface {
   invoiceTime?: number;
   expirationTime?: number;
   currentTime?: number;
-  exceptionStatus?: boolean;
+  exceptionStatus?: boolean | string;
   targetConfirmations?: number;
   transactions?: InvoiceTransaction[];
   refundAddresses?: unknown;
@@ -126,7 +126,7 @@ export class Invoice implements InvoiceInterface {
   invoiceTime?: number;
   expirationTime?: number;
   currentTime?: number;
-  exceptionStatus?: boolean;
+  exceptionStatus?: boolean | string;
   targetConfirmations?: number;
   transactions?: InvoiceTransaction[];
   refundAddresses?: unknown;
