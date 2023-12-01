@@ -1,21 +1,21 @@
 import { InvoiceData } from './InvoiceData';
 
 export interface SettlementLedgerEntryInterface {
-  code: number | null;
-  invoiceId: string | null;
-  amount: number | null;
-  timestamp: number | null;
-  description: string | null;
-  invoiceData: InvoiceData | null;
+  amount: number;
+  code?: number;
+  invoiceId?: string;
+  timestamp?: string;
+  description?: string;
+  invoiceData?: InvoiceData;
 }
 
 export class SettlementLedgerEntry implements SettlementLedgerEntryInterface {
-  code: number | null;
-  invoiceId: string | null;
-  amount: number | null;
-  timestamp: number | null;
-  description: string | null;
-  invoiceData: InvoiceData | null;
+  amount: number;
+  code?: number;
+  invoiceId?: string;
+  timestamp?: string;
+  description?: string;
+  invoiceData?: InvoiceData;
 
   public constructor() {}
 }

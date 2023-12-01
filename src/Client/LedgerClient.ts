@@ -26,8 +26,9 @@ export class LedgerClient {
 
     try {
       return <LedgerInterface[]>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Ledger', e.message);
+      throw new Error();
     }
   }
 
@@ -47,8 +48,9 @@ export class LedgerClient {
 
     try {
       return <LedgerEntryInterface[]>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Ledger', e.message);
+      throw new Error();
     }
   }
 }

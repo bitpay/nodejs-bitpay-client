@@ -18,7 +18,6 @@
   },
   "currency": "USD",
   "extendedNotifications": true,
-  "forcedBuyerSelectedTransactionCurrency": null,
   "forcedBuyerSelectedWallet": "bitpay",
   "fullNotifications": true,
   "itemDesc": "Example",

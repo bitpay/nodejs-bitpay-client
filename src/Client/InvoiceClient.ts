@@ -36,8 +36,9 @@ export class InvoiceClient {
 
     try {
       return <InvoiceInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 
@@ -59,8 +60,9 @@ export class InvoiceClient {
 
     try {
       return <InvoiceInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 
@@ -79,8 +81,9 @@ export class InvoiceClient {
 
     try {
       return <InvoiceInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 
@@ -99,8 +102,9 @@ export class InvoiceClient {
 
     try {
       return <InvoiceInterface[]>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 
@@ -117,8 +121,9 @@ export class InvoiceClient {
 
     try {
       return <InvoiceEventTokenInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 
@@ -138,8 +143,9 @@ export class InvoiceClient {
 
     try {
       return <InvoiceInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 
@@ -161,8 +167,9 @@ export class InvoiceClient {
 
     try {
       return <InvoiceInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 
@@ -184,8 +191,9 @@ export class InvoiceClient {
 
     try {
       return <InvoiceInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 
@@ -207,8 +215,9 @@ export class InvoiceClient {
 
     try {
       return <InvoiceInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 
@@ -226,8 +235,9 @@ export class InvoiceClient {
 
     try {
       return BitPayResponseParser.jsonToBoolean(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Invoice', e.message);
+      throw new Error();
     }
   }
 }

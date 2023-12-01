@@ -56,8 +56,7 @@
       "sms": "+12223334444",
       "smsVerified": true,
       "selectedWallet": "bitpay",
-      "selectedTransactionCurrency": "BCH",
-      "emailAddress": "john@doe.com"
+      "selectedTransactionCurrency": "BCH"
     },
     "paymentSubtotals": {
       "BTC": 18000,

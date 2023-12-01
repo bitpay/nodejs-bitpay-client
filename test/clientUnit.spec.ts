@@ -72,6 +72,19 @@ import * as invalidSignature from './json/invalidSignature.json';
 import { isEqual } from 'lodash';
 import * as BitPaySDK from '../src/index';
 import BitPayApiException from '../src/Exceptions/BitPayApiException';
+import { invoiceSchema } from '../src/Model/Invoice/Invoice.zod';
+import { billInterfaceSchema } from '../src/Model/Bill/Bill.zod';
+import { currencyInterfaceSchema } from '../src/Model/Currency/Currency.zod';
+import { ledgerEntryInterfaceSchema } from '../src/Model/Ledger/LedgerEntry.zod';
+import { ledgerInterfaceSchema } from '../src/Model/Ledger/Ledger.zod';
+import { payoutInterfaceSchema } from '../src/Model/Payout/Payout.zod';
+import { payoutGroupInterfaceSchema } from '../src/Model/Payout/PayoutGroup.zod';
+import { payoutGroupFailedInterfaceSchema } from '../src/Model/Payout/PayoutGroupFailed.zod';
+import { rateInterfaceSchema } from '../src/Model/Rates/Rate.zod';
+import { refundInterfaceSchema } from '../src/Model/Invoice/Refund.zod';
+import { settlementInterfaceSchema } from '../src/Model/Settlement/Settlement.zod';
+import { walletInterfaceSchema } from '../src/Model/Wallet/Wallet.zod';
+import { payoutRecipientInterfaceSchema } from '../src/Model/Payout/PayoutRecipient.zod';
 import { HttpRequestResolverExtras } from 'msw/lib/core/handlers/HttpHandler';
 import { ResponseResolverInfo } from 'msw/lib/core/handlers/RequestHandler';
 
@@ -115,7 +128,7 @@ describe('BitPaySDK.Client', () => {
       return exampleUuid;
     });
 
-    client = new Client(null, null, tokenContainer, null, null, undefined, bpc, guidGenerator);
+    client = new Client(null, null, tokenContainer, null, undefined, bpc, guidGenerator);
     oneMonthAgo = new Date();
     oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
 
@@ -202,10 +215,8 @@ describe('BitPaySDK.Client', () => {
       null,
       tokenContainer,
       null,
-      null,
       undefined,
-      new BitPayClient(host + '/', ecKey, 'someIdentity'),
-      null
+      new BitPayClient(host + '/', ecKey, 'someIdentity')
     );
 
     it('should throws BitPayException for invalid signature', async () => {
@@ -254,6 +265,9 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.getSupportedWallets();
+
+      walletInterfaceSchema.parse(result[0]);
+      walletInterfaceSchema.parse(result[1]);
       expect(result.length).toBe(7);
       expect(result[0].key).toBe('bitpay');
       expect(result[0].displayName).toBe('BitPay');
@@ -306,6 +320,7 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.createBill(getBill(), Facade.Merchant, true);
+      billInterfaceSchema.parse(result);
       expect(result.token).toBe('6EBQR37MgDJPfEiLY3jtRq7eTP2aodR5V5wmXyyZhru5FM5yF4RCGKYQtnT7nhwHjA');
       expect(result.items[0].id).toBe('NV35GRWtrdB2cmGEjY4LKY');
     });
@@ -324,6 +339,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.getBill('3Zpmji8bRKxWJo2NJbWX5H', Facade.Merchant, true);
+      billInterfaceSchema.parse(result);
+
       expect(result.id).toBe('3Zpmji8bRKxWJo2NJbWX5H');
       expect(result.token).toBe('6EBQR37MgDJPfEiLY3jtRq7eTP2aodR5V5wmXyyZhru5FM5yF4RCGKYQtnT7nhwHjA');
       expect(result.merchant).toBe('7HyKWn3d4xdhAMQYAEVxVq');
@@ -344,6 +361,7 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.getBills();
+      billInterfaceSchema.parse(result[0]);
 
       expect(result[0].id).toBe('X6KJbe9RxAGWNReCwd1xRw');
       expect(result[0].token).toBe('6EBQR37MgDJPfEiLY3jtRqBMYLg8XSDqhp2kp7VSDqCMHGHnsw4bqnnwQmtehzCvSo');
@@ -370,6 +388,7 @@ describe('BitPaySDK.Client', () => {
 
       const result = await client.getBills('draft');
 
+      billInterfaceSchema.parse(result[0]);
       expect(result[0].id).toBe('X6KJbe9RxAGWNReCwd1xRw');
       expect(result[0].token).toBe('6EBQR37MgDJPfEiLY3jtRqBMYLg8XSDqhp2kp7VSDqCMHGHnsw4bqnnwQmtehzCvSo');
       expect(result.length).toBe(2);
@@ -401,6 +420,7 @@ describe('BitPaySDK.Client', () => {
 
       const result = await client.updateBill(bill, '3Zpmji8bRKxWJo2NJbWX5H');
 
+      billInterfaceSchema.parse(result);
       expect(result.status).toBe('draft');
       expect(result.items.length).toBe(3);
       expect(result.items[2].price).toBe(5);
@@ -441,11 +461,13 @@ describe('BitPaySDK.Client', () => {
         })
       );
 
-      const results = await client.getCurrencyInfo('USD');
-      expect(results.code).toBe('USD');
-      expect(results.symbol).toBe('$');
-      expect(results.name).toBe('US Dollar');
-      expect(results.minimum).toBe(0.01);
+      const result = await client.getCurrencyInfo('USD');
+
+      currencyInterfaceSchema.parse(result);
+      expect(result.code).toBe('USD');
+      expect(result.symbol).toBe('$');
+      expect(result.name).toBe('US Dollar');
+      expect(result.minimum).toBe(0.01);
     });
   });
 
@@ -461,7 +483,6 @@ describe('BitPaySDK.Client', () => {
       invoice.notificationEmail = 'notification@email.com';
       invoice.autoRedirect = true;
       invoice.forcedBuyerSelectedWallet = 'bitpay';
-      invoice.forcedBuyerSelectedTransactionCurrency = null;
       const buyerData = new Buyer();
       buyerData.name = 'Marcin';
       buyerData.address1 = 'SomeStreet';
@@ -498,6 +519,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.createInvoice(getInvoiceExample(), Facade.Merchant, true);
+
+      invoiceSchema.parse(result);
       expect(result.id).toBe('G3viJEJgE8Jk2oekSdgT2A');
       expect(result.url).toBe('https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A');
       expect(result.buyerProvidedInfo.emailAddress).toBe('john@doe.com');
@@ -517,10 +540,15 @@ describe('BitPaySDK.Client', () => {
         )
       );
 
-      const results = await client.getInvoice('G3viJEJgE8Jk2oekSdgT2A');
+      const result = await client.getInvoice('G3viJEJgE8Jk2oekSdgT2A');
 
-      expect(results.id).toBe('G3viJEJgE8Jk2oekSdgT2A');
-      expect(results.url).toBe('https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A');
+      invoiceSchema.parse(result);
+      expect(result.id).toBe('G3viJEJgE8Jk2oekSdgT2A');
+      expect(result.transactions[0].exRates['WBTC']).toBe(0.024436520994387978);
+      expect(result.transactions[0].exRates['PAX']).toBe(1355.2800000000002);
+      expect(result.transactions[0].exRates['DOGE']).toBe(2725.466119299674);
+      expect(result.transactions[0].amount).toBe(739100);
+      expect(result.url).toBe('https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A');
     });
 
     it('should get invoice by guid', async () => {
@@ -536,8 +564,10 @@ describe('BitPaySDK.Client', () => {
         )
       );
 
-      const results = await client.getInvoiceByGuid('payment1234');
-      expect(results.id).toBe('G3viJEJgE8Jk2oekSdgT2A');
+      const result = await client.getInvoiceByGuid('payment1234');
+
+      invoiceSchema.parse(result);
+      expect(result.id).toBe('G3viJEJgE8Jk2oekSdgT2A');
     });
 
     it('should get invoices', async () => {
@@ -569,6 +599,9 @@ describe('BitPaySDK.Client', () => {
       };
 
       const results = await client.getInvoices(params);
+
+      invoiceSchema.parse(results[0]);
+      invoiceSchema.parse(results[1]);
       expect(results.length).toBe(2);
     });
 
@@ -588,6 +621,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.payInvoice('G3viJEJgE8Jk2oekSdgT2A', 'complete');
+
+      invoiceSchema.parse(result);
       expect(result.token).toBe('AShhrUJ2sEJ4stEzkt5AywcrDDE5A3SpeXsXdbU1TMVo');
     });
 
@@ -605,6 +640,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.cancelInvoice('Hpqc63wvE1ZjzeeH4kEycF');
+
+      invoiceSchema.parse(result);
       expect(result.orderId).toBe('20210511_fghij');
     });
 
@@ -622,6 +659,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.cancelInvoiceByGuid('payment1234');
+
+      invoiceSchema.parse(result);
       expect(result.orderId).toBe('20210511_fghij');
     });
 
@@ -656,8 +695,9 @@ describe('BitPaySDK.Client', () => {
         )
       );
 
-      const results = await client.getInvoiceEventToken('GZRP3zgNHTDf8F5BmdChKz');
-      expect(results.token).toBe('4MuqDPt93i9Xbf8SnAPniwbGeNLW8A3ScgAmukFMgFUFRqTLuuhVdAFfePPysVqL2P');
+      const result = await client.getInvoiceEventToken('GZRP3zgNHTDf8F5BmdChKz');
+
+      expect(result.token).toBe('4MuqDPt93i9Xbf8SnAPniwbGeNLW8A3ScgAmukFMgFUFRqTLuuhVdAFfePPysVqL2P');
     });
   });
 
@@ -689,6 +729,8 @@ describe('BitPaySDK.Client', () => {
         new Date('2021-05-31T03:24:00')
       );
 
+      ledgerEntryInterfaceSchema.parse(results[0]);
+      ledgerEntryInterfaceSchema.parse(results[1]);
       expect(results.length).toBe(3);
       expect(results[1].code).toBe(1023);
       expect(results[1].invoiceId).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -709,6 +751,9 @@ describe('BitPaySDK.Client', () => {
 
       const results = await client.getLedgers();
 
+      ledgerInterfaceSchema.parse(results[0]);
+      ledgerInterfaceSchema.parse(results[1]);
+      ledgerInterfaceSchema.parse(results[2]);
       expect(results.length).toBe(3);
       expect(results[0].currency).toBe('EUR');
       expect(results[1].currency).toBe('USD');
@@ -740,11 +785,12 @@ describe('BitPaySDK.Client', () => {
       payout.email = 'john@doe.com';
       payout.label = 'John Doe';
 
-      const results = await client.submitPayout(payout);
+      const result = await client.submitPayout(payout);
 
-      expect(results.status).toBe('new');
-      expect(results.token).toBe('6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL');
-      expect(results.email).toBe('john@doe.com');
+      payoutInterfaceSchema.parse(result);
+      expect(result.status).toBe('new');
+      expect(result.token).toBe('6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL');
+      expect(result.email).toBe('john@doe.com');
     });
 
     it('should get payout', async () => {
@@ -760,11 +806,12 @@ describe('BitPaySDK.Client', () => {
         )
       );
 
-      const results = await client.getPayout('JMwv8wQCXANoU2ZZQ9a9GH');
+      const result = await client.getPayout('JMwv8wQCXANoU2ZZQ9a9GH');
 
-      expect(results.status).toBe('complete');
-      expect(results.token).toBe('6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL');
-      expect(results.email).toBe('john@doe.com');
+      payoutInterfaceSchema.parse(result);
+      expect(result.status).toBe('complete');
+      expect(result.token).toBe('6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL');
+      expect(result.email).toBe('john@doe.com');
     });
 
     it('should get payouts', async () => {
@@ -795,6 +842,8 @@ describe('BitPaySDK.Client', () => {
 
       const results = await client.getPayouts(params);
 
+      payoutInterfaceSchema.parse(results[0]);
+      payoutInterfaceSchema.parse(results[1]);
       expect(results[0].id).toBe('JMwv8wQCXANoU2ZZQ9a9GH');
       expect(results[0].email).toBe('john@doe.com');
       expect(results[1].id).toBe('KMXZeQigXG6T5abzCJmTcH');
@@ -847,6 +896,9 @@ describe('BitPaySDK.Client', () => {
       const firstPayout = result.payouts[0];
       const firstFailed = result.failed[0];
 
+      payoutGroupInterfaceSchema.parse(result);
+      payoutInterfaceSchema.parse(firstPayout);
+      payoutGroupFailedInterfaceSchema.parse(firstFailed);
       expect(result.payouts.length).toBe(1);
       expect(firstPayout.notificationURL).toBe(notificationURL);
       expect(firstPayout.shopperId).toBe(shopperId);
@@ -871,6 +923,9 @@ describe('BitPaySDK.Client', () => {
       const firstPayout = result.payouts[0];
       const firstFailed = result.failed[0];
 
+      payoutGroupInterfaceSchema.parse(result);
+      payoutInterfaceSchema.parse(firstPayout);
+      payoutGroupFailedInterfaceSchema.parse(firstFailed);
       expect(result.payouts.length).toBe(2);
       expect(firstPayout.notificationURL).toBe('https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx');
       expect(firstPayout.shopperId).toBe('7qohDf2zZnQK5Qanj8oyC2');
@@ -920,6 +975,8 @@ describe('BitPaySDK.Client', () => {
 
       const results = await client.submitPayoutRecipients(payoutRecipients);
 
+      payoutRecipientInterfaceSchema.parse(results[0]);
+      payoutRecipientInterfaceSchema.parse(results[1]);
       expect(results.length).toBe(2);
       expect(results[0].id).toBe('JA4cEtmBxCp5cybtnh1rds');
       expect(results[1].id).toBe('X3icwc4tE8KJ5hEPNPpDXW');
@@ -951,6 +1008,8 @@ describe('BitPaySDK.Client', () => {
 
       const results = await client.getPayoutRecipients(params);
 
+      payoutRecipientInterfaceSchema.parse(results[0]);
+      payoutRecipientInterfaceSchema.parse(results[1]);
       expect(results.length).toBe(2);
       expect(results[0].id).toBe('JA4cEtmBxCp5cybtnh1rds');
       expect(results[1].id).toBe('X3icwc4tE8KJ5hEPNPpDXW');
@@ -972,6 +1031,7 @@ describe('BitPaySDK.Client', () => {
 
       const result = await client.getPayoutRecipient('JA4cEtmBxCp5cybtnh1rds');
 
+      payoutRecipientInterfaceSchema.parse(result);
       expect(result.email).toBe('john.smith@email.com');
       expect(result.label).toBe('John Smith');
       expect(result.id).toBe('JA4cEtmBxCp5cybtnh1rds');
@@ -1001,6 +1061,7 @@ describe('BitPaySDK.Client', () => {
 
       const payoutRecipient = new PayoutRecipient('bob@email.com', 'Bob123', 'https://someurl.com');
 
+      payoutRecipientInterfaceSchema.parse(payoutRecipient);
       const result = await client.updatePayoutRecipient('X3icwc4tE8KJ5hEPNPpDXW', payoutRecipient);
       expect(result.label).toBe('Bob123');
     });
@@ -1031,8 +1092,10 @@ describe('BitPaySDK.Client', () => {
         })
       );
 
-      const results: RateInterface = await client.getRate('BCH', 'USD');
-      expect(results.rate).toBe(100.99);
+      const result: RateInterface = await client.getRate('BCH', 'USD');
+
+      rateInterfaceSchema.parse(result);
+      expect(result.rate).toBe(100.99);
     });
 
     it('should get rates', async () => {
@@ -1043,6 +1106,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const results: Rates = await client.getRates();
+
+      rateInterfaceSchema.parse(results.getRates()[0]);
       expect(results.getRates().length).toBe(183);
     });
 
@@ -1054,6 +1119,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const results: Rates = await client.getRates('BTC');
+
+      rateInterfaceSchema.parse(results.getRates()[0]);
       expect(results.getRates().length).toBe(183);
     });
   });
@@ -1081,6 +1148,8 @@ describe('BitPaySDK.Client', () => {
       const refund = new Refund(10.0, 'Hpqc63wvE1ZjzeeH4kEycF', 'token');
 
       const result = await client.createRefund(refund);
+
+      refundInterfaceSchema.parse(result);
       expect(result.guid).toBe('ee26b5e0-9185-493e-bc12-e846d5fcf07c');
       expect(result.amount).toBe(10);
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -1100,6 +1169,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.getRefund('WoE46gSLkJQS48RJEiNw3L');
+
+      refundInterfaceSchema.parse(result);
       expect(result.guid).toBe('ee26b5e0-9185-493e-bc12-e846d5fcf07c');
       expect(result.amount).toBe(10);
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -1119,6 +1190,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.getRefundByGuid('ee26b5e0-9185-493e-bc12-e846d5fcf07c');
+
+      refundInterfaceSchema.parse(result);
       expect(result.id).toBe('WoE46gSLkJQS48RJEiNw3L');
       expect(result.amount).toBe(10);
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -1143,6 +1216,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.getRefunds('Hpqc63wvE1ZjzeeH4kEycF');
+
+      refundInterfaceSchema.parse(result);
       expect(result.id).toBe('WoE46gSLkJQS48RJEiNw3L');
       expect(result.amount).toBe(10);
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -1164,6 +1239,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.updateRefund('WoE46gSLkJQS48RJEiNw3L', 'created');
+
+      refundInterfaceSchema.parse(result);
       expect(result.id).toBe('WoE46gSLkJQS48RJEiNw3L');
       expect(result.status).toBe('created');
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -1185,6 +1262,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.updateRefundByGuid('ee26b5e0-9185-493e-bc12-e846d5fcf07c', 'created');
+
+      refundInterfaceSchema.parse(result);
       expect(result.id).toBe('WoE46gSLkJQS48RJEiNw3L');
       expect(result.status).toBe('created');
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
@@ -1223,6 +1302,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.cancelRefund('WoE46gSLkJQS48RJEiNw3L');
+
+      refundInterfaceSchema.parse(result);
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
       expect(result.reference).toBe('Test refund');
     });
@@ -1241,6 +1322,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.cancelRefundByGuid('WoE46gSLkJQS48RJEiNw3L');
+
+      refundInterfaceSchema.parse(result);
       expect(result.invoice).toBe('Hpqc63wvE1ZjzeeH4kEycF');
       expect(result.reference).toBe('Test refund');
     });
@@ -1280,6 +1363,9 @@ describe('BitPaySDK.Client', () => {
       };
 
       const result = await client.getSettlements(params);
+
+      settlementInterfaceSchema.parse(result[0]);
+      settlementInterfaceSchema.parse(result[1]);
       expect(result.length).toBe(2);
       expect(result[0].id).toBe('KBkdURgmE3Lsy9VTnavZHX');
       expect(result[0].accountId).toBe('YJCgTf3jrXHkUVzLQ7y4eg');
@@ -1301,6 +1387,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.getSettlement('DNFnN3fFjjzLn6if5bdGJC');
+
+      settlementInterfaceSchema.parse(result);
       expect(result.id).toBe('RPWTabW8urd3xWv2To989v');
       expect(result.accountId).toBe('YJCgTf3jrXHkUVzLQ7y4eg');
       expect(result.openingBalance).toBe(23.27);
@@ -1324,6 +1412,8 @@ describe('BitPaySDK.Client', () => {
       );
 
       const result = await client.getSettlementReconciliationReport('RvNuCTMAkURKimwgvSVEMP', token);
+
+      settlementInterfaceSchema.parse(result);
       expect(result.id).toBe('RvNuCTMAkURKimwgvSVEMP');
       expect(result.accountId).toBe('YJCgTf3jrXHkUVzLQ7y4eg');
       expect(result.openingBalance).toBe(23.13);

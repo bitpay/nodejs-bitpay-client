@@ -9,14 +9,14 @@ import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
 import { LoggerProvider } from '../Logger/LoggerProvider';
 
 export class BitPayClient {
-  private readonly ecKey: KeyPair;
-  private readonly identity: string;
+  private readonly ecKey: KeyPair | null;
+  private readonly identity: string | null;
   private readonly baseUrl: string;
   private readonly defaultHeaders: Record<string, string>;
   private readonly keyUtils: KeyUtils;
   private readonly responseParser: BitPayResponseParser;
 
-  public constructor(baseUrl: string, ecKey: KeyPair, identity: string) {
+  public constructor(baseUrl: string, ecKey: KeyPair | null, identity: string | null) {
     this.ecKey = ecKey;
     this.baseUrl = baseUrl;
     this.identity = identity;
@@ -67,7 +67,7 @@ export class BitPayClient {
       LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
 
       return this.responseParser.getJsonDataFromJsonResponse(jsonObject);
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof BitPayException) {
         throw e;
       }
@@ -106,7 +106,7 @@ export class BitPayClient {
       LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
 
       return this.responseParser.getJsonDataFromJsonResponse(jsonObject);
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof BitPayException) {
         throw e;
       }
@@ -146,7 +146,7 @@ export class BitPayClient {
       LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
 
       return this.responseParser.getJsonDataFromJsonResponse(jsonObject);
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof BitPayException) {
         throw e;
       }
@@ -184,7 +184,7 @@ export class BitPayClient {
       LoggerProvider.getLogger().logResponse(method, fullUrl, JSON.stringify(jsonObject));
 
       return this.responseParser.getJsonDataFromJsonResponse(jsonObject);
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof BitPayException) {
         throw e;
       }
@@ -200,17 +200,25 @@ export class BitPayClient {
    * @param jsonData
    * @throws BitPayApiExtension
    */
-  private getSignatureHeaders(fullUrl: string, headers: Record<string, string>, jsonData: string) {
+  private getSignatureHeaders(fullUrl: string, headers: Record<string, string>, jsonData: string | null) {
     if (jsonData !== null) {
       fullUrl = fullUrl + jsonData;
     }
 
+    if (this.ecKey == null) {
+      BitPayExceptionProvider.throwGenericExceptionWithMessage('Missing ecKey');
+      throw new Error();
+    }
+
     try {
       headers['X-Signature'] = this.keyUtils.sign(fullUrl, this.ecKey);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwGenericExceptionWithMessage('Wrong ecKey. ' + e.message);
     }
-    headers['X-Identity'] = this.identity;
+
+    if (this.identity !== null) {
+      headers['X-Identity'] = this.identity;
+    }
 
     return headers;
   }

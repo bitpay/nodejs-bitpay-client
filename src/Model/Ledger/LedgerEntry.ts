@@ -1,37 +1,37 @@
-import { Buyer } from './Buyer';
+import { BuyerFields } from './BuyerFields';
 
 export interface LedgerEntryInterface {
-  type: string | null;
-  amount: string | null;
-  code: string | null;
-  description: string | null;
-  timestamp: string | null;
-  txType: string | null;
-  scale: string | null;
-  invoiceId: string | null;
-  buyer: Buyer | null;
+  type: string;
+  amount: number;
+  code: number;
+  description?: string;
+  timestamp?: string;
+  txType?: string;
+  scale?: number;
+  invoiceId: string;
+  buyerFields?: BuyerFields;
   invoiceAmount: number;
-  invoiceCurrency: string | null;
-  transactionCurrency: string | null;
-  id: string | null;
-  supportRequest: string | null;
+  invoiceCurrency: string;
+  transactionCurrency: string;
+  id: string;
+  supportRequest?: string;
 }
 
 export class LedgerEntry implements LedgerEntryInterface {
-  type: string | null;
-  amount: string | null;
-  code: string | null;
-  description: string | null;
-  timestamp: string | null;
-  txType: string | null;
-  scale: string | null;
-  invoiceId: string | null;
-  buyer: Buyer | null;
+  type: string;
+  amount: number;
+  code: number;
+  description?: string;
+  timestamp?: string;
+  txType?: string;
+  scale?: number;
+  invoiceId: string;
+  buyerFields?: BuyerFields;
   invoiceAmount: number;
-  invoiceCurrency: string | null;
-  transactionCurrency: string | null;
-  id: string | null;
-  supportRequest: string | null;
+  invoiceCurrency: string;
+  transactionCurrency: string;
+  id: string;
+  supportRequest?: string;
 
   public constructor() {}
 }

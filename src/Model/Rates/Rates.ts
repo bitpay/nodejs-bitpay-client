@@ -1,13 +1,6 @@
 import { RateClient } from '../../Client/RateClient';
 import { BitPayExceptionProvider } from '../../Exceptions/BitPayExceptionProvider';
-
-interface RateInterface {
-  Name: string;
-  cryptoCode: string;
-  currencyPair: string;
-  code: string;
-  rate: number;
-}
+import { RateInterface } from './Rate';
 
 class Rates {
   private rates: RateInterface[];
@@ -33,7 +26,7 @@ class Rates {
   }
 
   public async update(rateClient: RateClient) {
-    const rates = await rateClient.getRates();
+    const rates = await rateClient.getRates(null);
     this.rates = rates.getRates();
   }
 
@@ -44,10 +37,11 @@ class Rates {
       }
 
       return <RateInterface[]>ratesObj;
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwGenericExceptionWithMessage(e.message);
+      throw new Error();
     }
   }
 }
 
-export { Rates, RateInterface };
+export { Rates };

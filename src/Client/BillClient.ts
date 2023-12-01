@@ -29,8 +29,9 @@ export class BillClient {
 
     try {
       return <BillInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwSerializeResourceException('Bill', e.message);
+      throw new Error();
     }
   }
 
@@ -50,8 +51,9 @@ export class BillClient {
 
     try {
       return <BillInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Bill', e.message);
+      throw new Error();
     }
   }
 
@@ -63,7 +65,7 @@ export class BillClient {
    * @throws BitPayGenericException BitPayGenericException
    * @throws BitPayApiException BitPayApiException
    */
-  public async getBills(status: string | null): Promise<BillInterface> {
+  public async getBills(status: string | null): Promise<BillInterface[]> {
     const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
     if (status) {
       params['status'] = status;
@@ -72,9 +74,10 @@ export class BillClient {
     const result = await this.bitPayClient.get('bills', params, true);
 
     try {
-      return <BillInterface>JSON.parse(result);
-    } catch (e) {
+      return <BillInterface[]>JSON.parse(result);
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Bill', e.message);
+      throw new Error();
     }
   }
 
@@ -92,8 +95,9 @@ export class BillClient {
 
     try {
       return <BillInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Bill', e.message);
+      throw new Error();
     }
   }
 
@@ -113,8 +117,9 @@ export class BillClient {
 
     try {
       return <string>JSON.parse(result) == 'Success';
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Bill', e.message);
+      throw new Error();
     }
   }
 }

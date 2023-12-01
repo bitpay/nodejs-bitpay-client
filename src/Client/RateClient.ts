@@ -24,8 +24,9 @@ export class RateClient {
 
     try {
       return <RateInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Rate', e.message);
+      throw new Error();
     }
   }
 
@@ -37,15 +38,16 @@ export class RateClient {
    * @throws BitPayGenericException BitPayGenericException class
    * @throws BitPayApiException BitPayApiException class
    */
-  public async getRates(currency: string = null): Promise<Rates> {
+  public async getRates(currency: string | null): Promise<Rates> {
     const uri = currency ? 'rates/' + currency : 'rates';
 
     const result = await this.bitPayClient.get(uri, null, false);
 
     try {
       return new Rates(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Rate', e.message);
+      throw new Error();
     }
   }
 }

@@ -32,8 +32,9 @@ export class PayoutRecipientClient {
 
     try {
       return <PayoutRecipientInterface[]>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Payout Recipient', e.message);
+      throw new Error();
     }
   }
 
@@ -54,8 +55,9 @@ export class PayoutRecipientClient {
 
     try {
       return <PayoutRecipientInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Payout Recipient', e.message);
+      throw new Error();
     }
   }
 
@@ -74,8 +76,9 @@ export class PayoutRecipientClient {
 
     try {
       return <PayoutRecipientInterface>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Payout Recipient', e.message);
+      throw new Error();
     }
   }
 
@@ -94,8 +97,9 @@ export class PayoutRecipientClient {
 
     try {
       return <PayoutRecipientInterface[]>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Payout Recipient', e.message);
+      throw new Error();
     }
   }
 
@@ -113,8 +117,9 @@ export class PayoutRecipientClient {
 
     try {
       return BitPayResponseParser.jsonToBoolean(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Payout Recipient', e.message);
+      throw new Error();
     }
   }
 
@@ -133,8 +138,9 @@ export class PayoutRecipientClient {
 
     try {
       return BitPayResponseParser.jsonToBoolean(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Payout Recipient', e.message);
+      throw new Error();
     }
   }
 }

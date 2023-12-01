@@ -12,9 +12,9 @@ export class CurrencyClient {
    * Retrieve the Currency Info
    *
    * @param currencyCode
-   * @returns Currency
+   * @returns CurrencyInterface|null
    */
-  public async getCurrencyInfo(currencyCode: string): Promise<CurrencyInterface> {
+  public async getCurrencyInfo(currencyCode: string): Promise<CurrencyInterface | null> {
     let currencyInfo = null;
 
     await this.bitPayClient.get('currencies', null, false).then((ratesData) => {

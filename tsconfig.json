@@ -6,12 +6,15 @@
     "target": "es2021",
     "outDir": "./dist",
     "sourceMap": true,
-    "strictNullChecks": false,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
     "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "lib": [
     "es2021",

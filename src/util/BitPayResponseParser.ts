@@ -37,7 +37,7 @@ export class BitPayResponseParser {
       }
 
       return JSON.stringify(responseObj);
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof BitPayApiException) {
         throw e;
       }

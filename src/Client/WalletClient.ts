@@ -20,8 +20,9 @@ export class WalletClient {
 
     try {
       return <WalletInterface[]>JSON.parse(result);
-    } catch (e) {
+    } catch (e: any) {
       BitPayExceptionProvider.throwDeserializeResourceException('Wallet', e.message);
+      throw new Error();
     }
   }
 }

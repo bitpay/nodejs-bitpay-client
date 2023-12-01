@@ -9,7 +9,7 @@ export class BitPayApiException extends BitPayException {
    * @param message string [optional] The Exception message to throw.
    * @param code    string [optional] The Exception code to throw.
    */
-  public constructor(message: string = null, code: string = null) {
+  public constructor(message: string, code: string | null) {
     super(message);
     this.code = code;
   }

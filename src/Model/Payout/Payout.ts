@@ -1,58 +1,58 @@
 import { PayoutTransaction } from './PayoutTransaction';
 
 export interface PayoutInterface {
-  token: string | null;
+  amount: number;
+  currency: string;
+  ledgerCurrency: string;
 
-  amount: number | null;
-  currency: string | null;
-  effectiveDate: string | null;
-  dateExecuted: string | null;
-  ledgerCurrency: string | null;
-  accountId: string | null;
-  reference: string | null;
-  notificationEmail: string | null;
-  notificationURL: string | null;
-  email: string | null;
-  recipientId: string | null;
-  shopperId: string | null;
-  label: string | null;
-  message: string | null;
+  token?: string;
+  effectiveDate?: string;
+  dateExecuted?: string;
+  accountId?: string;
+  reference?: string;
+  notificationEmail?: string;
+  notificationURL?: string;
+  email?: string;
+  recipientId?: string;
+  shopperId?: string;
+  label?: string;
+  message?: string;
 
-  id: string | null;
-  status: string | null;
-  groupId: string | null;
-  requestDate: number | null;
-  exchangeRates: string | null;
-  transactions: PayoutTransaction[];
-  code: number | null;
-  ignoreEmails: boolean;
+  id?: string;
+  status?: string;
+  groupId?: string;
+  requestDate?: string;
+  exchangeRates?: Record<string, Record<string, number>>;
+  transactions?: PayoutTransaction[];
+  code?: number;
+  ignoreEmails?: boolean;
 }
 
 export class Payout implements PayoutInterface {
-  token: string | null;
+  amount: number;
+  currency: string;
+  ledgerCurrency: string;
 
-  amount: number | null;
-  currency: string | null;
-  effectiveDate: string | null;
-  dateExecuted: string | null;
-  ledgerCurrency: string | null;
-  accountId: string | null;
-  reference: string | null;
-  notificationEmail: string | null;
-  notificationURL: string | null;
-  email: string | null;
-  recipientId: string | null;
-  shopperId: string | null;
-  label: string | null;
-  message: string | null;
+  token?: string;
+  effectiveDate?: string;
+  dateExecuted?: string;
+  accountId?: string;
+  reference?: string;
+  notificationEmail?: string;
+  notificationURL?: string;
+  email?: string;
+  recipientId?: string;
+  shopperId?: string;
+  label?: string;
+  message?: string;
 
-  id: string | null;
-  status: string | null;
-  groupId: string | null;
-  requestDate: number | null;
-  exchangeRates: string | null;
-  transactions: PayoutTransaction[];
-  code: number | null;
+  id?: string;
+  status?: string;
+  groupId?: string;
+  requestDate?: string;
+  exchangeRates?: Record<string, Record<string, number>>;
+  transactions?: PayoutTransaction[];
+  code?: number;
   ignoreEmails = false;
 
   /**
