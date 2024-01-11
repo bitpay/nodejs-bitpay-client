@@ -31,10 +31,4 @@ class InvoiceRequests {
 
     const invoice = client.getInvoice('myInvoiceId');
   }
-
-  public requestInvoiceWebhookToBeResent(): void {
-    const client = ClientProvider.createPos();
-
-    const deliverBill = client.deliverBill('someBillId', 'myBillToken');
-  }
 }
