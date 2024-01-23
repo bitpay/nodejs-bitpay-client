@@ -7,6 +7,7 @@ import { refundInfoSchema } from './RefundInfo.zod';
 import { shopperSchema } from './Shopper.zod';
 import { minerFeesItemSchema } from './MinerFeesItem.zod';
 import { supportedTransactionCurrencySchema } from './SupportedTransactionCurrency.zod';
+import {invoiceRefundAddressesSchema} from "./InvoiceRefundAddresses.zod";
 
 export const invoiceSchema = z.object({
   buyer: buyerInterfaceSchema.optional(),
@@ -47,7 +48,7 @@ export const invoiceSchema = z.object({
   currentTime: z.number().optional(),
   exceptionStatus: z.union([z.boolean(), z.string()]).optional(),
   targetConfirmations: z.number().optional(),
-  refundAddresses: z.unknown().optional(),
+  refundAddresses: z.array(z.record(z.string(), invoiceRefundAddressesSchema)).optional(),
   refundAddressRequestPending: z.boolean().optional(),
   buyerProvidedEmail: z.string().optional(),
   billId: z.string().optional(),

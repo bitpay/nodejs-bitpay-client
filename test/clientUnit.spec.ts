@@ -525,6 +525,7 @@ describe('BitPaySDK.Client', () => {
       expect(result.url).toBe('https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A');
       expect(result.buyerProvidedInfo.emailAddress).toBe('john@doe.com');
       expect(result.universalCodes.paymentString).toBe('https://link.bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A');
+      expect(result.refundAddresses[0].n2MDYgEhxCAnuoVd1JpPmvxZShE6rQA6zv.type).toBe("buyerSupplied")
     });
 
     it('should get invoice', async () => {

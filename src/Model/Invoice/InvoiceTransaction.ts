@@ -4,4 +4,6 @@ export interface InvoiceTransaction {
   time?: string;
   receivedTime?: string;
   txid?: string;
+  exRates?: Record<string, number>;
+  outputIndex?: number
 }
