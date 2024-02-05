@@ -8,7 +8,7 @@ import { InvoiceUniversalCodes } from './InvoiceUniversalCodes';
 import { BitPayExceptionProvider } from '../../Exceptions/BitPayExceptionProvider';
 import { MinerFeesItem } from './MinerFeesItem';
 import { SupportedTransactionCurrency } from './SupportedTransactionCurrency';
-import {InvoiceRefundAddresses} from "./InvoiceRefundAddresses";
+import { InvoiceRefundAddresses } from './InvoiceRefundAddresses';
 
 export interface InvoiceInterface {
   // API fields

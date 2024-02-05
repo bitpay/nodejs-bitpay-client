@@ -19,5 +19,5 @@ export const refundWebhookSchema = z.object({
   txid: z.string().nullable(),
   transactionCurrency: z.string().nullable(),
   transactionAmount: z.number().nullable(),
-  transactionRefundFee: z.number().nullable(),
-})
+  transactionRefundFee: z.number().nullable()
+});

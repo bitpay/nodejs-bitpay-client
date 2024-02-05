@@ -1,5 +1,4 @@
-import {BuyerFields} from "../Ledger/BuyerFields";
-import {InvoiceWebhookBuyerFields} from "./InvoiceWebhookBuyerFields";
+import { InvoiceWebhookBuyerFieldsInterface } from './InvoiceWebhookBuyerFields';
 
 export interface InvoiceWebhook {
   id?: string;
@@ -11,7 +10,7 @@ export interface InvoiceWebhook {
   invoiceTime?: string;
   currencyTime?: string;
   exceptionStatus?: string;
-  buyerFields?: InvoiceWebhookBuyerFields;
+  buyerFields?: InvoiceWebhookBuyerFieldsInterface;
   paymentSubtotals?: Record<string, number>;
   paymentTotals?: Record<string, number>;
   exchangeRates?: Record<string, Record<string, number>>;

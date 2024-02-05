@@ -7,7 +7,7 @@ import { refundInfoSchema } from './RefundInfo.zod';
 import { shopperSchema } from './Shopper.zod';
 import { minerFeesItemSchema } from './MinerFeesItem.zod';
 import { supportedTransactionCurrencySchema } from './SupportedTransactionCurrency.zod';
-import {invoiceRefundAddressesSchema} from "./InvoiceRefundAddresses.zod";
+import { invoiceRefundAddressesSchema } from './InvoiceRefundAddresses.zod';
 
 export const invoiceSchema = z.object({
   buyer: buyerInterfaceSchema.optional(),

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import {payoutTransactionInterfaceSchema} from "../Payout/PayoutTransaction.zod";
+import { payoutTransactionInterfaceSchema } from '../Payout/PayoutTransaction.zod';
 
 export const payoutWebhookSchema = z.object({
   id: z.string().optional(),
@@ -20,5 +20,5 @@ export const payoutWebhookSchema = z.object({
   transactions: z.array(payoutTransactionInterfaceSchema).optional(),
   accountId: z.string().optional(),
   date: z.string().optional(),
-  groupId: z.string().optional(),
-})
+  groupId: z.string().optional()
+});

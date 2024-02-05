@@ -5,5 +5,5 @@ export interface InvoiceTransaction {
   receivedTime?: string;
   txid?: string;
   exRates?: Record<string, number>;
-  outputIndex?: number
+  outputIndex?: number;
 }

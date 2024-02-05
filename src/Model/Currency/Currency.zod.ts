@@ -12,5 +12,5 @@ export const currencyInterfaceSchema = z.object({
   sanctioned: z.boolean(),
   displayCode: z.string().optional(),
   chain: z.string().optional(),
-  maxSupply: z.string().optional(),
+  maxSupply: z.string().optional()
 });

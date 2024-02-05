@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import {invoiceWebhookBuyerFieldsInterfaceSchema} from "./InvoiceBuyerFields.zod";
+import { invoiceWebhookBuyerFieldsInterfaceSchema } from './InvoiceBuyerFields.zod';
 
 export const invoiceWebhookSchema = z.object({
   id: z.string().optional(),
@@ -19,5 +19,5 @@ export const invoiceWebhookSchema = z.object({
   orderId: z.string().optional(),
   transactionCurrency: z.string().optional(),
   inInvoiceId: z.string().optional(),
-  inPaymentRequest: z.string().optional(),
-})
+  inPaymentRequest: z.string().optional()
+});

@@ -1,4 +1,4 @@
-import {PayoutTransaction} from "../Payout/PayoutTransaction";
+import { PayoutTransaction } from '../Payout/PayoutTransaction';
 
 export interface PayoutWebhookInterface {
   id?: string;
