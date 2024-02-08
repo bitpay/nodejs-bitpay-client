@@ -8,6 +8,7 @@ import { InvoiceUniversalCodes } from './InvoiceUniversalCodes';
 import { BitPayExceptionProvider } from '../../Exceptions/BitPayExceptionProvider';
 import { MinerFeesItem } from './MinerFeesItem';
 import { SupportedTransactionCurrency } from './SupportedTransactionCurrency';
+import { InvoiceRefundAddresses } from './InvoiceRefundAddresses';
 
 export interface InvoiceInterface {
   // API fields
@@ -53,7 +54,7 @@ export interface InvoiceInterface {
   exceptionStatus?: boolean | string;
   targetConfirmations?: number;
   transactions?: InvoiceTransaction[];
-  refundAddresses?: unknown;
+  refundAddresses?: Array<{ [key: string]: InvoiceRefundAddresses }>;
   refundAddressRequestPending?: boolean;
   buyerProvidedEmail?: string;
   buyerProvidedInfo?: InvoiceBuyerProvidedInfo;
@@ -129,7 +130,7 @@ export class Invoice implements InvoiceInterface {
   exceptionStatus?: boolean | string;
   targetConfirmations?: number;
   transactions?: InvoiceTransaction[];
-  refundAddresses?: unknown;
+  refundAddresses?: Array<{ [key: string]: InvoiceRefundAddresses }>;
   refundAddressRequestPending?: boolean;
   buyerProvidedEmail?: string;
   buyerProvidedInfo?: InvoiceBuyerProvidedInfo;
