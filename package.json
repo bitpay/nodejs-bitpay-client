@@ -22,7 +22,7 @@
     "prepare": "npm run build && husky install",
     "prettier": "prettier --config .prettierrc 'src/**/*.ts' 'test/**/*.spec.ts'",
     "test": "npm run format:ci && npm run lint && npm run coverage",
-    "unit": "jest test/clientUnit.spec.ts --config=jest.json --runInBand",
+    "unit": "jest test/clientUnit.spec.ts test/Client/bitPayResponseUnit.spec.ts --config=jest.json --runInBand",
     "functional": "jest test/clientFunctional.spec.ts --config=jest.json --runInBand"
   },
   "author": "Antonio Buedo <integrations@bitpay.com>",
