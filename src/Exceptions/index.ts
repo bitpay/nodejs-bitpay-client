@@ -13,8 +13,9 @@
  * See the LICENSE file for more info.
  */
 
-import { BitPayGenericException as Generic } from './BitPayGenericException';
 import { BitPayApiException as Api } from './BitPayApiException';
+import { BitPayException } from './BitPayException';
+import { BitPayGenericException as Generic } from './BitPayGenericException';
 import { BitPayValidationException as Validation } from './BitPayValidationException';
 
-export { Generic, Api, Validation };
+export { Api, BitPayException, Generic, Validation };
