@@ -1,5 +1,7 @@
+import { DefaultBodyType, PathParams, http } from 'msw';
+import { setupServer } from 'msw/node';
 import { Client, Facade } from '../src';
-import { Buyer } from '../src/Model/Invoice/Buyer';
+import { BitPayClient } from '../src/Client/BitPayClient';
 import {
   Bill,
   BillInterface,
@@ -11,82 +13,79 @@ import {
   RateInterface,
   Rates
 } from '../src/Model';
-import { Refund } from '../src/Model/Invoice/Refund';
 import { Item } from '../src/Model/Bill/Item';
-import { BitPayClient } from '../src/Client/BitPayClient';
-import { DefaultBodyType, PathParams, http } from 'msw';
-import { setupServer } from 'msw/node';
+import { Buyer } from '../src/Model/Invoice/Buyer';
+import { InvoiceBuyerProvidedInfo } from '../src/Model/Invoice/InvoiceBuyerProvidedInfo';
+import { Refund } from '../src/Model/Invoice/Refund';
 import { TokenContainer } from '../src/TokenContainer';
 import { GuidGenerator } from '../src/util/GuidGenerator';
-import { InvoiceBuyerProvidedInfo } from '../src/Model/Invoice/InvoiceBuyerProvidedInfo';
+import * as cancelInvoiceSuccessResponseMock from './json/cancelInvoiceSuccessResponse.json';
+import * as cancelPayoutGroupResponseMock from './json/cancelPayoutGroupResponse.json';
+import * as cancelPayoutResponseMock from './json/cancelPayoutResponse.json';
+import * as cancelRefundResponseMock from './json/cancelRefundResponse.json';
 import * as createBillRequestMock from './json/createBillRequest.json';
 import * as createBillResponseMock from './json/createBillResponse.json';
-import * as getBillsResponseMock from './json/getBillsResponse.json';
-import * as updateBillRequestMock from './json/updateBillRequest.json';
-import * as updateBillResponseMock from './json/updateBillResponse.json';
+import * as createInvoiceRequestMock from './json/createInvoiceRequest.json';
+import * as createInvoiceResponseMcok from './json/createInvoiceResponse.json';
+import * as createPayoutGroupRequestMock from './json/createPayoutGroupRequest.json';
+import * as createPayoutGroupResponseMock from './json/createPayoutGroupResponse.json';
+import * as createPayoutRequestMock from './json/createPayoutRequest.json';
+import * as createPayoutResponseMock from './json/createPayoutResponse.json';
+import * as createRefundResponseMock from './json/createRefundResponse.json';
+import * as deletePayoutRecipientResponseMock from './json/deletePayoutRecipientResponse.json';
 import * as deliverBillRequestMock from './json/deliverBillRequest.json';
 import * as deliverBillResponseMock from './json/deliverBillResponse.json';
 import * as errorResponse from './json/errorResponse.json';
+import * as getBillsResponseMock from './json/getBillsResponse.json';
 import * as getCurrenciesResponseMock from './json/getCurrenciesResponse.json';
-import * as createInvoiceRequestMock from './json/createInvoiceRequest.json';
-import * as createInvoiceResponseMcok from './json/createInvoiceResponse.json';
+import * as getInvoiceEventTokenMock from './json/getInvoiceEventToken.json';
 import * as getInvoiceResponseMock from './json/getInvoiceResponse.json';
 import * as getInvoicesResponseMock from './json/getInvoicesResponse.json';
-import * as payInvoiceRequestMock from './json/payInvoiceRequest.json';
-import * as payInvoiceResponseMock from './json/payInvoiceResponse.json';
-import * as cancelInvoiceSuccessResponseMock from './json/cancelInvoiceSuccessResponse.json';
-import * as invoiceWebhookResponseMock from './json/invoiceWebhookResponse.json';
-import * as getInvoiceEventTokenMock from './json/getInvoiceEventToken.json';
 import * as getLedgerEntriesResponseMock from './json/getLedgerEntriesResponse.json';
 import * as getLedgersResponseMock from './json/getLedgersResponse.json';
-import * as createPayoutRequestMock from './json/createPayoutRequest.json';
-import * as createPayoutResponseMock from './json/createPayoutResponse.json';
-import * as createPayoutGroupRequestMock from './json/createPayoutGroupRequest.json';
-import * as createPayoutGroupResponseMock from './json/createPayoutGroupResponse.json';
+import * as getPayoutRecipientResponseMock from './json/getPayoutRecipientResponse.json';
+import * as getPayoutRecipientsResponseMock from './json/getPayoutRecipientsResponse.json';
 import * as getPayoutResponseMock from './json/getPayoutResponse.json';
 import * as getPayoutsResponseMock from './json/getPayoutsResponse.json';
-import * as cancelPayoutResponseMock from './json/cancelPayoutResponse.json';
-import * as cancelPayoutGroupResponseMock from './json/cancelPayoutGroupResponse.json';
-import * as sendPayoutNotificationRequestMock from './json/sendPayoutNotificationRequest.json';
-import * as sendPayoutNotificationResponseMock from './json/sendPayoutNotificationResponse.json';
-import * as submitPayoutRecipientsRequestMock from './json/submitPayoutRecipientsRequest.json';
-import * as submitPayoutRecipientsResponseMock from './json/submitPayoutRecipientsResponse.json';
-import * as getPayoutRecipientsResponseMock from './json/getPayoutRecipientsResponse.json';
-import * as getPayoutRecipientResponseMock from './json/getPayoutRecipientResponse.json';
-import * as updatePayoutRecipientResponseMock from './json/updatePayoutRecipientResponse.json';
-import * as deletePayoutRecipientResponseMock from './json/deletePayoutRecipientResponse.json';
 import * as getRateResponseMock from './json/getRateResponse.json';
 import * as getRatesResponseMock from './json/getRatesResponse.json';
-import * as createRefundResponseMock from './json/createRefundResponse.json';
-import * as updateRefundRequestMock from './json/updateRefundRequest.json';
-import * as updateRefundResponseMock from './json/updateRefundResponse.json';
-import * as sendRefundNotificationRequestMock from './json/sendRefundNotificationRequest.json';
-import * as sendRefundNotificationResponseMock from './json/sendRefundNotificationResponse.json';
-import * as cancelRefundResponseMock from './json/cancelRefundResponse.json';
-import * as getSettlementsResponseMock from './json/getSettlementsResponse.json';
-import * as getSettlementResponseMock from './json/getSettlementResponse.json';
 import * as getSettlementReconciliationReportResponseMock from './json/getSettlementReconciliationReportResponse.json';
+import * as getSettlementResponseMock from './json/getSettlementResponse.json';
+import * as getSettlementsResponseMock from './json/getSettlementsResponse.json';
 import * as getSupportedWalletsMock from './json/getSupportedWallets.json';
 import * as invalidSignature from './json/invalidSignature.json';
+import * as invoiceWebhookResponseMock from './json/invoiceWebhookResponse.json';
+import * as payInvoiceRequestMock from './json/payInvoiceRequest.json';
+import * as payInvoiceResponseMock from './json/payInvoiceResponse.json';
+import * as sendPayoutNotificationRequestMock from './json/sendPayoutNotificationRequest.json';
+import * as sendPayoutNotificationResponseMock from './json/sendPayoutNotificationResponse.json';
+import * as sendRefundNotificationResponseMock from './json/sendRefundNotificationResponse.json';
+import * as submitPayoutRecipientsRequestMock from './json/submitPayoutRecipientsRequest.json';
+import * as submitPayoutRecipientsResponseMock from './json/submitPayoutRecipientsResponse.json';
+import * as updateBillRequestMock from './json/updateBillRequest.json';
+import * as updateBillResponseMock from './json/updateBillResponse.json';
+import * as updatePayoutRecipientResponseMock from './json/updatePayoutRecipientResponse.json';
+import * as updateRefundRequestMock from './json/updateRefundRequest.json';
+import * as updateRefundResponseMock from './json/updateRefundResponse.json';
 
 import { isEqual } from 'lodash';
-import * as BitPaySDK from '../src/index';
+import { HttpRequestResolverExtras } from 'msw/lib/core/handlers/HttpHandler';
+import { ResponseResolverInfo } from 'msw/lib/core/handlers/RequestHandler';
 import BitPayApiException from '../src/Exceptions/BitPayApiException';
-import { invoiceSchema } from '../src/Model/Invoice/Invoice.zod';
+import * as BitPaySDK from '../src/index';
 import { billInterfaceSchema } from '../src/Model/Bill/Bill.zod';
 import { currencyInterfaceSchema } from '../src/Model/Currency/Currency.zod';
-import { ledgerEntryInterfaceSchema } from '../src/Model/Ledger/LedgerEntry.zod';
+import { invoiceSchema } from '../src/Model/Invoice/Invoice.zod';
+import { refundInterfaceSchema } from '../src/Model/Invoice/Refund.zod';
 import { ledgerInterfaceSchema } from '../src/Model/Ledger/Ledger.zod';
+import { ledgerEntryInterfaceSchema } from '../src/Model/Ledger/LedgerEntry.zod';
 import { payoutInterfaceSchema } from '../src/Model/Payout/Payout.zod';
 import { payoutGroupInterfaceSchema } from '../src/Model/Payout/PayoutGroup.zod';
 import { payoutGroupFailedInterfaceSchema } from '../src/Model/Payout/PayoutGroupFailed.zod';
+import { payoutRecipientInterfaceSchema } from '../src/Model/Payout/PayoutRecipient.zod';
 import { rateInterfaceSchema } from '../src/Model/Rates/Rate.zod';
-import { refundInterfaceSchema } from '../src/Model/Invoice/Refund.zod';
 import { settlementInterfaceSchema } from '../src/Model/Settlement/Settlement.zod';
 import { walletInterfaceSchema } from '../src/Model/Wallet/Wallet.zod';
-import { payoutRecipientInterfaceSchema } from '../src/Model/Payout/PayoutRecipient.zod';
-import { HttpRequestResolverExtras } from 'msw/lib/core/handlers/HttpHandler';
-import { ResponseResolverInfo } from 'msw/lib/core/handlers/RequestHandler';
 
 let client;
 let oneMonthAgo;
@@ -165,6 +164,13 @@ describe('BitPaySDK.Client', () => {
   function validateMerchantTokenInFormData(json: { token?: string }) {
     const token = json.token;
     if (token !== merchantToken) {
+      throw new Error('Missing/wrong token');
+    }
+  }
+
+  function validatResourceTokenInFormData(resourceToken: string, json: { token?: string }) {
+    const token = json.token;
+    if (token !== resourceToken) {
       throw new Error('Missing/wrong token');
     }
   }
@@ -694,12 +700,13 @@ describe('BitPaySDK.Client', () => {
     });
 
     it('should send invoice webhook to be resent', async () => {
+      const invoiceToken = 'cM78LHk17Q8fktDE6QLBBFfvH1QKBhRkHibTLcxhgzsu3VDRvSyu3CGi17DuwYxhT';
       server.use(
         http.post(
           host + '/invoices/Hpqc63wvE1ZjzeeH4kEycF/notifications',
           async (responseResolver: ResponseResolverInfo<HttpRequestResolverExtras<PathParams>, DefaultBodyType>) => {
             const json = (await responseResolver.request.json()) as object;
-            validateMerchantTokenInFormData(json);
+            validatResourceTokenInFormData(invoiceToken, json);
             validateSignatureRequest(responseResolver.request);
 
             return new Response(JSON.stringify(invoiceWebhookResponseMock));
@@ -707,7 +714,7 @@ describe('BitPaySDK.Client', () => {
         )
       );
 
-      const result = await client.requestInvoiceWebhookToBeResent('Hpqc63wvE1ZjzeeH4kEycF');
+      const result = await client.requestInvoiceWebhookToBeResent('Hpqc63wvE1ZjzeeH4kEycF', invoiceToken);
       expect(result).toBe(true);
     });
 
@@ -1299,21 +1306,21 @@ describe('BitPaySDK.Client', () => {
     });
 
     it('should send refund notification', async () => {
+      const refundToken = 'cM78LHk17Q8fktDE6QLBBFfvH1QKBhRkHibTLcxhgzsu3VDRvSyu3CGi17DuwYxhT';
       server.use(
         http.post(
           host + '/refunds/WoE46gSLkJQS48RJEiNw3L/notifications',
           async (responseResolver: ResponseResolverInfo<HttpRequestResolverExtras<PathParams>, DefaultBodyType>) => {
             const json = (await responseResolver.request.json()) as object;
             validateSignatureRequest(responseResolver.request);
-            validateMerchantTokenInFormData(json);
-            validateRequest(json, sendRefundNotificationRequestMock);
+            validatResourceTokenInFormData(refundToken, json);
 
             return new Response(JSON.stringify(sendRefundNotificationResponseMock));
           }
         )
       );
 
-      const result = await client.sendRefundNotification('WoE46gSLkJQS48RJEiNw3L', 'created');
+      const result = await client.sendRefundNotification('WoE46gSLkJQS48RJEiNw3L', refundToken);
       expect(result).toBe(true);
     });
 
