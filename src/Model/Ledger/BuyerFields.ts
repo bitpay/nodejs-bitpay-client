@@ -11,7 +11,7 @@ export interface BuyerFieldsInterface {
   buyerEmail?: string;
 }
 
-export class BuyerFields implements BuyerFields {
+export class BuyerFields implements BuyerFieldsInterface {
   buyerName?: string;
   buyerAddress1?: string;
   buyerAddress2?: string;

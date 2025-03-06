@@ -1,38 +1,38 @@
-import { Client } from '../src';
-import { Buyer } from '../src/Model/Invoice/Buyer';
-import {
-  Bill,
-  PayoutRecipient,
-  Payout,
-  Invoice,
-  InvoiceInterface,
-  PayoutRecipientInterface,
-  PayoutInterface,
-  LedgerInterface,
-  LedgerEntryInterface,
-  BillInterface,
-  PayoutRecipients,
-  PayoutGroupInterface
-} from '../src/Model';
 import * as fs from 'fs';
 import * as path from 'path';
-import { InvoiceEventTokenInterface } from '../src/Model/Invoice/InvoiceEventToken';
-import { Refund, RefundInterface } from '../src/Model/Invoice/Refund';
-import { Item } from '../src/Model/Bill/Item';
-import { WalletInterface } from '../src/Model/Wallet/Wallet';
-import { CurrencyInterface } from '../src/Model/Currency/Currency';
+import { Client } from '../src';
 import * as BitPaySDK from '../src/index';
-import { rateInterfaceSchema } from '../src/Model/Rates/Rate.zod';
+import {
+  Bill,
+  BillInterface,
+  Invoice,
+  InvoiceInterface,
+  LedgerEntryInterface,
+  LedgerInterface,
+  Payout,
+  PayoutGroupInterface,
+  PayoutInterface,
+  PayoutRecipient,
+  PayoutRecipientInterface,
+  PayoutRecipients
+} from '../src/Model';
+import { billInterfaceSchema } from '../src/Model/Bill/Bill.zod';
+import { Item } from '../src/Model/Bill/Item';
+import { CurrencyInterface } from '../src/Model/Currency/Currency';
 import { currencyInterfaceSchema } from '../src/Model/Currency/Currency.zod';
+import { Buyer } from '../src/Model/Invoice/Buyer';
 import { invoiceSchema } from '../src/Model/Invoice/Invoice.zod';
+import { InvoiceEventTokenInterface } from '../src/Model/Invoice/InvoiceEventToken';
 import { invoiceEventTokenInterfaceSchema } from '../src/Model/Invoice/InvoiceEventToken.zod';
+import { Refund, RefundInterface } from '../src/Model/Invoice/Refund';
 import { refundInterfaceSchema } from '../src/Model/Invoice/Refund.zod';
-import { payoutRecipientInterfaceSchema } from '../src/Model/Payout/PayoutRecipient.zod';
-import { payoutInterfaceSchema } from '../src/Model/Payout/Payout.zod';
-import { payoutGroupInterfaceSchema } from '../src/Model/Payout/PayoutGroup.zod';
 import { ledgerInterfaceSchema } from '../src/Model/Ledger/Ledger.zod';
 import { ledgerEntryInterfaceSchema } from '../src/Model/Ledger/LedgerEntry.zod';
-import { billInterfaceSchema } from '../src/Model/Bill/Bill.zod';
+import { payoutInterfaceSchema } from '../src/Model/Payout/Payout.zod';
+import { payoutGroupInterfaceSchema } from '../src/Model/Payout/PayoutGroup.zod';
+import { payoutRecipientInterfaceSchema } from '../src/Model/Payout/PayoutRecipient.zod';
+import { rateInterfaceSchema } from '../src/Model/Rates/Rate.zod';
+import { WalletInterface } from '../src/Model/Wallet/Wallet';
 import { walletInterfaceSchema } from '../src/Model/Wallet/Wallet.zod';
 const Currencies = BitPaySDK.Currency;
 const PayoutStatus = BitPaySDK.PayoutStatus;
@@ -228,7 +228,7 @@ describe('BitPaySDK.Client', () => {
    * - GetRefund(string refundId)
    * - GetRefundByGuid(string guid)
    * - GetRefunds(string invoiceId)
-   * - SendRefundNotification(string refundId)
+   * - SendRefundNotification(string refundId, string refundToken)
    * - CancelRefund(string refundId)
    * - CancelRefundByGuid(string guid)
    * <p>
@@ -279,7 +279,9 @@ describe('BitPaySDK.Client', () => {
     });
 
     it('should send refund notification', async () => {
-      const result: boolean = await client.sendRefundNotification(refundId);
+      const retrieveRefund: RefundInterface = await client.getRefund(refundId);
+
+      const result: boolean = await client.sendRefundNotification(refundId, retrieveRefund.token);
       expect(result).toBe(true);
     });
 

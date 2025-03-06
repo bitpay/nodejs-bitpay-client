@@ -1,5 +1,5 @@
-import { ClientProvider } from '../ClientProvider';
 import { Refund } from '../../src/Model/Invoice/Refund';
+import { ClientProvider } from '../ClientProvider';
 
 export class RefundRequests {
   public async createRefund() {
@@ -49,6 +49,12 @@ export class RefundRequests {
   public async requestRefundNotificationToBeResent() {
     const client = ClientProvider.create();
 
-    return await client.sendRefundNotification('someRefundId');
+    const refundId = 'someRefundId';
+    const refund = await client.getRefund(refundId);
+    if (!refund.token) {
+      throw new Error('Refund token is required to request a refund notification to be resent.');
+    }
+
+    return await client.sendRefundNotification(refundId, refund.token);
   }
 }
