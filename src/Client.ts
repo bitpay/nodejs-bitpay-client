@@ -1,47 +1,47 @@
 /* eslint-disable @typescript-eslint/no-unused-vars*/
 
 import { ec } from 'elliptic';
+import {
+  BillClient,
+  BitPayClient,
+  CurrencyClient,
+  InvoiceClient,
+  LedgerClient,
+  PayoutClient,
+  PayoutGroupClient,
+  PayoutRecipientClient,
+  RateClient,
+  RefundClient,
+  SettlementClient,
+  WalletClient
+} from './Client/index';
 import { Env, Facade, KeyUtils } from './index';
 import {
   BillInterface,
   InvoiceInterface,
   LedgerEntryInterface,
   LedgerInterface,
-  PayoutInterface,
   PayoutGroupInterface,
+  PayoutInterface,
   PayoutRecipientInterface,
   PayoutRecipients,
   RateInterface,
   Rates
 } from './Model';
-import {
-  BitPayClient,
-  RateClient,
-  CurrencyClient,
-  InvoiceClient,
-  RefundClient,
-  PayoutClient,
-  PayoutGroupClient,
-  PayoutRecipientClient,
-  LedgerClient,
-  BillClient,
-  WalletClient,
-  SettlementClient
-} from './Client/index';
 
-import { TokenContainer } from './TokenContainer';
+import * as fs from 'fs';
 import { Environment } from './Environment';
-import { GuidGenerator } from './util/GuidGenerator';
+import { BitPayExceptionProvider } from './Exceptions/BitPayExceptionProvider';
+import { CurrencyInterface } from './Model/Currency/Currency';
 import { InvoiceEventTokenInterface } from './Model/Invoice/InvoiceEventToken';
 import { RefundInterface } from './Model/Invoice/Refund';
-import { ParamsRemover } from './util/ParamsRemover';
-import { WalletInterface } from './Model/Wallet/Wallet';
 import { SettlementInterface } from './Model/Settlement/Settlement';
+import { WalletInterface } from './Model/Wallet/Wallet';
 import { PosToken } from './PosToken';
 import { PrivateKey } from './PrivateKey';
-import { CurrencyInterface } from './Model/Currency/Currency';
-import * as fs from 'fs';
-import { BitPayExceptionProvider } from './Exceptions/BitPayExceptionProvider';
+import { TokenContainer } from './TokenContainer';
+import { GuidGenerator } from './util/GuidGenerator';
+import { ParamsRemover } from './util/ParamsRemover';
 
 export class Client {
   private bitPayClient: BitPayClient;
@@ -311,10 +311,12 @@ export class Client {
    * The intent of this call is to address issues when BitPay sends a webhook but the client doesn't receive it,
    * so the client can request that BitPay resend it.
    * @param invoiceId The id of the invoice for which you want the last webhook to be resent.
+   * @param invoiceToken The resource token for the invoiceId.
+   *                     This token can be retrieved from the Bitpay's invoice object.
    * @return Boolean status of request
    */
-  public async requestInvoiceWebhookToBeResent(invoiceId: string): Promise<boolean> {
-    return this.createInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId);
+  public async requestInvoiceWebhookToBeResent(invoiceId: string, invoiceToken: string): Promise<boolean> {
+    return this.createInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId, invoiceToken);
   }
 
   /**
@@ -389,10 +391,12 @@ export class Client {
    * Send a refund notification.
    *
    * @param refundId A BitPay refund ID.
+   * @param refundToken The resource token for the refundId.
+   *                    This token can be retrieved from the Bitpay's refund object.
    * @return An updated Refund Object
    */
-  public async sendRefundNotification(refundId: string): Promise<boolean> {
-    return this.createRefundClient().sendRefundNotification(refundId);
+  public async sendRefundNotification(refundId: string, refundToken: string): Promise<boolean> {
+    return this.createRefundClient().sendRefundNotification(refundId, refundToken);
   }
 
   /**

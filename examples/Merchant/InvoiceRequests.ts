@@ -67,6 +67,9 @@ export class InvoiceRequests {
   public async requestInvoiceWebhookToBeResent() {
     const client = ClientProvider.create();
 
-    return await client.deliverBill('someBillId', 'myBillToken');
+    const invoiceId = 'myInvoiceId';
+    const invoice = await client.getInvoice(invoiceId);
+
+    return await client.requestInvoiceWebhookToBeResent(invoiceId, invoice.token);
   }
 }

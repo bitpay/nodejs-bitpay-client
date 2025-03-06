@@ -1,11 +1,11 @@
-import { BitPayClient } from './BitPayClient';
-import { TokenContainer } from '../TokenContainer';
-import { GuidGenerator } from '../util/GuidGenerator';
+import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
 import { Facade } from '../index';
 import { RefundInterface } from '../Model/Invoice/Refund';
-import { ParamsRemover } from '../util/ParamsRemover';
+import { TokenContainer } from '../TokenContainer';
 import { BitPayResponseParser } from '../util/BitPayResponseParser';
-import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
+import { GuidGenerator } from '../util/GuidGenerator';
+import { ParamsRemover } from '../util/ParamsRemover';
+import { BitPayClient } from './BitPayClient';
 
 export class RefundClient {
   private bitPayClient: BitPayClient;
@@ -116,12 +116,14 @@ export class RefundClient {
    * Send a refund notification.
    *
    * @param refundId A BitPay refund ID.
+   * @param refundToken The resource token for the refundId.
+   *                    This token can be retrieved from the Bitpay's refund object.
    * @returns boolean An updated Refund Object
    * @throws BitPayApiException BitPayApiException class
    * @throws BitPayGenericException BitPayGenericException class
    */
-  public async sendRefundNotification(refundId: string): Promise<boolean> {
-    const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
+  public async sendRefundNotification(refundId: string, refundToken: string): Promise<boolean> {
+    const params = { token: refundToken };
     const result = await this.bitPayClient.post('refunds/' + refundId + '/notifications', params, true);
 
     try {
