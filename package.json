@@ -52,7 +52,7 @@
   "devDependencies": {
     "@types/bs58": "4.0.4",
     "@types/elliptic": "6.4.18",
-    "@types/jest": "29.5.13",
+    "@types/jest": "29.5.14",
     "@types/lodash": "4.17.7",
     "@types/node": "22.7.6",
     "@typescript-eslint/eslint-plugin": "8.15.0",
