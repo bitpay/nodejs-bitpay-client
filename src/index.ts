@@ -19,16 +19,16 @@ import * as Models from './Model/index';
 import { Client } from './Client';
 import { Config } from './Config';
 import { Currency } from './Currency';
+import { Environment } from './Environment';
 import { Facade } from './Facade';
+import { TokenContainer } from './TokenContainer';
 import * as Env from './Env';
-import * as Environment from './Environment';
 import * as Invoice from './Model/Invoice/Invoice';
 import * as InvoiceStatus from './Model/Invoice/InvoiceStatus';
 import * as RefundStatus from './Model/Invoice/RefundStatus';
 import * as RecipientStatus from './Model/Payout/RecipientStatus';
 import * as RecipientReferenceMethod from './Model/Payout/RecipientReferenceMethod';
 import * as PayoutStatus from './Model/Payout/PayoutStatus';
-import * as TokenContainer from './TokenContainer';
 
 export {
   KeyUtils,
