@@ -21,6 +21,7 @@ import { Config } from './Config';
 import { Currency } from './Currency';
 import { Facade } from './Facade';
 import * as Env from './Env';
+import * as Environment from './Env';
 import * as Invoice from './Model/Invoice/Invoice';
 import * as InvoiceStatus from './Model/Invoice/InvoiceStatus';
 import * as RefundStatus from './Model/Invoice/RefundStatus';
@@ -35,6 +36,7 @@ export {
   Models,
   Config,
   Env,
+  Environment,
   Facade,
   Currency,
   Client,
