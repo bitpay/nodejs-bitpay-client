@@ -27,6 +27,7 @@ import * as RefundStatus from './Model/Invoice/RefundStatus';
 import * as RecipientStatus from './Model/Payout/RecipientStatus';
 import * as RecipientReferenceMethod from './Model/Payout/RecipientReferenceMethod';
 import * as PayoutStatus from './Model/Payout/PayoutStatus';
+import * as TokenContainer from './TokenContainer';
 
 export {
   KeyUtils,
@@ -42,5 +43,6 @@ export {
   RefundStatus,
   RecipientStatus,
   RecipientReferenceMethod,
-  PayoutStatus
+  PayoutStatus,
+  TokenContainer
 };
