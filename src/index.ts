@@ -19,7 +19,9 @@ import * as Models from './Model/index';
 import { Client } from './Client';
 import { Config } from './Config';
 import { Currency } from './Currency';
+import { Environment } from './Environment';
 import { Facade } from './Facade';
+import { TokenContainer } from './TokenContainer';
 import * as Env from './Env';
 import * as Invoice from './Model/Invoice/Invoice';
 import * as InvoiceStatus from './Model/Invoice/InvoiceStatus';
@@ -34,6 +36,7 @@ export {
   Models,
   Config,
   Env,
+  Environment,
   Facade,
   Currency,
   Client,
@@ -42,5 +45,6 @@ export {
   RefundStatus,
   RecipientStatus,
   RecipientReferenceMethod,
-  PayoutStatus
+  PayoutStatus,
+  TokenContainer
 };
