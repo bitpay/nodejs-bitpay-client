@@ -1,0 +1,43 @@
+on:
+  release:
+    types:
+      - published
+
+name: release
+
+jobs:
+  readme-changelog:
+    name: Publish changelog to Readme
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract release data
+        id: release
+        run: |
+          echo "title=${{ github.event.release.name }}" >> $GITHUB_OUTPUT
+          {
+            echo "body<<EOF"
+            echo "${{ github.event.release.body }}"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Publish changelog to Readme
+        env:
+          README_API_KEY: ${{ secrets.README_API_KEY }}
+        run: |
+          jq -n --arg title "Node.js Unified SDK ${{ steps.release.outputs.title }}" \
+                --arg body "${{ steps.release.outputs.body }}" \
+                '{
+                  title: $title,
+                  content: {
+                    body: $body
+                  },
+                  privacy: { view: "public" }
+                }' > payload.json
+
+          curl --location 'https://api.readme.com/v2/changelogs' \
+            --header "Authorization: Bearer $README_API_KEY" \
+            --header 'Content-Type: application/json' \
+            --data @payload.json
