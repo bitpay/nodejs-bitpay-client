@@ -27,7 +27,7 @@ jobs:
         env:
           README_API_KEY: ${{ secrets.README_API_KEY }}
         run: |
-          jq -n --arg title "Node.js Unified SDK ${{ steps.release.outputs.title }}" \
+          jq -n --arg title "Node.js Unified SDK v${{ steps.release.outputs.title }}" \
                 --arg body "${{ steps.release.outputs.body }}" \
                 '{
                   title: $title,
