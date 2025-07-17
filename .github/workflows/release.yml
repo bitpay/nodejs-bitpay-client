@@ -35,11 +35,13 @@ jobs:
         run: npm ci
 
       - name: Push version bump and tag
+        id: version
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           npm version ${{ github.event.inputs.bump }} --no-git-tag-version
           version=$(jq -r .version package.json)
+          echo "version=$version" >> $GITHUB_OUTPUT
           git add package.json package-lock.json
           git commit -m "Bump version to $version"
           git tag $version
@@ -79,9 +81,9 @@ jobs:
 
       - name: Create GitHub release
         run: |
-          git fetch --tags
-          tag=$(git describe --tags --abbrev=0)
-          gh release create "$tag" --title "$tag" --notes "${{ env.RELEASE_NOTES }}"
+          gh release create "${{ steps.version.outputs.version }}" \
+            --title "${{ steps.version.outputs.version }}" \
+            --notes "${{ env.RELEASE_NOTES }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -97,8 +99,8 @@ jobs:
       - name: Extract release data
         id: release_data
         run: |
-          echo "title=${{ github.ref_name }}" >> $GITHUB_OUTPUT
-          body=$(gh release view ${{ github.ref_name }} --json body --jq .body)
+          echo "title=${{ needs.release.outputs.version }}" >> $GITHUB_OUTPUT
+          body=$(gh release view ${{ needs.release.outputs.version }} --json body --jq .body)
           {
             echo "body<<EOF"
             echo "$body"
