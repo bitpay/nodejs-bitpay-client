@@ -6,113 +6,86 @@ on:
       bump:
         description: 'Version bump type'
         required: true
+        default: 'patch'
         type: choice
         options:
           - patch
           - minor
           - major
       overview:
-        description: 'Release overview (will be placed at top of notes)'
-        required: true
+        description: 'Overview for the release notes (optional)'
+        required: false
+        type: string
 
 jobs:
   release:
-    name: Create tag and release
+    name: Create Release
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout target branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref_name }}
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Push version bump and tag
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          npm version ${{ github.event.inputs.bump }} --no-git-tag-version
-          version=$(jq -r .version package.json)
-          git add package.json package-lock.json
-          git commit -m "Bump version to $version"
-          git tag $version
-          git push origin ${{ github.ref_name }}
-          git push origin $version
-
-      - name: Get merged PR titles and format release notes
-        id: changelog
-        run: |
-          git fetch --tags
-
-          # Get most recent and previous tags
-          tags=($(git tag --sort=-creatordate))
-          new_tag="${tags[0]}"
-          prev_tag="${tags[1]}"
-
-          if [ -z "$prev_tag" ]; then
-            echo "Warning: No previous tag found. Skipping full changelog link."
-            changelog=""
-          else
-            changelog="**Full Changelog**: https://github.com/${{ github.repository }}/compare/$prev_tag...$new_tag"
-          fi
-
-          prs=$(gh pr list --state merged --base "${{ github.ref_name }}" --json title,mergedAt --jq '[.[] | select(.mergedAt != null) | .title]')
-          joined=$(echo "$prs" | jq -r '.[]' | sed 's/^/* /')
-
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "${{ github.event.inputs.overview }}" >> $GITHUB_ENV
-          echo "" >> $GITHUB_ENV
-          echo "## What's Changed" >> $GITHUB_ENV
-          echo "$joined" >> $GITHUB_ENV
-          echo "" >> $GITHUB_ENV
-          echo "$changelog" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create GitHub release
-        run: |
-          git fetch --tags
-          tag=$(git describe --tags --abbrev=0)
-          gh release create "$tag" --title "$tag" --notes "${{ env.RELEASE_NOTES }}"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  readme-changelog:
-    name: Publish changelog to Readme
-    needs: release
-    runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Extract release data
-        id: release
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Configure git
         run: |
-          echo "title=${{ github.ref_name }}" >> $GITHUB_OUTPUT
-          body=$(gh release view ${{ github.ref_name }} --json body --jq .body)
-          {
-            echo "body<<EOF"
-            echo "$body"
-            echo "EOF"
-          } >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Fetch tags
+        run: git fetch --tags
+
+      - name: Bump version
+        run: |
+          NEW_VERSION=$(npm version ${{ github.event.inputs.bump }} --no-git-tag-version)
+          echo "VERSION=${NEW_VERSION}" >> $GITHUB_ENV
+
+      - name: Commit and tag version bump
+        run: |
+          git commit -am "Bump version to ${VERSION}"
+          git tag ${VERSION}
+          git push origin HEAD
+          git push origin ${VERSION}
+
+      - name: Get previous tag
+        id: previous_tag
+        run: |
+          PREV_TAG=$(git tag --sort=-creatordate | grep -v ${VERSION} | head -n 1)
+          echo "PREV_TAG=$PREV_TAG" >> $GITHUB_ENV
+          echo "prev_tag=$PREV_TAG" >> $GITHUB_OUTPUT
+
+      - name: Generate release notes from merged PRs
+        id: release_notes
+        run: |
+          OVERVIEW="${{ github.event.inputs.overview }}"
+          NOTES=$(git log ${{ env.PREV_TAG }}..HEAD --pretty=format:"* %s" --merges)
+          echo -e "${OVERVIEW}\n\n## What's Changed\n${NOTES}\n\n**Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ env.PREV_TAG }}...${{ env.VERSION }}" > release-notes.md
+          cat release-notes.md
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          cat release-notes.md >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "${VERSION}" \
+            --title "${VERSION}" \
+            --notes "$(cat release-notes.md)"
 
       - name: Publish changelog to Readme
         env:
           README_API_KEY: ${{ secrets.README_API_KEY }}
         run: |
-          jq -n --arg title "Node.js Unified SDK v${{ steps.release.outputs.title }}" \
-                --arg body "${{ steps.release.outputs.body }}" \
+          jq -n --arg title "Node.js Unified SDK v${VERSION}" \
+                --arg body "$(<release-notes.md)" \
                 '{
                   title: $title,
                   content: {
