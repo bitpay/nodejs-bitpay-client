@@ -44,7 +44,8 @@ jobs:
           npm version ${{ github.event.inputs.bump }} --no-git-tag-version
           version=$(jq -r .version package.json)
           echo "version=$version" >> $GITHUB_OUTPUT
-          git add package.json package-lock.json
+          sed -i "s/^export const BitpayPluginInfo = .*$/export const BitpayPluginInfo = 'BitPay_NodeJs_Client_v$version';/" src/Env.ts
+          git add package.json package-lock.json src/Env.ts
           git commit -m "Bump version to $version"
           git tag $version
           git push origin ${{ github.ref_name }}
