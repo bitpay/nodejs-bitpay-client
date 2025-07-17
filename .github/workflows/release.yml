@@ -103,9 +103,15 @@ jobs:
         run: |
           echo "title=${{ needs.release.outputs.version }}" >> $GITHUB_OUTPUT
           body=$(gh release view ${{ needs.release.outputs.version }} --json body --jq .body)
+          body_escaped=$(echo "$body" \
+            | sed 's/&/\&#38;/g' \
+            | sed 's/</\&#60;/g' \
+            | sed 's/>/\&#62;/g' \
+            | sed 's/{/\&#123;/g' \
+            | sed 's/}/\&#125;/g')
           {
             echo "body<<EOF"
-            echo "$body"
+            echo "$body_escaped"
             echo "EOF"
           } >> $GITHUB_OUTPUT
         env:
