@@ -17,6 +17,7 @@ on:
 
 jobs:
   release:
+    name: Create tag and release
     runs-on: ubuntu-latest
 
     steps:
@@ -90,6 +91,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Extract release data
         id: release
         run: |
