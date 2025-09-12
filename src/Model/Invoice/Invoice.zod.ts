@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { buyerInterfaceSchema } from './Buyer.zod';
-import { invoiceTransactionSchema } from './InvoiceTransaction.zod';
 import { invoiceBuyerProvidedInfoSchema } from './InvoiceBuyerProvidedInfo.zod';
+import { invoiceRefundAddressesSchema } from './InvoiceRefundAddresses.zod';
+import { invoiceTransactionSchema } from './InvoiceTransaction.zod';
 import { invoiceUniversalCodesSchema } from './InvoiceUniversalCodes.zod';
+import { minerFeesItemSchema } from './MinerFeesItem.zod';
 import { refundInfoSchema } from './RefundInfo.zod';
 import { shopperSchema } from './Shopper.zod';
-import { minerFeesItemSchema } from './MinerFeesItem.zod';
 import { supportedTransactionCurrencySchema } from './SupportedTransactionCurrency.zod';
-import { invoiceRefundAddressesSchema } from './InvoiceRefundAddresses.zod';
 
 export const invoiceSchema = z.object({
   buyer: buyerInterfaceSchema.optional(),
@@ -18,7 +18,6 @@ export const invoiceSchema = z.object({
   shopper: shopperSchema.optional(),
   refundInfo: refundInfoSchema.optional(),
   universalCodes: invoiceUniversalCodesSchema.optional(),
-
   currency: z.string().optional(),
   guid: z.string().optional(),
   token: z.string().optional(),
@@ -56,17 +55,17 @@ export const invoiceSchema = z.object({
   transactionCurrency: z.string().optional(),
   amountPaid: z.number().optional(),
   displayAmountPaid: z.string().optional(),
-  exchangeRates: z.record(z.record(z.number())).nullable(),
-  paymentSubtotals: z.record(z.number()).nullable(),
-  paymentTotals: z.record(z.number()).nullable(),
-  paymentDisplayTotals: z.record(z.string()).nullable(),
-  paymentDisplaySubTotals: z.record(z.string()).nullable(),
+  exchangeRates: z.record(z.string(), z.record(z.string(), z.number())).nullable(),
+  paymentSubtotals: z.record(z.string(), z.number()).nullable(),
+  paymentTotals: z.record(z.string(), z.number()).nullable(),
+  paymentDisplayTotals: z.record(z.string(), z.string()).nullable(),
+  paymentDisplaySubTotals: z.record(z.string(), z.string()).nullable(),
   nonPayProPaymentReceived: z.boolean().optional(),
   jsonPayProRequired: z.boolean().optional(),
   merchantName: z.string().optional(),
   bitpayIdRequired: z.boolean().optional(),
   underpaidAmount: z.number().optional(),
   overpaidAmount: z.number().optional(),
-  paymentCodes: z.record(z.record(z.string())).nullable(),
+  paymentCodes: z.record(z.string(), z.record(z.string(), z.string())).nullable(),
   isCancelled: z.boolean().optional()
 });
