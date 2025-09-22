@@ -57,7 +57,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@types/bs58": "4.0.4",
+    "@types/bs58": "5.0.0",
     "@types/elliptic": "6.4.18",
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.20",
