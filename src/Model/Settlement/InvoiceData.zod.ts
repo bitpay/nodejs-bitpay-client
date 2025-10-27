@@ -9,5 +9,5 @@ export const invoiceDataInterfaceSchema = z.object({
   date: z.string().optional(),
   currency: z.string().optional(),
   transactionCurrency: z.string().optional(),
-  payoutPercentage: z.record(z.number()).optional()
+  payoutPercentage: z.record(z.string(), z.number()).optional()
 });

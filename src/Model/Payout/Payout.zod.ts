@@ -23,7 +23,7 @@ export const payoutInterfaceSchema = z.object({
   status: z.string().optional(),
   groupId: z.string().optional(),
   requestDate: z.string().optional(),
-  exchangeRates: z.record(z.record(z.number())).optional(),
+  exchangeRates: z.record(z.string(), z.record(z.string(), z.number())).optional(),
   code: z.number().optional(),
   ignoreEmails: z.boolean().optional()
 });

@@ -8,7 +8,7 @@ export const payoutWebhookSchema = z.object({
   price: z.number().optional(),
   currency: z.string().optional(),
   ledgerCurrency: z.string().optional(),
-  exchangeRates: z.record(z.record(z.number())).optional(),
+  exchangeRates: z.record(z.string(), z.record(z.string(), z.number())).optional(),
   email: z.string().optional(),
   reference: z.string().optional(),
   label: z.string().optional(),
