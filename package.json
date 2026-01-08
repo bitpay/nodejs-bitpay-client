@@ -1,6 +1,6 @@
 {
   "name": "bitpay-sdk",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Complete version of the NodeJS library for the new cryptographically secure BitPay API",
   "engines": {
     "node": ">=20.0.0 <25.0.0"
@@ -62,9 +62,9 @@
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.21",
     "@types/node": "24.10.1",
-    "@typescript-eslint/eslint-plugin": "8.48.0",
-    "@typescript-eslint/parser": "8.49.0",
-    "eslint": "9.39.1",
+    "@typescript-eslint/eslint-plugin": "8.52.0",
+    "@typescript-eslint/parser": "8.52.0",
+    "eslint": "9.39.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
     "husky": "9.1.7",
