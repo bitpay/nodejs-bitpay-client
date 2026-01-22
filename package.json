@@ -53,7 +53,7 @@
   "dependencies": {
     "bs58": "6.0.0",
     "elliptic": "6.6.1",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "zod": "4.3.5"
   },
   "devDependencies": {
