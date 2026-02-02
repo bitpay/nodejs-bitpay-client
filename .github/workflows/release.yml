@@ -38,57 +38,63 @@ jobs:
 
       - name: Push version bump and tag
         id: version
+        env:
+          BUMP: ${{ github.event.inputs.bump }}
+          REF_NAME: ${{ github.ref_name }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          npm version ${{ github.event.inputs.bump }} --no-git-tag-version
+          npm version $BUMP --no-git-tag-version
           version=$(jq -r .version package.json)
           echo "version=$version" >> $GITHUB_OUTPUT
           sed -i "s/^export const BitpayPluginInfo = .*$/export const BitpayPluginInfo = 'BitPay_NodeJs_Client_v$version';/" src/Env.ts
           git add package.json package-lock.json src/Env.ts
           git commit -m "Bump version to $version"
           git tag $version
-          git push origin ${{ github.ref_name }}
+          git push origin $REF_NAME
           git push origin $version
 
       - name: Get merged PR titles and format release notes
         id: changelog
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REF_NAME: ${{ github.ref_name }}
+          OVERVIEW: ${{ github.event.inputs.overview }}
+          REPOSITORY: ${{ github.repository }}
         run: |
           git fetch --tags
 
-          # Get most recent and previous tags
           tags=($(git tag --sort=-creatordate))
           new_tag="${tags[0]}"
           prev_tag="${tags[1]}"
 
           if [ -z "$prev_tag" ]; then
-            echo "Warning: No previous tag found. Skipping full changelog link."
             changelog=""
           else
-            changelog="**Full Changelog**: https://github.com/${{ github.repository }}/compare/$prev_tag...$new_tag"
+            changelog="**Full Changelog**: https://github.com/$REPOSITORY/compare/$prev_tag...$new_tag"
           fi
 
-          prs=$(gh pr list --state merged --base "${{ github.ref_name }}" --json title,mergedAt --jq '[.[] | select(.mergedAt != null) | .title]')
+          prs=$(gh pr list --state merged --base "$REF_NAME" --json title,mergedAt --jq '[.[] | select(.mergedAt != null) | .title]')
           joined=$(echo "$prs" | jq -r '.[]' | sed 's/^/* /')
 
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "${{ github.event.inputs.overview }}" >> $GITHUB_ENV
+          echo "$OVERVIEW" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "## What's Changed" >> $GITHUB_ENV
           echo "$joined" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
           echo "$changelog" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub release
-        run: |
-          gh release create "${{ steps.version.outputs.version }}" \
-            --title "${{ steps.version.outputs.version }}" \
-            --notes "${{ env.RELEASE_NOTES }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_NOTES: ${{ env.RELEASE_NOTES }}
+        run: |
+          gh release create "$VERSION" \
+            --title "$VERSION" \
+            --notes "$RELEASE_NOTES"
 
   readme-changelog:
     name: Publish changelog to Readme
@@ -101,9 +107,12 @@ jobs:
 
       - name: Extract release data
         id: release_data
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.release.outputs.version }}
         run: |
-          echo "title=${{ needs.release.outputs.version }}" >> $GITHUB_OUTPUT
-          body=$(gh release view ${{ needs.release.outputs.version }} --json body --jq .body)
+          echo "title=$VERSION" >> $GITHUB_OUTPUT
+          body=$(gh release view $VERSION --json body --jq .body)
           body_escaped=$(echo "$body" \
             | sed 's/&/\&#38;/g' \
             | sed 's/</\&#60;/g' \
@@ -115,15 +124,15 @@ jobs:
             echo "$body_escaped"
             echo "EOF"
           } >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish changelog to Readme
         env:
           README_API_KEY: ${{ secrets.README_API_KEY }}
+          RELEASE_TITLE: ${{ steps.release_data.outputs.title }}
+          RELEASE_BODY: ${{ steps.release_data.outputs.body }}
         run: |
-          jq -n --arg title "Node.js Unified SDK v${{ steps.release_data.outputs.title }}" \
-                --arg body "${{ steps.release_data.outputs.body }}" \
+          jq -n --arg title "Node.js Unified SDK v$RELEASE_TITLE" \
+                --arg body "$RELEASE_BODY" \
                 '{
                   title: $title,
                   content: {
