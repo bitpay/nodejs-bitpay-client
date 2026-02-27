@@ -69,8 +69,7 @@ import * as updateRefundRequestMock from './json/updateRefundRequest.json';
 import * as updateRefundResponseMock from './json/updateRefundResponse.json';
 
 import { isEqual } from 'lodash';
-import { HttpRequestResolverExtras } from 'msw/lib/core/handlers/HttpHandler';
-import { ResponseResolverInfo } from 'msw/lib/core/handlers/RequestHandler';
+import { HttpRequestResolverExtras, ResponseResolverInfo } from 'msw';
 import BitPayApiException from '../src/Exceptions/BitPayApiException';
 import * as BitPaySDK from '../src/index';
 import { billInterfaceSchema } from '../src/Model/Bill/Bill.zod';
@@ -87,7 +86,7 @@ import { rateInterfaceSchema } from '../src/Model/Rates/Rate.zod';
 import { settlementInterfaceSchema } from '../src/Model/Settlement/Settlement.zod';
 import { walletInterfaceSchema } from '../src/Model/Wallet/Wallet.zod';
 
-let client;
+let client: Client;
 let oneMonthAgo;
 let tomorrow;
 
@@ -306,7 +305,7 @@ describe('BitPaySDK.Client', () => {
       expect(result[0].key).toBe('bitpay');
       expect(result[0].displayName).toBe('BitPay');
       expect(result[0].avatar).toBe('bitpay-wallet.png');
-      expect(result[0].currencies[0].qr.type).toBe('BIP72b');
+      expect(result[0].currencies?.[0]?.qr?.type).toBe('BIP72b');
     });
   });
 
@@ -394,7 +393,7 @@ describe('BitPaySDK.Client', () => {
         )
       );
 
-      const result = await client.getBills();
+      const result = await client.getBills(null);
       billInterfaceSchema.parse(result[0]);
 
       expect(result[0].id).toBe('X6KJbe9RxAGWNReCwd1xRw');
@@ -498,10 +497,10 @@ describe('BitPaySDK.Client', () => {
       const result = await client.getCurrencyInfo('USD');
 
       currencyInterfaceSchema.parse(result);
-      expect(result.code).toBe('USD');
-      expect(result.symbol).toBe('$');
-      expect(result.name).toBe('US Dollar');
-      expect(result.minimum).toBe(0.01);
+      expect(result?.code).toBe('USD');
+      expect(result?.symbol).toBe('$');
+      expect(result?.name).toBe('US Dollar');
+      expect(result?.minimum).toBe(0.01);
     });
   });
 
@@ -557,9 +556,9 @@ describe('BitPaySDK.Client', () => {
       invoiceSchema.parse(result);
       expect(result.id).toBe('G3viJEJgE8Jk2oekSdgT2A');
       expect(result.url).toBe('https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A');
-      expect(result.buyerProvidedInfo.emailAddress).toBe('john@doe.com');
-      expect(result.universalCodes.paymentString).toBe('https://link.bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A');
-      expect(result.refundAddresses[0].n2MDYgEhxCAnuoVd1JpPmvxZShE6rQA6zv.type).toBe('buyerSupplied');
+      expect(result.buyerProvidedInfo?.emailAddress).toBe('john@doe.com');
+      expect(result.universalCodes?.paymentString).toBe('https://link.bitpay.com/i/G3viJEJgE8Jk2oekSdgT2A');
+      expect(result.refundAddresses?.[0]?.n2MDYgEhxCAnuoVd1JpPmvxZShE6rQA6zv?.type).toBe('buyerSupplied');
     });
 
     it('should get invoice', async () => {
@@ -579,10 +578,10 @@ describe('BitPaySDK.Client', () => {
 
       invoiceSchema.parse(result);
       expect(result.id).toBe('G3viJEJgE8Jk2oekSdgT2A');
-      expect(result.transactions[0].exRates['WBTC']).toBe(0.024436520994387978);
-      expect(result.transactions[0].exRates['PAX']).toBe(1355.2800000000002);
-      expect(result.transactions[0].exRates['DOGE']).toBe(2725.466119299674);
-      expect(result.transactions[0].amount).toBe(739100);
+      expect(result.transactions?.[0]?.exRates?.['WBTC']).toBe(0.024436520994387978);
+      expect(result.transactions?.[0]?.exRates?.['PAX']).toBe(1355.2800000000002);
+      expect(result.transactions?.[0]?.exRates?.['DOGE']).toBe(2725.466119299674);
+      expect(result.transactions?.[0]?.amount).toBe(739100);
       expect(result.url).toBe('https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A');
     });
 
@@ -630,7 +629,12 @@ describe('BitPaySDK.Client', () => {
       const params = {
         dateStart: '2021-05-10',
         dateEnd: '2021-05-12',
-        status: 'complete'
+        status: 'complete',
+        orderId: null,
+        page: null,
+        pageSize: null,
+        limit: null,
+        offset: null
       };
 
       const results = await client.getInvoices(params);
@@ -1141,7 +1145,7 @@ describe('BitPaySDK.Client', () => {
         })
       );
 
-      const results: Rates = await client.getRates();
+      const results: Rates = await client.getRates(null);
 
       rateInterfaceSchema.parse(results.getRates()[0]);
       expect(results.getRates().length).toBe(183);
@@ -1251,7 +1255,7 @@ describe('BitPaySDK.Client', () => {
         )
       );
 
-      const result = await client.getRefunds('Hpqc63wvE1ZjzeeH4kEycF');
+      const result: any = await client.getRefunds('Hpqc63wvE1ZjzeeH4kEycF');
 
       refundInterfaceSchema.parse(result);
       expect(result.id).toBe('WoE46gSLkJQS48RJEiNw3L');
@@ -1428,7 +1432,7 @@ describe('BitPaySDK.Client', () => {
       expect(result.id).toBe('RPWTabW8urd3xWv2To989v');
       expect(result.accountId).toBe('YJCgTf3jrXHkUVzLQ7y4eg');
       expect(result.openingBalance).toBe(23.27);
-      expect(result.payoutInfo.account).toBe('NL85ABNA0000000000');
+      expect(result.payoutInfo?.account).toBe('NL85ABNA0000000000');
     });
 
     it('should get settlement reconciliation report', async () => {
@@ -1453,8 +1457,8 @@ describe('BitPaySDK.Client', () => {
       expect(result.id).toBe('RvNuCTMAkURKimwgvSVEMP');
       expect(result.accountId).toBe('YJCgTf3jrXHkUVzLQ7y4eg');
       expect(result.openingBalance).toBe(23.13);
-      expect(result.payoutInfo.iban).toBe('NL85ABNA0000000000');
-      expect(result.ledgerEntries.length).toBe(42);
+      expect(result.payoutInfo?.iban).toBe('NL85ABNA0000000000');
+      expect(result.ledgerEntries?.length).toBe(42);
     });
   });
 });
