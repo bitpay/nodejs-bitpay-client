@@ -37,9 +37,9 @@ import { walletInterfaceSchema } from '../src/Model/Wallet/Wallet.zod';
 const Currencies = BitPaySDK.Currency;
 const PayoutStatus = BitPaySDK.PayoutStatus;
 
-let client;
-let oneMonthAgo;
-let tomorrow;
+let client: Client;
+let oneMonthAgo: Date;
+let tomorrow: Date;
 
 const exampleInvoice = function () {
   const invoice = new Invoice(10.0, 'USD');
@@ -112,7 +112,7 @@ describe('BitPaySDK.Client', () => {
       expect(result.rate).toBeGreaterThan(0);
     });
     it('should get rates', async () => {
-      const result = await client.getRates();
+      const result = await client.getRates(null);
 
       rateInterfaceSchema.parse(result.getRates()[0]);
       expect(result.getRates()[0].rate).toBeGreaterThan(0);
@@ -131,10 +131,10 @@ describe('BitPaySDK.Client', () => {
    */
   describe('Currency', () => {
     it('should get currency info', async () => {
-      const result: CurrencyInterface = await client.getCurrencyInfo('BTC');
+      const result: CurrencyInterface | null = await client.getCurrencyInfo('BTC');
 
       currencyInterfaceSchema.parse(result);
-      expect(result.name).toBe('Bitcoin');
+      expect(result?.name).toBe('Bitcoin');
     });
   });
 
@@ -152,13 +152,13 @@ describe('BitPaySDK.Client', () => {
    * - RequestInvoiceWebhookToBeResent
    */
   describe('Invoices', () => {
-    let invoiceId;
-    let invoiceToken;
-    let invoiceGuid;
+    let invoiceId: string;
+    let invoiceToken: string;
+    let invoiceGuid: string;
 
     it('should create invoice', async () => {
       const invoice: InvoiceInterface = await client.createInvoice(exampleInvoice());
-      invoiceId = invoice.id;
+      invoiceId = invoice.id || '';
       invoiceToken = invoice.token;
       invoiceGuid = invoice.guid;
 
@@ -184,7 +184,11 @@ describe('BitPaySDK.Client', () => {
     it('should get invoices', async () => {
       const params = {
         dateStart: oneMonthAgo.toISOString().split('T')[0],
-        dateEnd: tomorrow.toISOString().split('T')[0]
+        dateEnd: tomorrow.toISOString().split('T')[0],
+        status: 'paid',
+        orderId: null,
+        limit: 10,
+        offset: 0
       };
       const invoices: InvoiceInterface[] = await client.getInvoices(params);
 
@@ -281,7 +285,7 @@ describe('BitPaySDK.Client', () => {
     it('should send refund notification', async () => {
       const retrieveRefund: RefundInterface = await client.getRefund(refundId);
 
-      const result: boolean = await client.sendRefundNotification(refundId, retrieveRefund.token);
+      const result: boolean = await client.sendRefundNotification(refundId, retrieveRefund.token || '');
       expect(result).toBe(true);
     });
 
@@ -299,11 +303,11 @@ describe('BitPaySDK.Client', () => {
       const refundToCreateRequest: RefundInterface = new Refund(10.0, invoiceId, 'token');
       const refund: RefundInterface = await client.createRefund(refundToCreateRequest);
 
-      const result: RefundInterface = await client.cancelRefundByGuid(refund.guid);
+      const result: RefundInterface = await client.cancelRefundByGuid(refund.guid || '');
       expect(result.status).toBe('canceled');
       refundInterfaceSchema.parse(result);
 
-      const refundAfterCanceled: RefundInterface = await client.getRefundByGuid(refund.guid);
+      const refundAfterCanceled: RefundInterface = await client.getRefundByGuid(refund.guid || '');
       expect(refundAfterCanceled.status).toBe('canceled');
       refundInterfaceSchema.parse(refundAfterCanceled);
     });
@@ -465,7 +469,7 @@ describe('BitPaySDK.Client', () => {
 
     it('should cancel payout groups', async () => {
       // when
-      const result: PayoutGroupInterface = await client.cancelPayouts(payoutGroupId);
+      const result: PayoutGroupInterface = await client.cancelPayouts(payoutGroupId || '');
       // then
       payoutGroupInterfaceSchema.parse(result);
       expect(result.payouts.length).toBe(1);
@@ -564,7 +568,7 @@ describe('BitPaySDK.Client', () => {
     });
 
     it('should deliver bill', async () => {
-      const result: string = await client.deliverBill(billId, billToken);
+      const result = await client.deliverBill(billId, billToken);
       expect(result).toBe(true);
     });
   });
