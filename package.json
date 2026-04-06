@@ -73,7 +73,7 @@
     "msw": "2.12.14",
     "prettier": "3.8.1",
     "rimraf": "6.1.3",
-    "ts-jest": "29.4.6",
+    "ts-jest": "29.4.9",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
   }
