@@ -1,8 +1,8 @@
-import { BitPayClient } from './BitPayClient';
-import { TokenContainer } from '../TokenContainer';
-import { SettlementInterface } from '../Model/Settlement/Settlement';
-import { Facade } from '../index';
 import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
+import { SettlementInterface } from '../Model/Settlement/Settlement';
+import { TokenContainer } from '../TokenContainer';
+import { Facade } from '../index';
+import { BitPayClient } from './BitPayClient';
 
 export class SettlementClient {
   private bitPayClient: BitPayClient;
@@ -41,7 +41,7 @@ export class SettlementClient {
    * @throws BitPayApiException BitPayApiException class
    * @throws BitPayGenericException BitPayGenericException class
    */
-  public async getSettlements(params: object): Promise<SettlementInterface[]> {
+  public async getSettlements(params: { [key: string]: any }): Promise<SettlementInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
     const result = await this.bitPayClient.get('settlements', params, true);

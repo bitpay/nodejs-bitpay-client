@@ -1,8 +1,8 @@
-import { BitPayClient } from './BitPayClient';
-import { TokenContainer } from '../TokenContainer';
-import { BillInterface } from '../Model';
-import { Facade } from '../Facade';
 import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
+import { Facade } from '../Facade';
+import { BillInterface } from '../Model';
+import { TokenContainer } from '../TokenContainer';
+import { BitPayClient } from './BitPayClient';
 
 export class BillClient {
   private bitPayClient: BitPayClient;
@@ -66,7 +66,7 @@ export class BillClient {
    * @throws BitPayApiException BitPayApiException
    */
   public async getBills(status: string | null): Promise<BillInterface[]> {
-    const params = { token: this.tokenContainer.getToken(Facade.Merchant) };
+    const params: { token: string; status?: string } = { token: this.tokenContainer.getToken(Facade.Merchant) };
     if (status) {
       params['status'] = status;
     }

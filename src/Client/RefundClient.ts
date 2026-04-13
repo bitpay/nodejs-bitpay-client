@@ -33,9 +33,9 @@ export class RefundClient {
       currency: refund.currency,
       preview: refund.preview,
       immediate: refund.immediate,
-      buyerPaysRefundFee: refund.buyerPaysRefundFee
+      buyerPaysRefundFee: refund.buyerPaysRefundFee,
+      guid: refund.guid ? refund.guid : this.guidGenerator.execute()
     };
-    params['guid'] = refund.guid ? refund.guid : this.guidGenerator.execute();
 
     ParamsRemover.removeNullValuesFromObject(params);
 

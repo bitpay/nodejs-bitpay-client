@@ -1,8 +1,8 @@
-import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
 import { BitPayApiException } from '../Exceptions/BitPayApiException';
+import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
 
 export class BitPayResponseParser {
-  public async getJsonDataFromJsonResponse(responseObj: object) {
+  public async getJsonDataFromJsonResponse(responseObj: { [key: string]: any }) {
     if (responseObj === null) {
       BitPayExceptionProvider.throwApiExceptionWithMessage('HTTP response is null', null);
     }
@@ -30,7 +30,7 @@ export class BitPayResponseParser {
 
       if (Object.prototype.hasOwnProperty.call(responseObj, 'errors')) {
         let result = '';
-        responseObj['errors'].forEach((error, index) => {
+        responseObj['errors'].forEach((error: { [key: string]: any }, index: number) => {
           if (index !== 0) {
             result += ' ';
           }
