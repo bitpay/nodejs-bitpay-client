@@ -89,7 +89,7 @@ const config: Config = {
   // An array of file extensions your modules use
   moduleFileExtensions: [
     "js",
-  //   "mjs",
+    "mjs",
   //   "cjs",
   //   "jsx",
     "ts",
@@ -187,13 +187,19 @@ const config: Config = {
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
-    '^.+\\.m?jsx?$': 'ts-jest',
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: {
+        ignoreDeprecations: '6.0',
+        noImplicitAny: false,
+        types: ['jest', 'node'],
+      },
+    }],
+    '^.+\\.(js|jsx|mjs|cjs)$': 'babel-jest',
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [
-    'node_modules/(?!(msw|@mswjs|@bundled-es-modules|until-async|strict-event-emitter|@open-draft)/)'
+    'node_modules/(?!(@mswjs|msw|@bundled-es-modules|until-async|strict-event-emitter|@open-draft|rettime|outvariant|event-interceptor))',
   ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them

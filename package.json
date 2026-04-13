@@ -53,28 +53,31 @@
   "dependencies": {
     "bs58": "6.0.0",
     "elliptic": "6.6.1",
-    "lodash": "4.17.23",
+    "lodash": "4.18.1",
     "zod": "4.3.6"
   },
   "devDependencies": {
+    "@babel/core": "7.29.0",
+    "@babel/preset-env": "7.29.2",
     "@eslint/eslintrc": "3.3.5",
     "@eslint/js": "10.0.1",
     "@types/elliptic": "6.4.18",
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.24",
-    "@types/node": "25.5.0",
-    "@typescript-eslint/eslint-plugin": "8.58.0",
-    "@typescript-eslint/parser": "8.58.0",
-    "eslint": "10.1.0",
+    "@types/node": "25.6.0",
+    "@typescript-eslint/eslint-plugin": "8.58.1",
+    "@typescript-eslint/parser": "8.58.1",
+    "babel-jest": "30.3.0",
+    "eslint": "10.2.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
     "husky": "9.1.7",
     "jest": "30.3.0",
-    "msw": "2.12.14",
-    "prettier": "3.8.1",
+    "msw": "2.13.2",
+    "prettier": "3.8.2",
     "rimraf": "6.1.3",
-    "ts-jest": "29.4.6",
+    "ts-jest": "29.4.9",
     "ts-node": "10.9.2",
-    "typescript": "5.9.3"
+    "typescript": "6.0.2"
   }
 }

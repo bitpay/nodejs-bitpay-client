@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
     "target": "es2021",
+    "rootDir": "./src",
     "outDir": "./dist",
     "sourceMap": true,
     "strictBindCallApply": true,
@@ -14,7 +16,8 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noImplicitAny": false
   },
   "lib": [
     "es2021",
