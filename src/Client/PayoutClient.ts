@@ -1,10 +1,10 @@
-import { BitPayClient } from './BitPayClient';
-import { TokenContainer } from '../TokenContainer';
-import { GuidGenerator } from '../util/GuidGenerator';
+import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
 import { Facade } from '../Facade';
 import { PayoutInterface } from '../Model';
+import { TokenContainer } from '../TokenContainer';
 import { BitPayResponseParser } from '../util/BitPayResponseParser';
-import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
+import { GuidGenerator } from '../util/GuidGenerator';
+import { BitPayClient } from './BitPayClient';
 
 export class PayoutClient {
   private bitPayClient: BitPayClient;
@@ -63,7 +63,7 @@ export class PayoutClient {
    * @returns Payout[]
    * @throws PayoutQueryException
    */
-  public async getPayouts(params: object): Promise<PayoutInterface[]> {
+  public async getPayouts(params: { [key: string]: any }): Promise<PayoutInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Payout);
     const result = await this.bitPayClient.get('payouts', params, true);
 

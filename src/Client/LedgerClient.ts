@@ -1,8 +1,8 @@
-import { BitPayClient } from './BitPayClient';
-import { TokenContainer } from '../TokenContainer';
-import { LedgerEntryInterface, LedgerInterface } from '../Model';
-import { Facade } from '../Facade';
 import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
+import { Facade } from '../Facade';
+import { LedgerEntryInterface, LedgerInterface } from '../Model';
+import { TokenContainer } from '../TokenContainer';
+import { BitPayClient } from './BitPayClient';
 
 export class LedgerClient {
   private bitPayClient: BitPayClient;
@@ -41,7 +41,7 @@ export class LedgerClient {
    * @throws BitPayApiException BitPayApiException class
    * @throws BitPayGenericException BitPayGenericException class
    */
-  public async getEntries(currency: string, params: object): Promise<LedgerEntryInterface[]> {
+  public async getEntries(currency: string, params: { [key: string]: any }): Promise<LedgerEntryInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
     const result = await this.bitPayClient.get('ledgers/' + currency, params, true);

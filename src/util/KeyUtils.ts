@@ -1,6 +1,6 @@
-import * as elliptic from 'elliptic';
 import bs58 from 'bs58';
 import * as crypto from 'crypto';
+import * as elliptic from 'elliptic';
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -10,7 +10,7 @@ export class KeyUtils {
     return kp;
   }
 
-  public load_keypair(buf: Buffer | string): elliptic.ec.KeyPair {
+  public load_keypair(buf: Buffer | string | elliptic.ec.KeyPair): elliptic.ec.KeyPair {
     return ec.keyFromPrivate(buf);
   }
 
@@ -33,7 +33,7 @@ export class KeyUtils {
     return Buffer.from(privkey.sign(hashBuffer).toDER()).toString('hex');
   }
 
-  public getPublicKeyFromPrivateKey(privkey) {
+  public getPublicKeyFromPrivateKey(privkey: string | Buffer | elliptic.ec.KeyPair): string {
     const ecKey = this.load_keypair(privkey);
 
     return ecKey.getPublic().encodeCompressed('hex');

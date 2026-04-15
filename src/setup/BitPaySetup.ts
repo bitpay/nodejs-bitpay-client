@@ -1,19 +1,20 @@
+import { ec } from 'elliptic';
 import * as fs from 'fs';
-import * as BitPaySDK from '../index';
 import * as readline from 'readline';
+import * as BitPaySDK from '../index';
 
 const keyUtils = new BitPaySDK.KeyUtils();
 let configFilePath = process.cwd();
-let keyPair;
-let ecKey;
-let environment;
+let keyPair: ec.KeyPair;
+let ecKey: ec.KeyPair;
+let environment: string;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let storeFile = true;
-let apiUrl;
-let merchantToken;
-let merchantPairCode;
-let payoutToken;
-let payoutPairCode;
+let apiUrl: string;
+let merchantToken: string;
+let merchantPairCode: string;
+let payoutToken: string;
+let payoutPairCode: string;
 let keyPath = '';
 let keyPlain = '';
 
@@ -48,7 +49,7 @@ const selectEnv = async () => {
     console.log(e);
   }
 };
-const setEnv = async (env) => {
+const setEnv = async (env: string) => {
   if (env == 'Test') {
     apiUrl = 'https://test.bitpay.com';
     return;
@@ -84,7 +85,7 @@ const createNewKey = async () => {
     console.log(e);
   }
 };
-const loadKey = async (privateKey) => {
+const loadKey = async (privateKey: string) => {
   try {
     if (fs.existsSync(privateKey)) {
       console.log('Loading private key... \n');
@@ -205,11 +206,11 @@ const selectTokens = async () => {
     console.log(e);
   }
 };
-const requestTokens = async (option) => {
+const requestTokens = async (option: string) => {
   async function requestMerchantToken(options: {
     headers: { 'Content-type': string; 'x-accept-version': string };
     method: string;
-    body: { id: string };
+    body: { id: string; facade?: string };
     url: string;
   }) {
     console.log('Requesting Merchant token... \n');
@@ -237,7 +238,7 @@ const requestTokens = async (option) => {
   async function requestPayoutToken(options: {
     headers: { 'Content-type': string; 'x-accept-version': string };
     method: string;
-    body: { id: string };
+    body: { id: string; facade?: string };
     url: string;
   }) {
     console.log('Requesting Payout token... \n');
@@ -345,7 +346,7 @@ const updateConfigFile = async () => {
   process.exit();
 };
 
-function sleep(ms) {
+function sleep(ms: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });

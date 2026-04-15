@@ -737,7 +737,7 @@ export class Client {
     return this.keyUtils.load_keypair(Buffer.from(value).toString().trim());
   }
 
-  private getEcKeyByConfig(envConfig: object) {
+  private getEcKeyByConfig(envConfig: Record<string, any>) {
     const privateKeyPath = envConfig['PrivateKeyPath'].toString().replace('"', '');
     const keyHex = envConfig['PrivateKey'].toString().replace('"', '');
 

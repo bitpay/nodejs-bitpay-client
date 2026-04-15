@@ -95,7 +95,7 @@ export class InvoiceClient {
    * @throws BitPayApiException BitPayApiException class
    * @throws BitPayGenericException BitPayGenericException class
    */
-  public async getInvoices(params: object): Promise<InvoiceInterface[]> {
+  public async getInvoices(params: { [key: string]: any }): Promise<InvoiceInterface[]> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
     const result = await this.bitPayClient.get('invoices', params, true);
@@ -114,8 +114,9 @@ export class InvoiceClient {
    * @returns
    */
   public async getInvoiceEventToken(invoiceId: string): Promise<InvoiceEventTokenInterface> {
-    const params = {};
-    params['token'] = this.tokenContainer.getToken(Facade.Merchant);
+    const params = {
+      token: this.tokenContainer.getToken(Facade.Merchant)
+    };
 
     const result = await this.bitPayClient.get('invoices/' + invoiceId + '/events', params, true);
 
@@ -136,7 +137,7 @@ export class InvoiceClient {
    * @throws BitPayApiException BitPayApiException class
    * @throws BitPayGenericException BitPayGenericException class
    */
-  public async update(invoiceId: string, params: object): Promise<InvoiceInterface> {
+  public async update(invoiceId: string, params: { [key: string]: any }): Promise<InvoiceInterface> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
     const result = await this.bitPayClient.put('invoices/' + invoiceId, params);

@@ -179,7 +179,7 @@ export class Currency {
   static ZMW = 'ZMW';
   static ZWL = 'ZWL';
 
-  static isValid(value) {
+  static isValid(value: string) {
     try {
       return this.hasOwnProperty.call(this, value);
     } catch (ex) {
