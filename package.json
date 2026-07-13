@@ -59,7 +59,7 @@
   "devDependencies": {
     "@babel/core": "7.29.7",
     "@babel/preset-env": "7.29.7",
-    "@eslint/eslintrc": "3.3.5",
+    "@eslint/eslintrc": "3.3.6",
     "@eslint/js": "10.0.1",
     "@types/elliptic": "6.4.18",
     "@types/jest": "30.0.0",
