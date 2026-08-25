@@ -63,7 +63,7 @@
     "@eslint/js": "10.0.1",
     "@types/elliptic": "6.4.18",
     "@types/jest": "30.0.0",
-    "@types/lodash": "4.17.24",
+    "@types/lodash": "4.17.25",
     "@types/node": "26.2.0",
     "@typescript-eslint/eslint-plugin": "8.67.0",
     "@typescript-eslint/parser": "8.67.0",
