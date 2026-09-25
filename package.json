@@ -30,7 +30,7 @@
     "prepare": "npm run build && husky",
     "prettier": "prettier --config .prettierrc 'src/**/*.ts' 'test/**/*.spec.ts' 'examples/**/*'",
     "test": "npm run format:ci && npm run lint && npm run coverage",
-    "unit": "jest test/clientUnit.spec.ts test/Client/bitPayResponseUnit.spec.ts --runInBand",
+    "unit": "jest test/clientUnit.spec.ts test/Client/bitPayResponseUnit.spec.ts test/keyUtilsUnit.spec.ts --runInBand",
     "functional": "jest test/clientFunctional.spec.ts --runInBand"
   },
   "author": "Antonio Buedo <integrations@bitpay.com>",
@@ -51,8 +51,9 @@
   },
   "homepage": "https://github.com/bitpay/nodejs-bitpay-client#readme",
   "dependencies": {
+    "@noble/secp256k1": "1.7.2",
+    "bn.js": "4.12.5",
     "bs58": "6.0.0",
-    "elliptic": "6.6.1",
     "lodash": "4.18.1",
     "zod": "4.5.1"
   },
@@ -61,7 +62,7 @@
     "@babel/preset-env": "7.29.7",
     "@eslint/eslintrc": "3.3.6",
     "@eslint/js": "10.0.1",
-    "@types/elliptic": "6.4.18",
+    "@types/bn.js": "5.2.0",
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.25",
     "@types/node": "26.6.2",
