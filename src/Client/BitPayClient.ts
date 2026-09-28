@@ -1,6 +1,5 @@
 import { Env, KeyUtils } from '../index';
-import { ec } from 'elliptic';
-import KeyPair = ec.KeyPair;
+import { KeyPairLike } from '../util/KeyUtils';
 import * as qs from 'querystring';
 import BitPayException from '../Exceptions/BitPayException';
 import { BitPayResponseParser } from '../util/BitPayResponseParser';
@@ -8,14 +7,14 @@ import { BitPayExceptionProvider } from '../Exceptions/BitPayExceptionProvider';
 import { LoggerProvider } from '../Logger/LoggerProvider';
 
 export class BitPayClient {
-  private readonly ecKey: KeyPair | null;
+  private readonly ecKey: KeyPairLike | null;
   private readonly identity: string | null;
   private readonly baseUrl: string;
   private readonly defaultHeaders: Record<string, string>;
   private readonly keyUtils: KeyUtils;
   private readonly responseParser: BitPayResponseParser;
 
-  public constructor(baseUrl: string, ecKey: KeyPair | null, identity: string | null, platformInfo?: string) {
+  public constructor(baseUrl: string, ecKey: KeyPairLike | null, identity: string | null, platformInfo?: string) {
     this.ecKey = ecKey;
     this.baseUrl = baseUrl;
     this.identity = identity;

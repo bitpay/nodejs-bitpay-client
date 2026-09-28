@@ -1,12 +1,12 @@
-import { ec } from 'elliptic';
 import * as fs from 'fs';
 import * as readline from 'readline';
 import * as BitPaySDK from '../index';
+import { KeyPair } from '../util/KeyUtils';
 
 const keyUtils = new BitPaySDK.KeyUtils();
 let configFilePath = process.cwd();
-let keyPair: ec.KeyPair;
-let ecKey: ec.KeyPair;
+let keyPair: KeyPair;
+let ecKey: KeyPair;
 let environment: string;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let storeFile = true;

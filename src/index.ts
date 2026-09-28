@@ -13,7 +13,8 @@
  * See the LICENSE file for more info.
  */
 
-import { KeyUtils } from './util/KeyUtils';
+import { KeyUtils, KeyPair, PublicKey, Signature } from './util/KeyUtils';
+export type { KeyInput, KeyPairLike } from './util/KeyUtils';
 import * as BitPayExceptions from './Exceptions/index';
 import * as Models from './Model/index';
 import { Client } from './Client';
@@ -32,6 +33,9 @@ import * as PayoutStatus from './Model/Payout/PayoutStatus';
 
 export {
   KeyUtils,
+  KeyPair,
+  PublicKey,
+  Signature,
   BitPayExceptions,
   Models,
   Config,

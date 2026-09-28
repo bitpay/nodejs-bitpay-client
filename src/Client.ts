@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars*/
 
-import { ec } from 'elliptic';
 import {
   BillClient,
   BitPayClient,
@@ -41,6 +40,7 @@ import { PosToken } from './PosToken';
 import { PrivateKey } from './PrivateKey';
 import { TokenContainer } from './TokenContainer';
 import { GuidGenerator } from './util/GuidGenerator';
+import { KeyPair } from './util/KeyUtils';
 import { ParamsRemover } from './util/ParamsRemover';
 
 export class Client {
@@ -757,7 +757,7 @@ export class Client {
     return environment.toUpperCase() == Env.Test ? Env.TestUrl : Env.ProdUrl;
   }
 
-  private getIdentity(ecKey: ec.KeyPair) {
+  private getIdentity(ecKey: KeyPair) {
     return this.keyUtils.getPublicKeyFromPrivateKey(ecKey);
   }
 
