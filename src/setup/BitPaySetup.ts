@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as readline from 'readline';
 import * as BitPaySDK from '../index';
+import { writeSecretFile } from './SecretFile';
 import { KeyPair } from '../util/KeyUtils';
 
 const keyUtils = new BitPaySDK.KeyUtils();
@@ -165,10 +166,8 @@ const storeKey = async () => {
 
         console.log('Saving private key... \n');
         sleep(500);
-        fs.writeFile(keyPath, ecKey.getPrivate('hex'), { mode: 0o755 }, function (err) {
-          if (err) throw err;
-          console.log('Private key saved in file: ' + keyPath + '\n');
-        });
+        writeSecretFile(keyPath, ecKey.getPrivate('hex'));
+        console.log('Private key saved in file: ' + keyPath + '\n');
         await sleep(1000);
 
         selectTokens();
@@ -323,11 +322,9 @@ const updateConfigFile = async () => {
     }
   };
 
-  fs.writeFile(configFilePath + '/BitPay.config.json', JSON.stringify(configurationObject, null, 4), function (err) {
-    if (err) throw err;
-    console.log('Generated configuration file');
-    console.log('And saved in file: ' + configFilePath + '/BitPay.config.json' + '\n');
-  });
+  writeSecretFile(configFilePath + '/BitPay.config.json', JSON.stringify(configurationObject, null, 4));
+  console.log('Generated configuration file');
+  console.log('And saved in file: ' + configFilePath + '/BitPay.config.json' + '\n');
   await sleep(5000);
 
   console.log('Configuration generated successfully! \n');
